@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Gate;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+
+//Route::get('stock/allproducts', ['middleware' => 'plgLicns:products', function () {
+//}]);
+
+
 Route::get('/gateCheck',function () {
     if (Gate::allows('customer_create', 1))
        {

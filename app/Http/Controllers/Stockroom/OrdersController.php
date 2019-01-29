@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Gate;
 
 
+
+
 class OrdersController extends Controller
 {
     public function __construct()

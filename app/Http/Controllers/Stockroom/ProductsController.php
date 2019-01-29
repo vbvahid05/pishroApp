@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
+
+  public function __construct()
+{
+    $this->middleware('plgLicns:products');
+
+    if ( $this->middleware('auth')) return "OK";
+    else return view('/login');
+}
   public  function showProducts()
   {
        $AllProducts = \DB::table('stockroom_products')
@@ -70,11 +78,7 @@ class ProductsController extends Controller
     return  $table=$table."</table>";
   }
 
-    public function __construct()
-    {
-        if ( $this->middleware('auth')) return "OK";
-        else return view('/login');
-    }
+
 
   public function showAll( )
   {
