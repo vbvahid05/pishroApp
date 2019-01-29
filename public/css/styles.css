@@ -1,0 +1,2276 @@
+
+@font-face
+{
+    font-family:'iransans';
+    src: url('fonts/iransans.eot?#') format('eot'),/* IE6â€“8 */
+    url('fonts/iransans.woff') format('woff'),/* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('fonts/iransans.ttf') format('truetype');/* Saf3â€”5, Chrome4+, FF3.5, Opera 10+ */
+}
+.fontIransans{
+    font-family:iransans !important;
+}
+@font-face
+{
+    font-family:'Yekan';
+    src: url('fonts/Yekan.eot?#') format('eot'),/* IE6â€“8 */
+    url('fonts/Yekan.woff') format('woff'),/* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('fonts/Yekan.ttf') format('truetype');/* Saf3â€”5, Chrome4+, FF3.5, Opera 10+ */
+}
+
+
+@font-face
+{
+    font-family:'Icons';
+    src: url('fonts/icons.eot?#') format('eot'),/* IE6â€“8 */
+    url('fonts/icons.woff') format('woff'),/* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('fonts/icons.ttf') format('truetype');/* Saf3â€”5, Chrome4+, FF3.5, Opera 10+ */
+}
+
+
+body {
+    direction: rtl;
+    font-family: iransans !important;
+    background-color: #1d334e !important;
+}
+h1, h2, h3, h4, h5 {
+    font-family: iransans !important;
+}
+input {
+    width: 25em !important;
+    font-family: iransans !important;
+}
+input.ng-invalid {
+    border: 1px solid #ff000059 !important;
+}
+input.ng-valid {
+    border: 1px solid #8bc34a !important;
+}
+.shadow{
+    /*box-shadow: -1px 1px 1px 0px #d4d4d5;*/
+    box-shadow:0px 2px 4px 1px #d4d4d5;
+
+}
+.ui.slider.checkbox input:checked ~ .box, .ui.slider.checkbox input:checked ~ label {
+    color: #337ab7 !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+}
+
+.ltrdir {
+    direction: ltr !important;
+    text-align: left;
+}
+
+.saveCheck {
+    font-size: 25px !important;
+    color: #8BC34A;
+    cursor: pointer;
+    border: 4px solid;
+    border-radius: 100px;
+    padding: 0px;
+    transition: 0.2s;
+}
+
+.saveCheck:hover {
+    color: #4CAF50;
+}
+
+.saveCheckSmall {
+    font-size: 14px !important;
+    color: #8BC34A;
+    cursor: pointer;
+    border: 4px solid;
+    border-radius: 100px;
+    padding: 0px;
+    transition: 0.2s;
+    margin-right: 5px;
+}
+
+.refreshBtn
+{
+    float: right;
+    margin-top: -10px;
+    margin-right: 10px;
+    margin-bottom: 3px !important;
+}
+
+
+.Product_type_radio {
+    width: 0px !important;
+    padding-right: 0px !important;
+    margin-right: 0px !important;
+}
+/*Header Bar*/
+.headerBar.col-md-11 {
+    height: 30px;
+    width: 100%;
+    background: #23282d;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Manin Side*/
+.content-side {
+    background: #f0f2f7;
+    min-height: 100% !important;
+    padding: 25px;
+}
+
+.well{
+    background-color: #fbfdff !important;
+}
+
+
+
+.voidspace {
+    height: 100%;
+}
+.content-side .PageTitle {
+    font-family: iransans;
+}
+
+/* Side bar */
+.left-sidebar{
+    background: #1c334e;
+    color: #fff;
+    height: 100%;
+    position: fixed !important;
+    top: 0;
+    right: 0 !important;
+    /*width: 250px; */
+}
+
+
+/* Side Bar Menu     */
+/*custom font for text*/
+@import url(http://fonts.googleapis.com/css?family=Nunito);
+/*CSS file for fontawesome - an iconfont we will be using. This CSS file imported contains the font-face declaration. More info: http://fortawesome.github.io/Font-Awesome/ */
+@import url(http://thecodeplayer.com/uploads/fonts/fontawesome/css/font-awesome.min.css);
+
+/*Basic reset*/
+
+
+#accordian {
+    margin: 35px -13px auto;
+    color: white;
+}
+/*heading styles*/
+#accordian h3 {
+    font-size: 14px;
+    line-height: 34px;
+    padding: 0 10px;
+    cursor: pointer;
+    margin-right: -5px;
+}
+/*heading hover effect*/
+#accordian h3:hover {
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);
+}
+/*iconfont styles*/
+#accordian h3 span {
+    font-size: 16px;
+    margin-right: 10px;
+}
+/*list items*/
+#accordian li {
+    list-style-type: none;
+    margin-right: -45px !important;
+}
+/*links*/
+
+/*Lets hide the non active LIs by default*/
+#accordian ul ul {
+    display: none;
+}
+#accordian li.active ul {
+    display: block;
+}
+accMenu.active ul li a .active
+{
+    color:red;
+}
+.activeSubMenu li {
+    color: #dbff21 !important;
+    background: #3b689a;
+}
+
+li.actived {
+    color: #e03997 !important;
+    background: #f4f4f4;
+}
+/*___________________*/
+
+canvas.canvasjs-chart-canvas {
+    position: relative !important;
+}
+.dashboard-right-menu a:visited  {
+    /*    background: red !important; */
+}
+
+li ul {
+    margin-top: -10px !important;
+}
+li ul li {
+    font-size: 12px;
+    padding-right: 30px !important;
+    background: #285686;
+    margin-left: 0px !important;
+}
+li ul li i {
+    margin-left: 5px;
+}
+
+li ul li:hover {
+    background: #295585cf !important;
+}
+
+
+/* footer*/
+.footer.col-md-12 {
+    text-align: center;
+}
+
+.footer.col-md-12 div {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: #e9e9e9;
+    padding: 2px;
+    font-size: 11px;
+    text-align: left;
+    padding-left: 30px;
+    z-index: 20000;
+}
+
+/*Dashboard */
+.dashboard_slog {
+    margin-right: 10px;
+}
+
+.dashboard>.highlight {
+    border-right: 3px solid #4CAF50;
+    padding-right: 20px;
+    padding-top: 20px;
+    height: auto;
+    line-height: 2;
+    background: #fff;
+    width: 98%;
+    margin-right: 10px;
+}
+
+.dashboard-right-menu ul {
+    list-style: none;
+    line-height: 3;
+    margin-top: 30px;
+    font-family: iransans !important;;
+    font-size: 15px;
+}
+
+.dashboard-right-menu ul li {
+    /*  background: #0073aa; */
+    color: #fff;
+    margin-right: -55px;
+    padding-right: 10px;
+    margin-left: -14px;
+}
+
+.dashboard-right-menu ul li:hover {
+    background: #000;
+    color: #05aeff;
+    cursor: hand;
+}
+
+.dashboard-right-menu ul li a {
+    color: #f1f1f1;
+    text-decoration: none;
+}
+.dashboard-right-menu ul li a:hover {
+    color: #05aeff;
+    text-decoration: none;
+}
+
+.dashboard_user_menu
+{
+    width: 130px;
+    float: left;
+    background: #f4f4f4;
+    color: #fff !important;
+    height: 30px;
+    list-style-type: none;
+    line-height: 2;
+    padding-right: 20px;
+    margin-left: 20px;
+}
+
+.voidspace .topBoxs {
+    width: 23.6%;
+    margin-left: 10px;
+    height: 140px;
+    margin-right: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+.topBoxs {
+    color: #fff;
+}
+.topBoxs.A {
+    background: #79c447;
+}
+.topBoxs.B {
+    background: #fabb3c;
+}
+.topBoxs.C {
+    background: #66c2ef;
+}
+.topBoxs.D {
+    background: #ff5454;
+}
+
+.topBoxs .icon
+{
+    line-height: 2;
+    text-align: center;
+}
+
+.topBoxs .icon i {
+    font-size: 80px;
+    display: block;
+    margin: auto;
+    margin-top: 23px;
+    opacity: 0.8;
+}
+
+.ShowChangeLogs
+{
+    background: #fff;
+    margin-top: 20px;
+    width: 23.6% !important;
+    margin-right: 10px;
+    border-right: 3px solid #5b8aa1;
+}
+
+.seprate{
+    border-right: 1px solid;
+    height: 90%;
+    margin-top: 5px;
+    padding: 0;
+}
+
+
+
+
+.backButton {
+    float: left;
+}
+
+
+.publicNotificationMessage {
+    display: block;
+    text-align: center;
+    position: fixed;
+    height: 50px !important;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 30px;
+
+
+}
+.alert
+{
+
+    /*position: fixed !important;*/
+    /*z-index: 1000 !important;*/
+    /*width: 100%;*/
+    /*right: 0;*/
+    /*left: 0;*/
+    /*top: 0;*/
+    /*z-index: 1000 !important;*/
+
+    /*position: fixed !important;*/
+    /*z-index: 1000 !important;*/
+    /*width: 98% !important;*/
+
+    /*position: absolute !important;*/
+    /*z-index: 1000 !important;*/
+}
+.alertMessage {
+    font-size: 11px;
+    color: red;
+}
+
+
+
+
+.FilterBox
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid lightgray;
+    border-top: 2px solid lightgray;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+
+
+
+tr.filterBoxRow th {
+    background: #e7e7e7 !important;
+}
+
+
+.DropFilter {
+    width: 200px !important;
+    float: right;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-right: 20px !important;
+    color: #767676 !important;
+}
+.Filter_icon
+{
+    font-size: 20px !important;
+    color: gray;
+    float: right;
+}
+
+
+/* All customers Table */
+.TableContainer {
+    background: #fff !important;
+}
+.table-hover>tbody>tr  {
+    height: 60px;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #e7e7e7 !important;
+}
+.table-hover>tbody>tr:hover .row-actions {
+    display: block;
+}
+
+
+table.allcustomertable {
+    font-size: 12px;
+}
+
+table.listTable {
+    font-size: 12px;
+}
+
+table th {
+    text-align: right;
+    background: #d4d4d4;
+}
+th.groupA {
+    background: #b4d6f1 !important;
+}
+th.groupB {
+    background: #00a0265e;
+}
+
+table.table.with40 th {
+    width: 40% !important;
+
+}
+table.table.with30 th {
+    width: 30% !important;
+    font-size: 12px !important;
+}
+table.publicTable{
+    font-size: 12px;
+}
+
+table.publicTable.table.table-hover input{
+    width: 1em !important;
+}
+
+table.publicTable th {
+    line-height: 15px !important;
+    padding-top: 15px !important;
+}
+.Moveable_header th {
+    padding-bottom: 20px;
+}
+
+/*New Tabel Header In Div */
+.TabelHead {
+    position: fixed;
+    background: #d4d4d4;
+    width: 88.7%;
+    top: 0px;
+    left: 29px;
+    z-index: 10;
+    height: 50px;
+    line-height: 3.5em;
+
+}
+
+
+.publicTable.Moveable_header {
+    display: none ;
+    position: fixed;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.publicTable.Moveable_header .blueBack {
+    height: 50px;
+    background: #b4d6f1;
+}
+.publicTable.Moveable_header .greenBack {
+    height: 50px;
+    background: #78ca84;
+}
+
+.publicTable.Moveable_header.show {
+    display: block !important;
+}
+
+.titleWith {
+    width: 22%;
+}
+.PartNumberWith {
+    width: 13.5%;
+}
+.INsumWith
+{
+    width: 4%;
+}
+
+.tarkhisWith
+{
+    width: 2% !important;
+}
+.mojudiAnbarWith
+{
+    width: 3% !important;
+}
+@media only screen and (max-width: 1440px) {
+    .titleWith {
+        width: 19%;
+    }
+    .PartNumberWith {
+        width: 13% !important;
+    }
+    .tarkhisWith
+    {
+        width: 3% !important;
+    }
+    .INsumWith
+    {
+        width: 4%;
+    }
+    .mojudiAnbarWith
+    {
+        width: 3% !important;
+    }
+}
+
+
+
+table.publicTable.Moveable_header {
+    display: none;
+    position: fixed;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+table.publicTable.Moveable_header .show {
+    display: block;
+
+}
+
+table.publicTable.table.table-hover th {
+    text-align: center;
+}
+table.publicTable.table.table-hover tr td {
+    /*line-height: 3;*/
+    text-align: center;
+}
+
+.reportTable td {
+    line-height: 4 !important;
+}
+
+
+.orderForm {
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 600px;
+    height: auto;
+}
+
+.divTableHeader
+{
+    background: #ddd;
+    height: 40px;
+    line-height: 3;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+.divTableRow {
+    /* background: red; */
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    height: 40px;
+    margin-top: -14px !important;
+    border-bottom: 1px dashed lightgray;
+    line-height: 3;
+}
+.divTableRow:hover {
+    background: #f2bd1c1c;
+    cursor: pointer;
+}
+
+.divTableRowB
+{
+    border-bottom: 1px dashed lightgray;
+    line-height: 2;
+    background: #fff !important;
+    cursor: pointer;
+}
+.divTableRowB:hover
+{
+    background: #f4f4f4 !important;
+}
+.BigDivTabel {
+    right: -15px;
+    height: 50px;
+    line-height: 3;
+}
+
+.BigDivTabel:hover {
+    background: #e3e3e3 !important;
+    color: #144d7a !important;
+}
+
+.RowActionBtn {
+    font-size: 11px !important;
+    display: none;
+}
+
+.actionField:hover>span {
+    font-size: 11pt;
+    display: block !important;
+}
+
+
+.subRowToolBar{
+    display: none;
+}
+.subRowToolBar i {
+    float: right;
+    color: #81a9bd !important;
+}
+
+.divTableRowB:hover .subRowToolBar
+{
+    display: block;
+}
+.subChassisSerialBTN
+{
+    float: left;
+    padding: 0;
+    margin-top: -3px;
+    height: 20px;
+    display: none;
+}
+.serialsInDB:hover .subChassisSerialBTN
+{
+    display: block;
+}
+.subRow-Box {
+    height: 30px;
+}
+.subRow-btn
+{
+    display: none;
+}
+
+.subrowMessage {
+    background: #f4f4f4;
+    text-align: right;
+    color: #ad003b;
+    direction: rtl;
+    height: 50PX;
+    line-height: 4;
+    font-style: italic;
+}
+.DivMouseOver {
+    background: rgba(16, 75, 100, 0.1);
+    border-bottom: 1px dashed #e1e1e1;
+    transition: 2ms;
+}
+.DivMouseOver:hover
+{
+    background: rgba(16, 75, 100, 0.3);
+    border-bottom: 1px dashed #e8edef;
+}
+#editSerialBTN {
+    position: absolute;
+    right: 0;
+    top: 70px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: 25px solid #0d800d;
+}
+.divTableRowB:hover .subRow-btn {
+    display: block;
+}
+
+.row.serialsInDB:hover {
+    background: #e3e3e3;
+    transition: 0.2s;
+}
+
+
+
+.divTableRowCHeader
+{
+    font-weight: bold;
+    border-bottom: 1px dashed lightgray;
+    line-height: 2;
+    background: #fff !important;
+}
+
+.serialsInDB div .CC:hover {
+    background: #f4f4f4;
+}
+
+.Sub_Chassis_Product {
+    background: #e7e7e7;
+    border: 1px solid #c2c2c2;
+    border-radius: 40px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    text-align: right;
+    color: #082841;
+}
+
+.singleRow {
+    width: 100%;
+    min-height: 35px;
+    border-bottom: 1px dashed lightgray;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+
+.fld {
+    width: 15%;
+    float: right;
+}
+.subrow {
+    width: 100%;
+    float: right;
+    text-align: right;
+    display: none;
+}
+
+.subrow_Show
+{
+    display: block;
+    background: #ffffff;
+    padding: 10px 10px 10px 10px;
+    border: 1px dashed #e6e6e6;
+    margin-bottom: 10px;
+
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    /*max-height: 300px;*/
+}
+}
+.subrow.subrow_Show div {
+    display: block;
+    height: 30px;
+}
+.subrow .divTableRowB {
+    font-family: tahoma;
+    font-size: 13px;
+    font-style: italic;
+    background: #e9faff !important;
+    color: #2d2d2d;
+}
+.subrow.subrow_Show .subChassisSerial {
+    margin-right: 50px;
+}
+.selectedRow {
+    min-height: 400px;
+    border-bottom: 2px dashed #dedede;
+    transition: 1s;
+    margin-bottom: 25px;
+    padding-top: 10px;
+    background: #f7fdff !important;
+    z-index: 1000;
+    box-shadow: 0px 0 50px 20px #000 !important;
+    /*box-shadow: -2px 2px 9px 3px lightblue !important;*/
+}
+.subrow_searchBox {
+    min-height: 50px;
+    padding-top: 5;
+    margin-bottom: 20px;
+    background: #ecf6f9;
+}
+.srtialRow {
+    margin-bottom: 10px !important;
+}
+
+.editSerialBTN_inLine {
+    position: absolute;
+    border-right: 15px solid green !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    right: 15px;
+}
+
+.TopLevelSerialNum {
+    border-radius: 50px;
+    background: #E91E63;
+    color: #fff;
+    text-align: center;
+    font-size: x-large;
+    width: auto;
+    display: inline-block;
+    padding-right: 20px;
+    padding-left: 20px;
+    line-height: 1.5;
+}
+.serialsInDB {
+    border-right: 3px solid;
+    padding: 3px;
+    margin-right: 5px;
+}
+.subSerialBox {
+    background: #2196F3;
+    color: #fff;
+    width: auto;
+    display: inline-block;
+    padding-left: 20px;
+    margin-right: -15px;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+}
+
+.Qtyfield i
+{
+    display: none;
+    margin-top: 14px;
+    margin-left: -100px;
+    float: right;
+    margin-right: 60px;
+    color: #5bc0de !important;
+}
+
+.Qtyfield:hover>i
+{
+    display: block;
+    color:red;
+}
+
+.deleteRow i {
+    display: none;
+    width: 5px;
+    margin-top: 10px;
+    font-size: 20px;
+
+}
+
+.deleteRow:hover>i
+{
+    display: block;
+    color:red;
+}
+
+ul.pagination {
+    float: left;
+}
+.masterField
+{
+    width: 250px;
+}
+.masterFieldLink {
+    font-weight: bold;
+    font-size: 15px;
+}
+.row-actions {
+    margin-top: 0px;
+    display: none;
+}
+.submitdelete {
+    color: #c74343;
+    cursor: pointer;
+}
+.editBtn {
+    color: #2185d0;
+    cursor: pointer;
+}
+.copyItem
+{
+    color: #b102d0;
+    cursor: pointer;
+}
+.hideEditBTN
+{
+    display: none !important;
+}
+.viewBtn {
+    color: #058c25;
+    cursor: pointer;
+}
+
+.ui.segment label {
+    float: right;
+    margin-top: 0px;
+    font-family: iransans;
+    color: gray !important;
+    width: 120px;
+}
+.mainInvoice.backLayer{
+    opacity: 0.6 !important;
+}
+
+.ui.search.selection.dropdown {
+    width: 350px !important;
+}
+
+
+.ui.selection.dropdown
+{
+    padding: 0.38571429em 2.6em 0.78571429em 1em !important;
+}
+input.search {
+    width: 300px !important;
+}
+
+span.RestoreTrash {
+    color: green;
+    cursor: pointer;
+}
+/*Input Image Upload */
+.ImageUpload {
+    border: 1px dashed lightgray;
+    height: 200px;
+}
+
+
+/* ToolBars*/
+.DatalistSelector {
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #d8d8d8;
+    color: #2185d0;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+.DatalistSelector.active {
+    background: #2185d0;
+    color: #fff;
+}
+/* Tabs*/
+.ui.tabular.menu {
+    font-family: iransans !important;
+}
+/* ---- Form */
+table.form-table input {
+    width: 25em;
+    margin-right: 50px;
+    margin-bottom: 30px;
+}
+table.form-table th {
+    background: #fff;
+    min-width: 100px;
+}
+
+select.selectpicker {
+    width: 22em;
+    margin-right: 50px;
+    margin-bottom: 30px;
+}
+
+
+.Organizations {
+    font-family: iransans;
+    width: 300px !important;
+}
+
+.btn-group.bootstrap-select {
+    margin-right: 180px;
+    margin-bottom: 30px;
+}
+.btn-group.bootstrap-select.dropup button {
+    width: 350px;
+}
+
+table.allcustomertable.table.table-hover input {
+    width: 1em !important;
+}
+table.listTable.table.table-hover input {
+    width: 1em !important;
+}
+/* icons */
+i.fa.fa-pencil {
+    color: #4CAF50;
+}
+i.fa.fa-plus {
+    color: #2196F3;
+}
+i.fa.fa-trash {
+    color: #db2828;
+}
+
+
+i.fa.fa-trash.gray {
+    color: gray;
+    transition: 0.5s;
+}
+
+i.fa.fa-trash.gray:hover
+{
+    color: red;
+}
+
+.btn-all-custommers i {
+    color: #e03997;
+    font-size: 20px;
+}
+
+/*Loading */
+
+.waitForLoading {
+    font-size: 50px !important;
+    color: green;
+    background: #fff;
+    position: absolute;
+    z-index: 200000;
+}
+.Loading {
+
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0;
+    position: absolute;
+
+}
+.Loading.part {
+
+    display: none;
+
+}
+
+.Loading img {
+    display: block;
+    width: auto;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    z-index: 2;
+}
+.Loading .LoadingBack {
+    background: white;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0;
+    position: absolute;
+    opacity: 0.7;
+}
+
+.Loading.ng-hide-add,
+.Loading.ng-hide-remove {
+    -webkit-transition : 1s ease-in-out opacity;
+    -moz-transition    : 1s ease-in-out opacity;
+    -ms-transition     : 1s ease-in-out opacity;
+    -o-transition      : 1s ease-in-out opacity;
+    transition         : 1s ease-in-out opacity;
+    opacity            : 1;
+}
+
+.Loading.ng-hide {
+    opacity : 0;
+}
+
+/* Main Loading Style*/
+
+.MainLoading {
+
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0;
+    position: absolute;
+    display: none;
+    z-index: 1000;
+}
+
+.MainLoading .show
+{
+    display: block;
+}
+
+.MainLoading img {
+    display: block;
+    width: auto;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    z-index: 2;
+}
+.MainLoading .LoadingBack {
+    background: white;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0;
+    position: absolute;
+    opacity: 0.7;
+}
+
+.MainLoading.ng-hide-add,
+.MainLoading.ng-hide-remove {
+    -webkit-transition : 1s ease-in-out opacity;
+    -moz-transition    : 1s ease-in-out opacity;
+    -ms-transition     : 1s ease-in-out opacity;
+    -o-transition      : 1s ease-in-out opacity;
+    transition         : 1s ease-in-out opacity;
+    opacity            : 1;
+}
+
+.MainLoading.ng-hide {
+    opacity : 0;
+}
+
+.Loading_waitForDB
+{
+    background-image: url(/img/rubix-loader.gif) !important;
+    width: 100%;
+    height: 100% !important;
+    background-size: 60px;
+    background-repeat: no-repeat;
+    z-index: 10000;
+    position: absolute;
+    background-position-x: 50%;
+    background-position-y: 20%;
+    background-color: rgba(246, 246, 246, 0.8);
+}
+
+.Loading_waitForDB_Small
+{
+    font-size: 18px;
+    color: gray;
+    /*
+    width: 100%;
+    height: 100% !important;
+    background-size: 60px;
+    background-repeat-x: no-repeat;
+    background-repeat-y: no-repeat;
+    z-index: 10000;
+    position: absolute;
+    background-position-x: 50%;
+    background-position-y: 20%;
+  background-color: rgba(246, 246, 246, 0.8);
+    */
+}
+
+
+.btnAddToChasiss {
+    display: none !important;
+    float: right;
+    font-size: 15px;
+    height: 30px;
+    margin-top: 5PX;
+}
+.btnAddToChasiss .show
+{
+    display: block;
+    float: right;
+}
+/*--------------*/
+
+
+
+
+/* List Filters */
+.filters.ui.search input {
+    text-align: right;
+    width: 50% !important;
+    min-width: 300px;
+}
+
+
+.ui.tabular.menu .active.item
+{
+    border-top: 2px solid #2185d0 !important;
+}
+
+.ui.segment {
+    border-radius: 6px !important;
+    padding-top: 3em !important;
+    color: #000;
+    font-family: iransans;
+    opacity: 1;
+    transition: 0.5ms;
+}
+
+
+.ui.segment .toolBar {
+    display: block;
+    text-align: right;
+    background: #ebebeb;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    height: 40px;
+}
+
+.section_new_edit.lowOpacity{
+    opacity: 0.8;
+}
+
+.alert.alert-danger.ng-binding {
+    display: none;
+}
+
+/**/
+.ui.steps .step.active {
+    border-right: 3px solid #21ba45;
+    background: #f0f8ff !important;
+}
+.ui.steps .step .title {
+    font-family: iransans !important;
+}
+.step {
+    cursor: pointer !important;
+}
+.step i {
+    font-size: 40px !important;
+    margin-left: 30px;
+}
+
+#columnTitles {
+    width: 25%;
+}
+#columnDetails {
+    width: 75%;
+}
+.ui.dividing.header {
+    color: #2185d0;
+}
+
+.stepAction {
+    background: #fff;
+    height: auto;
+    padding: 20px;
+    margin-right: -25px;
+    box-shadow: -1px 1px 7px 0px #d4d4d5;
+}
+.stepAction input {
+    width: 100% !important;
+    font-family: iransans !important;
+    color: #545454 !important;
+}
+.RequirementField:after {
+    content: "*";
+    color: red;
+}
+.stepForm
+{
+    display: none;
+}
+.stepForm.active
+{
+    display: block;
+    transition: 0.3s;
+}
+
+/* Custom Dimmer*/
+.dimmer-title
+{
+    float: right;
+    color: #2196F3;
+}
+.dimmer_form
+{
+    min-height: 550px;
+    width: 190% !important;
+    /*right: -220;*/
+}
+.dimmer_form.new
+{
+    border-top: 4px solid #21ba45 !important;
+}
+.dimmer_form.edit
+{
+    border-top: 5px solid #2185d0 !important;
+    width: 1200px !important;
+    min-height: 600PX;
+    position: absolute !important;
+    left: -300px;
+    top: -300px;
+}
+.dimmer_form.view
+{
+    border-top: 4px solid #f2711c !important;
+}
+.dimmer_form.other
+{
+    border-top: 4px solid #e03997 !important;
+    position: absolute !important;
+    top: 40% !important;
+    left: 50% !important;
+    width: 1200px !important;
+    min-height: 600px !important;
+    margin-top: -380px !important;
+    margin-left: -600px !important;
+}
+
+.dimmer_scroller
+{
+    overflow: scroll !important;
+}
+
+form.ui.form {
+    border: 1px solid #607d8b47;
+    height: 90%;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 25px;
+    background: #f4f4f4;
+}
+form.ui.form.type2 {
+    position: absolute !important;
+    left: 5px !important;
+    right: 5px !important;
+    bottom: 2px !important;
+    height: 85% !important;
+}
+
+.ui.buttons .button {
+    font-family: iransans !important;
+}
+.mode_div {
+    background: #e7e7e7;
+    height: 80px;
+    border-top: 1px solid gainsboro;
+    border-bottom: 1px solid gainsboro;
+    padding-top: 5px;
+}
+
+.resultProduct {
+    height: 50px;
+    width: 100%;
+    margin-right: 1px !important;
+    padding-top: 15px;
+    border-bottom: 1px solid #d4d4d557;
+    border-left: 4px solid #337ab7;
+    border-right: 4px solid #2185d0;
+    background: #fffffffa;
+}
+.OrderStatus {
+    height:95px;
+    width: 100%;
+    margin-right: 1px !important;
+    padding-top: 15px;
+    border-bottom: 1px solid #d4d4d557;
+    border-left: 4px solid #21ba45;
+    border-right: 4px solid #21ba45;
+    background: #fffffffa;
+}
+.ProductStatus {
+    min-height:70px;
+    width: 100%;
+    margin-right: 1px !important;
+    padding-top: 0px;
+    border-bottom: 1px solid #d4d4d557;
+    border-left: 4px solid #f2bd1c;
+    border-right: 4px solid #f2bd1c;
+    background: #fffffffa;
+}
+
+.greenblue {
+    border-right-color: #00b5ad;
+    border-left-color: #00b5ad;
+}
+
+.SerialNumber_MainLevel {
+    min-height:70px;
+    width: 100%;
+    margin-right: 1px !important;
+    padding-top: 0px;
+    border-bottom: 1px solid #d4d4d557;
+    border-left: 4px solid #e03997;
+    border-right: 4px solid #e03997;
+    background: #fffffffa;
+}
+.new_form_control {
+    border-top: 1px solid #ccd3d7;
+    margin-top: 5px !IMPORTANT;
+    padding-top: 10PX;
+}
+
+.calender input.search {
+    width: 75px !important;
+}
+.calender.ui.search.selection.dropdown {
+    width: 10px !important;
+}
+.calender.ui.selection.dropdown
+{
+    min-width: 6em !important;
+}
+.calender.ui.search.dropdown > .text {
+    right: -15px !important	;
+    top: 5px !important;
+}
+/* Order Menu*/
+
+.brandsID.ui.search.selection.dropdown.search-select {
+    width: 50px !important;
+}
+.TypeID.ui.search.selection.dropdown.search-select {
+    width: 50px !important;
+}
+.product_prtNum.ui.search.selection.dropdown.search-select {
+    width: 50px !important;
+}
+.selectProduct
+{
+    border-bottom: 1px solid #ccd3d7 !important;
+    border-top: 1px solid #ccd3d7;
+    background: white;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    transition: 0.3s;
+}
+.selectProduct_ticket {
+    border-left: 3px dashed #2196F3;
+    font-size: 12px;
+    padding-left: 10PX;
+    margin-top: -10PX;
+    line-height: 5;
+    background: #e3e3e3f4;
+}
+
+button#mode1 {
+    width: 60%;
+    font-size: 13px;
+}
+/* Sell Menu*/
+.green{
+    background: #21ba45;
+    color: #fff !important;
+}
+.red{
+    background: #E91E63;
+    color: #fff !important;
+}
+.blue {
+    background: #2185d0;
+    color: #fff !important;
+}
+
+.purple {
+    background: #5668ce;
+    color: #fff !important;
+}
+
+.greenBlueX
+{
+    background: #00b5ad;
+    color: #fff !important;
+}
+.numberBorder
+{
+    padding: 3px;
+    padding-right: 10PX;
+    padding-left: 10px;
+    border-radius: 100px;
+    font-weight: bold;
+    color: #c3c3c3;
+}
+.serialIcon
+{
+    line-height: 1.5 !important;
+    font-size: 22px !important;
+}
+.redx
+{
+    color :red !important;
+}
+.greenx
+{
+    color :green !important;
+}
+.toggleButton
+{
+    display: none !important;
+}
+.showtoggleButton
+{
+    display: block !important;
+}
+
+/* CheckBox*/
+/* The containerx */
+.containerx {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 220px !important;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+/* Hide the browser's default checkbox */
+.containerx input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    border: 1px solid #cfcfcf;
+}
+/* On mouse-over, add a grey background color */
+.containerx:hover input ~ .checkmark {
+    background-color: #ccc;
+
+}
+/* When the checkbox is checked, add a blue background */
+.containerx input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+/* Show the checkmark when checked */
+.containerx input:checked ~ .checkmark:after {
+    display: block;
+}
+/* Style the checkmark/indicator */
+.containerx .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.partnumbers_id {
+    z-index: 15000 !important;
+}
+/*Invoice*/
+
+label.invcsting {
+    text-align: right;
+    width: 38% !important;
+    margin-right: 6%;
+}
+
+.field_label {
+    text-align: right;
+    padding-right: 25px;
+    color: #5b5b5b;
+}
+
+.invoiceDescription {
+    background: #fff;
+    padding: 20px;
+    text-align: right;
+    margin-top: 10px;
+    border-top: 1px dashed lightgray;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed lightgray;
+}
+
+.divTableRowB:hover .addSubproduct {
+    display: block !important;
+}
+.addSubproduct {
+    font-size: 30px !important;
+    padding-top: 5px;
+    color: #21ba44;
+    display: none !important;
+}
+
+.datepicker-plot-area {
+    font-family: iransans !important;
+}
+
+.Newinvoice input {
+    width: 100% !important;
+}
+.mrgTop25 {
+    margin-top: 25px !important;
+}
+.underLine
+{
+    text-decoration: underline;
+}
+
+.left-border-gray-dashed{
+    border-left: 1px dashed gray;
+}
+.invoiveDetials {
+    text-align: right;
+    background: #e5e5e5;
+    border-top: 1px dashed #e6f3f7;
+    min-height: 30px !important;
+    height: auto;
+}
+.invoice_unit_price
+{
+    padding: 0 !important;
+    font-size: 12px;
+}
+.TotalSummeryBox {
+    margin-top: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    margin-bottom: 10px;
+    background: #ededed;
+    min-height: 150px;
+    height: auto !important;
+}
+
+.EditableText {
+    color: #00213c;
+    font-style: italic;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.EditableText:hover {
+    color: #0081e7;
+}
+.del_invc_item
+{
+    font-size:  18px;
+    width: 20px;
+    float: left;
+    padding:  4px;
+    padding-right: 15px;
+
+}
+.Cpointer {
+    cursor: pointer;
+}
+.Cpointer:hover {
+    color: #266fa8;
+}
+
+.Sub_Chassis_order {
+    transition: 0.2s;
+}
+.Sub_Chassis_order:hover {
+    background: #ddf7ff;
+    box-shadow: 1px 1px 2px 2px #e7e7e7;
+}
+.Sub_Chassis_order .Row div {
+    padding: 0;
+    font-size: 11px;
+}
+.Sub_Chassis_order .row {
+    border-top: 1px dashed lightgray;
+}
+
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    left: 0;
+    right: 14px;
+    padding-right: 10px;
+    line-height: 2.5em;
+    background: #f4f4f4;
+    width: 350px;
+    cursor: pointer;
+}
+.autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+    padding-right: 10px ;
+}
+.SubProductData {
+    font-size: 11px;
+    margin-bottom: 1px;
+    font-style: italic;
+    color: #071458;
+    border-top: 1px solid #ececec;
+}
+.pdf_btn
+{font-size:24px !important;
+    color: red;}
+
+.pdfconf {
+    font-size: 25px !important;
+    cursor: pointer;
+}
+/* Mobile*/
+@media only screen and (max-width: 600px) {
+    .left-sidebar.col-md-1 {
+        display: none;
+    }
+}
+
+.settingPanel
+{
+    background: white;box-shadow: 0px 0px 10px -4px grey; padding: 20px ;margin-top: 10px;
+}
+
+.settingPanelX {
+    background: #fff;
+    height: auto;
+    box-shadow: 0px 0px 10px -4px grey;
+    padding: 20px;
+}
+
+.Wait_4_userList {
+    font-size: 50px !important;
+    text-align: center;
+    position: absolute;
+    background: #fff;
+    color: red;
+    border-radius: 100px;
+    right: 45%;
+    top: 45%;
+}
+.actionCheckBox {
+    height: 30px;
+    text-align: right;
+    border-bottom: 1px dashed #eaeaea;
+    padding-top: 5px;
+}
+.actionCheckBox input {
+    width: 50px !important;
+    float: right;
+}
+
+.StockTypeA {
+    border-right: 5px solid #8BC34A;
+}
+
+.StockTypeB {
+    border-right: 5px solid #FFC107;
+}
+
+.StockType_span_A {
+    background: #8bc34a8a;
+    border-radius: 100px;
+    padding: 5px;
+}
+
+.StockType_span_B {
+    background: #ffc1055e;
+    border-radius: 100px;
+    padding: 5px;
+}
+.edit_link {
+    cursor: pointer;
+    color: #0000ca;
+}
+.edit_link:hover {
+    color: #2d2a90;
+}
+/*Sub_Chassis_part*/
+.Sub_Chassis_part {
+    background: #fff !important;
+    text-align: right;
+    font-size: 12px;
+    border-right: 2px solid #2196F3;
+}
+
+.Sub_Chassis_part div {
+    border-bottom: 1px solid #cecece;
+    height: 25px;
+    padding-top: 1px;
+}
+
+.Sub_Chassis_part:hover {
+    background: #e5e5e5 !important;
+}
+
+.savedList {
+    margin-bottom: 30px;
+}
+.saved_parts div {
+    background: #d1ebff;
+    min-height: 35px;
+    line-height: 2;
+    font-size: 17px;
+}
+
+.saved_parts.ng-scope {
+    margin-bottom: 10px;
+
+}
+
+.content .header {
+    font-family: iransans !important;
+}
+
+.SubChassisPartView {
+    padding: 15px;
+    background: #efefef;
+    margin-top: 10px;
+}
+
+.SubChassisPartView:before {
+    content: "قطعات منفصله مرتبط با شاسی فوق :";
+}
+.SubChassisPartView .singleRow:hover {
+    background: #fbfbfb;
+}
+
+.SubChassisPartView .singleRow.active {
+    background: #fbfbfb;
+}
+
+.Sub_Chassis_part_List
+{
+    /*height: 400px;*/
+    /*overflow: scroll;*/
+    /*overflow-x: hidden;*/
+    /*overflow-y: scroll;*/
+}
+
+.SerialInput tr td
+{
+    padding-bottom: 3px;
+}
+
+.SerialInput tr td input
+{
+    width: 170px !important;
+}
+
+.ActiveSubchassis
+{
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    top: 0;
+    bottom: 0 !important;
+}
+
+.Title_PartofChassis {
+    text-align: right;
+    padding-right: 17px;
+    height: 40px;
+    border-bottom: 1px dashed #2196f2;
+    border-top: 1px dashed #2196f2;
+    font-size: 15px;
+    color: #2c2b2b;
+    background: #f1f1f1;
+    line-height: 2.5;
+    margin-right: 32px;
+}
+
+.showEmptyListMessage
+{
+    border-bottom: 1px dashed #2196f2;
+    margin-right: 30px;
+    height: 50px;
+    line-height: 4;
+}
+
+.content .header {
+    cursor: pointer !important;
+}
+.header.Text_Avail {
+    color: #4CAF50 !important;
+}
+.description.Text_Avail {
+    color: #8bc34ad4 !important;
+}
+.header.Text_unAvailable {
+    color: #E91E63 !important;
+}
+.description.Text_unAvailable {
+    color: #e91e63ab !important;
+}
+
+.item .content {
+    width: 100% !important;
+}
+.item:hover {
+    background: #f5f5f5 !important;
+}
+
+
+.waiting {
+    display: block !important;
+    margin: auto;
+    width: 100px;
+    font-size: 25px !important;
+    margin-bottom: 24px;
+    color: #00bc00;
+}
+
+.settingPanel.AllUsers .Header {
+    font-weight: bold;
+    font-size: 17px;
+    height: 30px;
+    padding-top: 5px;
+    background: #f3f3f3 !important;
+}
+
+.NewRole form {
+    background: #fff !important;
+    height: 195px !important;
+}
+
+.NewRole h4 {
+    margin-top: 10px !important;
+    text-align: right;
+    border-top: 1px dashed #e5e5e5 !important;
+    padding-top: 5px !important;
+}
+
+
+/*______________*/
+.funkyradio div {
+    clear: both;
+    overflow: hidden;
+}
+
+.funkyradio label {
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+    display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+    position: relative;
+    line-height: 2.5em;
+    text-indent: 3.25em;
+    margin-top: 2em;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius: 3px 0 0 3px;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+    color: #888;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+    color: #777;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #333;
+    background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+    box-shadow: 0 0 0 3px #999;
+}
+
+.funkyradio-default input[type="radio"]:checked ~ label:before,
+.funkyradio-default input[type="checkbox"]:checked ~ label:before {
+    color: #333;
+    background-color: #ccc;
+}
+
+.funkyradio-primary input[type="radio"]:checked ~ label:before,
+.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before,
+.funkyradio-success input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before,
+.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before,
+.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked ~ label:before,
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5bc0de;
+}
+
+
+.funkyradio-success label {
+    width: 100% !important;
+}
+
+
+
+/*label.ng-binding:hover {*/
+    /*background: #4CAF50;*/
+    /*color: #fff !important;*/
+/*}*/
+
+/*label.ng-binding {*/
+    /*transition: 0.3s;*/
+/*}*/
+/*______________*/
+.editRole {
+    height: 30px;
+    color: #0063b1;
+    cursor: pointer;
+}
+.editRole:hover {
+    color: #2196F3 !important;
+}
+
+
+.partnumbers_id .text {
+    direction: ltr !important;
+}
+
+.closeSelectedRow
+{
+    display: none;
+}
+.selectedRow .closeSelectedRow {
+    display: block;
+    float: left;
+    color: red;
+}
+
+.resultProduct table label {
+    font-size: 12px;
+}
+
+table.Dateinput select {
+    padding: 0 !important;
+    font-size: 12px;
+    width: 50px !important;
+}
+
+/* PDF setting*/
+.inputStyle{
+    width: 100%!important;
+}
+.Aactive {
+    border-bottom: 3px solid red;
+}
+
+form#chngPas {
+    background: #fff;
+    padding: 20px;
+    border-right: 5px solid orange;
+}
+
+.formSetting_input
+{
+    width: 200px !important;
+    float: right;
+    margin-left: 15px;
+}
+i.fa.fa-key.changepass {
+    font-size: 17px !important;
+    margin-right: 15px !important;
+    cursor: pointer !important;
+}
+
+.select_CustommerList a {
+    text-align: right;
+}
+
+
+.select_CustommerList .btn-group.bootstrap-select {
+    width: 410px !important;
+    float: left !important;
+}
+.All_PartNumbersInSubProduct label {
+    position: absolute;
+}
+
+.All_PartNumbersInSubProduct .btn-group.bootstrap-select.ng-pristine.ng-untouched.ng-valid.ng-empty {
+    width: 350px;
+}
+
+.CustommerList a {
+    text-align: right;
+}
+.CustommerList .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    float: right;
+    width: 80%;
+    margin: 0;
+}
+
+.StockRequest_CustommerList .btn-group.bootstrap-select {
+    margin: 0;
+}
+
+.CustommerOrg a {
+    text-align: right;
+}
+
+.text_align_left {
+    text-align: left;
+}
+
+.addSubproduct span {
+    font-size: 13px;
+    float: right;
+    font-family: iransans;
+    width: 100px;
+    margin-right: -20px;
+}
+
+/*.invoice_unit_price.ng-binding span input {*/
+    /*width: 100% !important;*/
+/*}*/
+
+.invoice_unit_price span input {
+    width: 100% !important;
+    position: absolute;
+}
+
+.invoice_unit_price .saveCheckSmall {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    background: #ffffff;
+    height: 25px;
+    width: 24px;
+    font-size: 25px !important;
+    padding-top: 3px;
+    border: 0 !important;
+}
+.editUnitpriceInput{
+    display: block;
+    position: relative;
+}
+
+.EditQtyValue input
+{
+    width: 100px !important;
+}
+
+.mycustom {
+    border: solid 1px green;
+    position: relative;
+}
+.mycustom input[type=text] {
+    border: none;
+    width: 100%;
+    padding-right: 123px;
+}
+.mycustom .input-group-prepend {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;z-index:9;
+}
+
+.EditQtyValue {
+
+    position: relative;
+    display: block;
+    width: 100px;
+    z-index: 1;
+}
+.EditQtyValue input {
+    width: 75px !important;
+    padding: 0 !important;
+}
+.EditQtyValue i {
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+.QtyValueLabel:hover {
+    background: #232323;
+    color: #fff;
+    padding-right: 23px;
+    padding-left: 30px;
+    text-align: center;
+}
+.QtyValueLabel {
+    color: #2196F3;
+    cursor: pointer;
+}
