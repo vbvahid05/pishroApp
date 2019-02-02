@@ -15,7 +15,7 @@ class pluginLicense
      */
     public function handle($request, Closure $next ,$action )
     {
-        if ($action=='products')
+        if ($action=='productszz')
             return redirect('/');
         else
             return $next($request);

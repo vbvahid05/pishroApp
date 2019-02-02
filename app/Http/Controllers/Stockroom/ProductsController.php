@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Stockroom;
 //>>>>>>>>>>>> Model
+use App\Mylibrary\excel\InvoicesExport;
+use App\Mylibrary\excel\productsExport;
 use App\Stockroom_products;
 use App\Stockroom_products_brands;
 use App\Stockroom_products_type;
 use App\Mylibrary\StockroomClass;
 use App\Mylibrary\PublicClass;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
 {
@@ -22,9 +26,27 @@ class ProductsController extends Controller
     if ( $this->middleware('auth')) return "OK";
     else return view('/login');
 }
+
+
+
   public  function showProducts()
   {
-       $AllProducts = \DB::table('stockroom_products')
+
+  return Excel::download(new productsExport(), 'PishroProducts.xlsx');
+
+
+
+
+
+
+
+
+
+
+
+
+
+      $AllProducts = \DB::table('stockroom_products')
             ->join('stockroom_products_brands', 'stockroom_products_brands.id', '=', 'stockroom_products.stkr_prodct_brand')
             ->join('stockroom_products_types',  'stockroom_products_types.id', '=', 'stockroom_products.stkr_prodct_type')
             ->select('*', \DB::raw('stockroom_products_brands.stkr_prodct_brand_title AS Brand ,
@@ -37,6 +59,9 @@ class ProductsController extends Controller
            '))
              ->orderBy('stockroom_products.stkr_prodct_brand', 'ASC')
             ->get();
+
+
+
     $table="<table border='1' style=' border-collapse: collapse;'>";
       $table=$table."<tr>";
       $table=$table."<th>ردیف</th>";

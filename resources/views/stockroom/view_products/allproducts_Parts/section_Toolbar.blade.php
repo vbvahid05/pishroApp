@@ -19,11 +19,19 @@
         {{ Lang::get('labels.fulldelete') }}
     </div>
 
+    <a class="exportExcel btn btn-default " href="/showProducts" style="position: absolute;left: 25px;">
+        <i class="fa fa-file-excel-o" style="font-size: 18px;color: green;"></i>
+        دریافت لیست کالا
+    </a>
+
 </div>
 <!-- TOOLBAR -->
 <div class="toolbars well well-sm">
       <span  id="ShowAll" class="DatalistSelector"  ng-click="ShowAllProducts()" >      {{ Lang::get('labels.all') }}   </span>
       <span  id="ShowTrashed"  class="DatalistSelector" ng-click="ShowTrashedProducts()" >   {{ Lang::get('labels.Trash') }}  </span>
+
+
+
 </div>
 <!-- Notifications-->
   <div id="publicNotificationMessage" class="publicNotificationMessage"></div>
