@@ -2018,6 +2018,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.section_new_edit_invoice_in_Dimmer=true;
                     $scope.formStatus='new';
                     $scope.section_pdfSetting_dimmer=false;
+                    $scope.section_searchInvoice_dimmer =false;
                     // Form Controllers
                     break;
 
@@ -2029,6 +2030,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.FormTitle=lbl_Edit_invoice;
                     $scope.FormTitle_viewMode=lbl_Edit_invoice;
                     $scope.section_pdfSetting_dimmer=false;
+                    $scope.section_searchInvoice_dimmer =false;
                     break;
 
                 case 'subPartToinvoice' :
@@ -2054,8 +2056,17 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.section_new_edit_invoice_in_Dimmer=false;
                     $scope.section_addSubProduct_dimmer=false;
                     $scope.section_sub_chassis_list=false;
+                    $scope.section_searchInvoice_dimmer =false;
                     break;
 
+
+                case  'section_searchInvoice' :
+                    $scope.section_searchInvoice_dimmer =true;
+                    $scope.section_pdfSetting_dimmer=false;
+                    $scope.section_new_edit_invoice_in_Dimmer=false;
+                    $scope.section_addSubProduct_dimmer=false;
+                    $scope.section_sub_chassis_list=false;
+                    break;
 
 
 
@@ -3768,4 +3779,34 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         }
 
 
+        $scope.SearchInvoice=function () {
+            SelectDimmer('section_searchInvoice');
+            $('#Dimmer_page').dimmer('show');
+            $scope.FormTitle="Search Invoice";
+        }
+
+        $scope.searchInvoice=function () {
+            var args= {
+                Action:"SearchInvoice",
+                SearchForKey:$scope.SearchFor
+            };
+            $http.post('/services/sell/SearchInvoice',args).then
+            (function xSuccess(response) {
+                if (response.data.length)
+                {
+                    $scope.SreachResalt=response.data;
+                    $scope.Noresult=false;
+                }
+
+                else
+                {
+                    $scope.SreachResalt=[];
+                    $scope.Noresult=true;
+                }
+
+                console.log(response.data)
+            }), function xError(response)
+            {}
+
+        }
     }]);

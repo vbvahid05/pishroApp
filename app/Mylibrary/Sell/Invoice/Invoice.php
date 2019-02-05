@@ -1059,10 +1059,23 @@ public function add_subProduct_in_Invoice   ($request)
          catch (\Exception $e)
          {
              return $e->getMessage();}
-
-
-
     }
+//--------------------
+    public function SearchInvoice($req)
+    {
+         $keyWord=$req['SearchForKey'];
+     return   $AllProducts = \DB::table('sell_invoice_details')
+            ->join('sell_invoices AS invoices', 'invoices.id', '=', 'sell_invoice_details.sid_invoice_id')
+            ->join('stockroom_products AS products', 'products.id', '=', 'sell_invoice_details.sid_product_id')
+            ->where('products.stkr_prodct_partnumber_commercial', 'LIKE', "%$keyWord%" )
+            ->orWhere('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
+//            ->where('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
+            ->select('*')
+            ->orderBy('invoices.updated_at', 'desc')
+//           ->orderBy('sell_invoice_details.sid_product_id', 'desc')
+            ->get();
+    }
+
 //--------------------
     public  function  getPDFStings($req)
     {

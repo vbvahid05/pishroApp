@@ -221,6 +221,11 @@ public function Invoice(request $request ,$function)
                $allInvoiceDate= new Invoice();
                return $allInvoiceDate->updateNewSubProduct_Qty($request);
             break;
+
+        case 'SearchInvoice':
+            $SearchInvoice= new Invoice();
+            return $SearchInvoice->SearchInvoice($request);
+            break;
     }
 
 }

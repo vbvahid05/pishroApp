@@ -74,27 +74,7 @@
                         <i class="fa fa-cog pdfconf" ></i>
                     </a>
                 </td>
-
-
                <br/>
-
-
-<!--
-               <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
-                 <span class="edit">
-                   <span class="editBtn"  ng-click="EditSelected(row.orderID)" aria-label="{{Lang::get('labels.edit')}}" > {{ Lang::get('labels.edit') }} </span> |
-                 </span>
-                 <span class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
-                 </span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
-
-               <div ng-show="inTrashlist" id="inTrashlist" class="row-actions">
-                 <span class="RestoreTrash"> <span  class="RestoreTrash"  ng-click="RestoreFromTrash(row.orderID)" >{{ Lang::get('labels.RestoreFromTrash') }} | </span></span>
-                 <span class="trash">        <span  class="submitdelete"  ng-click="DeleteFromDataBase(row.orderID)" >{{ Lang::get('labels.fulldelete') }}</span></span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
--->
       </tr>
     </table>
   </div>
