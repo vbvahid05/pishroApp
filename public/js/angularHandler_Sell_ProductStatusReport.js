@@ -2991,6 +2991,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         $scope.selectRow =function (productID,Totalqty,StockRequestID,StockRequestRowID)
         {
+
             $('i.fa.fa-close').addClass('hide');
             $('.closeSubRow'+StockRequestRowID).removeClass('hide');
             $scope.showspinner_Loading=true;
@@ -3082,8 +3083,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     {
 
                         //var newItemNo = $scope.choicesx.length+1;
+
                         $scope.choicesx.push({'id':i-1});
                     }
+
                 }),
                 function xError(response)
                 {

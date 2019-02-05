@@ -63,13 +63,13 @@
 
                <div class="subrow col-sm-12 col-md-12">
                <i ng-show="showspinner_Loading" class="fa fa-spinner fa-spin" style="position: absolute;z-index: 1000;font-size: 30px;color: #F44336;background: #fff;border-radius: 100px;right: 50%;"></i>
+
                   <div class="row" ng-repeat="chcs in choicesx" >
                     <div class="col-md-6 col-sm-6 pull-right" style="margin-bottom:  8px;" >
                       <label>@{{$index+1}}</label>
-                      <input  ng-model="chcs.SerialA"  ng-keypress="checkEnterpressdB($event ,$index+1)" class="A@{{$index+1}}"  ng-blur="checkThisSerial(1,SRPA.productID,$index+1)" id="serialA@{{SRPA.productID}}@{{$index+1}}" type="text" placeholder="{{ Lang::get('labels.serialNumber_first') }}">
+                      <input ng-if="$index<SRPA.product_QTY"  ng-model="chcs.SerialA"  ng-keypress="checkEnterpressdB($event ,$index+1)" class="A@{{$index+1}}"  ng-blur="checkThisSerial(1,SRPA.productID,$index+1)" id="serialA@{{SRPA.productID}}@{{$index+1}}" type="text" placeholder="{{ Lang::get('labels.serialNumber_first') }}">
                         <i class="serialIcon" id="serialIcon@{{SRPA.productID}}@{{$index+1}}" ></i>
                     </div>
-
 
                     <div  class="col-md-6 col-sm-6 pull-right" style="margin-bottom:  8px;">
                         <div ng-show="haveTwoSerial">
@@ -77,7 +77,6 @@
                             <input  ng-model="chcs.SerialB" ng-blur="checkThisSerial(2,SRPA.productID,$index+1)" ng-keypress="checkEnterpressdBinputs($event ,$index+1)" class="B@{{$index+1}}"  id="serialB@{{SRPA.productID}}@{{$index+1}}" type="text" placeholder="{{ Lang::get('labels.serialNumber_last') }}">
                             <i class="serialIcon" id="serialIconB@{{SRPA.productID}}@{{$index+1}}" ></i>
                         </div>
-
                     </div>
                   </div>
 

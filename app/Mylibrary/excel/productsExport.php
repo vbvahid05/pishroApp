@@ -7,8 +7,10 @@
  */
 
 namespace App\Mylibrary\excel;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -72,4 +74,9 @@ class productsExport implements FromCollection,WithHeadings,WithMapping
                 $row->Title
             ];
     }
+
+    /**
+     * @return View
+     */
+
 }
