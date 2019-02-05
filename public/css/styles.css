@@ -2278,10 +2278,19 @@ i.fa.fa-key.changepass {
 .SreachResalt {
     height: 500px;
     overflow: auto;
+    margin-top: -15px;
 }
 .SreachResalt tr {
     height: 20px !important;
 }
 .SreachResalt tr td {
     padding: 3px !important;
+}
+.popover {
+    max-width: 350px !important;
+    font-family: iransans !important;
+}
+.popover td {
+    cursor: pointer;
+    padding: 0px !important;
 }

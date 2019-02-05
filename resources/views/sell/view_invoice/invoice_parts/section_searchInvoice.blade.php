@@ -53,7 +53,7 @@
                                 <td> @{{SRslt.stkr_prodct_partnumber_commercial}}</td>
                                 <td> @{{ SRslt.stkr_prodct_title }} </td>
                                 <td> @{{ SRslt.si_Alias_id }} </td>
-                                <td> @{{ SRslt.si_date }} </td>
+                                <td> @{{ SRslt.si_date |Jdate }} </td>
                                 <td> @{{ SRslt.sid_qty }} </td>
                                 <td> @{{ SRslt.sid_Unit_price }} </td>
                                 <td> @{{  SRslt.sid_qty*SRslt.sid_Unit_price }} </td>

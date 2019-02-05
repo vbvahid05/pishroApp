@@ -57,3 +57,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/persian-datepicker/persian-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/persian-datepicker/persian-date.min.js') }}"></script>
 <link rel="stylesheet" href="{{ URL::asset('js/persian-datepicker/persian-datepicker.min.css') }}" />
+
+<link rel="stylesheet" href="{{ URL::asset('css/jquery.Bootstrap-PersianDateTimePicker.css') }}" />
+<script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/calendar.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js') }}"></script>

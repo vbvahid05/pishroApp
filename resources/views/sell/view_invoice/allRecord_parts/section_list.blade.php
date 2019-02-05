@@ -55,8 +55,9 @@
                     </div>
                 </td>
                 <td class="col-md-4" ng-click="Show_Selected_invoice(row.id)"  style="color: #0066b7;cursor: pointer;">@{{ row.custommer_name}} @{{ row.custommer_family}}  <br/> @{{ row.orgName}} </td>
-                <td class="col-md-2">@{{ row.invoices_Date}}</td>
-                <td class="col-md-2">@{{ row.createdBy}}</td>
+                <td class="col-md-2">@{{ row.invoices_Date | Jdate}}</td>
+                <td class="col-md-2">
+                    @{{ row.createdBy}}</td>
                 <td class="col-md-1">
 
                     <a ng-show="row.VerifiedBy!=null" href="/sell/invoice/print/@{{ row.id }}" style="font-size:24px" target="_blank">

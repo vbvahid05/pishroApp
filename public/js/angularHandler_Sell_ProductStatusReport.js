@@ -1238,38 +1238,23 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //######## ACTIONS ###################
         $scope.save_Invoice_Base=function()
         {
-            // invoice_AliasID= $scope.invoiceAlias;
-            // invoice_date= $("#datesX").val();
-            // invoice_Currency= $("#Currency").val();
-            // invoice_custommerID= $("#custommerID").val();
-
             var args= {
                 Action:"SaveInvoice_Base",
                 invoice_AliasID : $scope.invoiceAlias,
-                invoice_date    : $("#datesX").val(),
+                invoice_date    : $("#InvoiceDate").attr("data-mdpersiandatetimepickerselecteddatetime"),
                 invoice_Currency:  $("#Currency").val(),
                 invoice_custommerID: $("#custommerID").val()
             };
 
-            console.log(args);
+
             $http.post('/services/sell/save_Invoice_Base',args).then
             (function xSuccess(response)
             {
+                console.log(response.data);
                 if (response.data!=0)
                 {
                     All_invoice_Date(0);
                     $scope.Show_Selected_invoice(response.data[0].invoicesID);
-                    //
-                    // resp=response.data[0];
-                    // $scope.echo_invoiceAlias=$scope.invoiceAlias;
-                    // $scope.echo_orgName=$("#custommerID option:selected").text();
-                    // $scope.echo_Currency=$("#Currency option:selected").text();
-                    // $scope.echo_date =$('#datesX').val();
-                    // $scope.invoicesID=resp.invoicesID;
-                    // $scope.NewinvoiceRow=false;
-                    // $scope.NewinvoiceRow=false;
-                    // $scope.show_invoiceRow=true;
-                    // $scope.selectProductx=true;
                 }
                 else
                     toast_alert(error_message,'danger');
@@ -1351,9 +1336,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     SelectDimmer('edit_invoice');
                     $('#Dimmer_page').dimmer('show');
                     $(".MainLoading").addClass("show");
-
                     $scope.echo_invoicesID = Invoice_id;
-                    $scope.echo_date = response.data['0']['0'].si_date;
+
+                    // $dateis=(response.data['0']['0'].si_date).split('-');
+                    // $scope.echo_date = gregorian_to_jalali(parseInt($dateis[0]),parseInt($dateis[1]),parseInt($dateis[2]));
+
+                    $scope.echo_date=Date_Convert_gregorianToJalali(response.data['0']['0'].si_date);
+
                     $scope.echo_invoiceAlias = response.data['0']['0'].si_Alias_id;
                     $scope.echo_orgName = response.data['0']['0'].org_name + '(' + response.data['0']['0'].cstmr_name + ' ' + response.data['0']['0'].cstmr_family + ')';
                     $scope.echo_custommerID = response.data['0']['0'].si_custommer_id;
@@ -1903,12 +1892,14 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             var Args= {
                 Action:"edit_invoice_Base_data",
                 invoicesID : $scope.echo_invoicesID,
-                new_date:$('#datesXD').val(),
+                // new_date:$("#datesXD").attr("data-mdpersiandatetimepickerselecteddatetime"),
+                 new_date:$("#datesXD").val(),
                 new_Currency:$scope.Currency,
                 new_custommerID :  $('#EditcustommerID').val()
             };
 
-            console.log(Args);
+
+
             $http.post('/services/sell/edit_invoice_Base_data',Args).then(
                 function xSuccess(response)
                 {
@@ -1918,13 +1909,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.productTabel=true;
                     $scope.new_form_control =false;
                     $scope.edit_form_control=true;
-
+                    console.log(response.data);
                     All_invoice_Date(0);
                     $scope.EditInvoiceLIST(1);
                     $scope.Show_Selected_invoice($scope.echo_invoicesID);
-
-                    //$scope.EditInvoiceLIST(1);
-
                 }),
                 function xError(response)
                 {

@@ -49,7 +49,10 @@
                         </div>
                         <div class="three wide field">
                             <label>{{ Lang::get('labels.invoice_date') }}</label>
-                            <input id="datesX" class="dates" type="text" style="height: 45px;">
+                                {{--<div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#exampleInput3"></div>--}}
+                                <input type="text" class="form-control" id="InvoiceDate" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" />
+                            {{--<label>{{ Lang::get('labels.invoice_date') }}</label>--}}
+                            {{--<input id="datesX" class="dates" type="text" style="height: 45px;">--}}
                         </div>
                         <div class="two wide field">
                             <label>{{ Lang::get('labels.invoice_currency') }}</label>
@@ -121,7 +124,8 @@
                         </div>
                         <div class="three wide field">
                             <label>{{ Lang::get('labels.invoice_date') }}</label>
-                            <input id="datesXD" ng-model="datesXD" class="dates" type="text" style="height: 45px;">
+                            <input id="datesXD" ng-model="datesXD" type="text" class="form-control"  placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" />
+                            {{--<input id="datesXD" ng-model="datesXD" class="dates" type="text" style="height: 45px;">--}}
                         </div>
                         <div class="two wide field">
                             <label>{{ Lang::get('labels.invoice_currency') }}</label>
