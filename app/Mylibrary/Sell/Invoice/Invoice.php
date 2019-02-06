@@ -198,7 +198,8 @@ class Invoice
     //########## ####### ###############
     //----------------------------------
     public function SaveInvoice_Base($request)
-    {try{
+    {
+        try{
         $data=$request->all();
         $AliasID =$data['invoice_AliasID'];
         $date =$data['invoice_date'];
@@ -206,14 +207,12 @@ class Invoice
         $custommer =$data['invoice_custommerID'];
         $createdBy=\Auth::user()->id;
 
-        //CONVERT DATE
-//            $Gdate=explode("/",$date);
-//            $jy=$Gdate[0];//$jm=(int)$Gdate[1];$jd=(int)$Gdate[2];
-//            $jm=$Gdate[1];
-//            $jd=$Gdate[2];
-//            $jconvert= new PublicClass;
-//            //   return $jconvert->convert_jalali_to_gregorian($jy,$jm,$jd,$mod='');
-
+            $arDate= explode(",",$date);
+            $y=$arDate[0];$yr=explode("{\"Year\":",$y); $year=$yr[1];
+            $m=$arDate[1]; $mn=explode("\"Month\":",$m); $month=$mn[1];
+            $d=$arDate[2];$dy=explode("\"Day\":",$d);  $day=$dy[1];
+            $jconvert= new PublicClass;
+            $date= $jconvert->convert_jalali_to_gregorian($year,$month,$day,$mod='');
 
             $invoice = new sell_invoice;
             $invoice->si_Alias_id = $AliasID;
@@ -821,7 +820,12 @@ return  sell_invoice::where('id', '=', $invoicesID) ->update(array('si_Descripti
     {
         $data=$request->all();
         $invoiceTargetID= $data['invoicesID'];
-        $new_date= $data['new_date'];
+
+       $new_date= $data['new_date'];
+        $arDate= explode("/",$new_date);
+        $y=$arDate[0] ;$m=$arDate[1] ;$d=$arDate[2] ;
+        $jconvert= new PublicClass;
+        $new_date= $jconvert->convert_jalali_to_gregorian($y,$m,$d);
         $new_Currency= $data['new_Currency'];
         $new_custommerID= $data['new_custommerID'];
 
@@ -1059,10 +1063,23 @@ public function add_subProduct_in_Invoice   ($request)
          catch (\Exception $e)
          {
              return $e->getMessage();}
-
-
-
     }
+//--------------------
+    public function SearchInvoice($req)
+    {
+         $keyWord=$req['SearchForKey'];
+     return   $AllProducts = \DB::table('sell_invoice_details')
+            ->join('sell_invoices AS invoices', 'invoices.id', '=', 'sell_invoice_details.sid_invoice_id')
+            ->join('stockroom_products AS products', 'products.id', '=', 'sell_invoice_details.sid_product_id')
+            ->where('products.stkr_prodct_partnumber_commercial', 'LIKE', "%$keyWord%" )
+            ->orWhere('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
+//            ->where('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
+            ->select('*')
+            ->orderBy('invoices.si_date', 'desc')
+//           ->orderBy('sell_invoice_details.sid_product_id', 'desc')
+            ->get();
+    }
+
 //--------------------
     public  function  getPDFStings($req)
     {

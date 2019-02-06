@@ -295,6 +295,7 @@ return [
 'invoiceConfirm'=>'تایید پیش فاکتور',
 'invoice_validation'=>'مدت اعتبار پیش فاکتور',
 'invoice_delivery_Type' =>'نحوه تحویل',
+'keyValueNotFound'=>'اطلاعات یافت نشد',
 'summery' =>'مجموع ',
 'Totalsummery' =>'جمع کل',
 '$'=>'دلار',

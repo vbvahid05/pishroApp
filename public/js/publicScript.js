@@ -149,6 +149,14 @@ function jalali_to_gregorian(jy,jm,jd){
 }
 
 
+function Date_Convert_gregorianToJalali(date)
+{
+    $dateis=date.split('-');
+    return gregorian_to_jalali(parseInt($dateis[0]),
+                               parseInt($dateis[1]),
+                               parseInt($dateis[2]));
+}
+
 
 //toast_alert ----------------------
 function toast_alert(message,status)

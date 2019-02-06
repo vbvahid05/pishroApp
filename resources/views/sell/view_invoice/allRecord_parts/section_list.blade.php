@@ -55,8 +55,9 @@
                     </div>
                 </td>
                 <td class="col-md-4" ng-click="Show_Selected_invoice(row.id)"  style="color: #0066b7;cursor: pointer;">@{{ row.custommer_name}} @{{ row.custommer_family}}  <br/> @{{ row.orgName}} </td>
-                <td class="col-md-2">@{{ row.invoices_Date}}</td>
-                <td class="col-md-2">@{{ row.createdBy}}</td>
+                <td class="col-md-2">@{{ row.invoices_Date | Jdate}}</td>
+                <td class="col-md-2">
+                    @{{ row.createdBy}}</td>
                 <td class="col-md-1">
 
                     <a ng-show="row.VerifiedBy!=null" href="/sell/invoice/print/@{{ row.id }}" style="font-size:24px" target="_blank">
@@ -74,27 +75,7 @@
                         <i class="fa fa-cog pdfconf" ></i>
                     </a>
                 </td>
-
-
                <br/>
-
-
-<!--
-               <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
-                 <span class="edit">
-                   <span class="editBtn"  ng-click="EditSelected(row.orderID)" aria-label="{{Lang::get('labels.edit')}}" > {{ Lang::get('labels.edit') }} </span> |
-                 </span>
-                 <span class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
-                 </span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
-
-               <div ng-show="inTrashlist" id="inTrashlist" class="row-actions">
-                 <span class="RestoreTrash"> <span  class="RestoreTrash"  ng-click="RestoreFromTrash(row.orderID)" >{{ Lang::get('labels.RestoreFromTrash') }} | </span></span>
-                 <span class="trash">        <span  class="submitdelete"  ng-click="DeleteFromDataBase(row.orderID)" >{{ Lang::get('labels.fulldelete') }}</span></span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
--->
       </tr>
     </table>
   </div>
