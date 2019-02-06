@@ -12,9 +12,9 @@ return [
     | you want to customize your views to better match your application.
     |
     */
-'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.2.8' ,
+'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.2.9' ,
 'copyright' => 'گروه شرکت های مهندسی پیشرو '  ,
-'copyright_date' => '© Copyright 2017-2018' ,
+'copyright_date' => '© Copyright 2017-2019' ,
 'changeLog'=>'تغییرات انجام شده',
 'version'=>'نگارش',
  'officeAddress' => 'تهران ، خیابان شهید مطهری ، ابتدای سلیمان خاطر ، ساختمان 130 ، طبقه هفتم واحد 701',
