@@ -2,7 +2,7 @@
 https://roocket.ir/series/learn-git-and-github/episode/3
 <<<<<<< HEAD
 connectTo GIT
-OK Lets Begin ;) See abow
+New changes
 
 =======
 connectToGit Manual
