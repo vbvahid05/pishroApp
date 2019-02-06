@@ -1,6 +1,6 @@
  https://www.youtube.com/watch?v=PrCk7y-K9rs&index=31&list=PL3Y-E4YSE4wYFlcomsBtJy1nCu3jclA8L
 https://roocket.ir/series/learn-git-and-github/episode/3
-
+connectTo
 vahid@vahid2018
 (2)
 *git initialise :
@@ -40,7 +40,7 @@ vahid@vahid2018
 *                 
 	git reset HEAD .    //UnStage 
 	git reset Commit-ID	
-	git reset ñhard Commit-ID
+	git reset ‚Äìhard Commit-ID
 
 (5)
 *branch   
@@ -113,7 +113,7 @@ a1f6adf update Invoice And Dashboard moduls
 3ac9229 (edit_Invoice) invoice details added
 26df15f change dimmer position
 b0fbbc8 StockRequests Font changed to Yekan
-c143d0d invoice  ‰ŸÌ„ «” «Ì·
+c143d0d invoice √ä√§√ô√≠√£ √á√ì√ä√á√≠√°
 a34dfdc fix StockRequest issue
 15bda88 add farsi Font to invoice Numbers
 17f5816 change invoice_PDF has error
