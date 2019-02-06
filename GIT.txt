@@ -1,6 +1,8 @@
 ﻿ https://www.youtube.com/watch?v=PrCk7y-K9rs&index=31&list=PL3Y-E4YSE4wYFlcomsBtJy1nCu3jclA8L
 https://roocket.ir/series/learn-git-and-github/episode/3
 connectTo GIT
+OK Lets Begin ;)
+
 vahid@vahid2018
 (2)
 *git initialise :
