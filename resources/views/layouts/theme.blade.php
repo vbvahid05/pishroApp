@@ -9,6 +9,9 @@
       <div class="col-md-1 ">
       </div>
     <div class="col-md-12">
+
+
+
           <div class="content-side col-md-11">
     <!-- ------------ ---------- -->
             @section('alerts')

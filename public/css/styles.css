@@ -117,9 +117,13 @@ input.ng-valid {
 .content-side {
     background: #f0f2f7;
     min-height: 100% !important;
-    padding: 25px;
+    padding-right: 0;
+    padding-left: 0;
 }
-
+.content-side.col-md-11 {
+    padding: 0;
+    padding-top: 25px;
+}
 .well{
     background-color: #fbfdff !important;
 }
@@ -131,6 +135,8 @@ input.ng-valid {
 }
 .content-side .PageTitle {
     font-family: iransans;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /* Side bar */
@@ -2293,4 +2299,69 @@ i.fa.fa-key.changepass {
 .popover td {
     cursor: pointer;
     padding: 0px !important;
+}
+
+
+/*POSTs*/
+.ToolBar {
+    border: 1px solid #e4e0e0;
+    padding: 10px;
+    background: #F0F0F0;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.SCleftSideBar {
+    padding-right: 0px !important;
+}
+.SCmainBody {
+    padding-right: 0px !important;
+}
+
+
+.sideBoxs {
+    position: relative;
+    min-width: 255px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    background: #fff;
+    padding: 10px;
+}
+
+.sideBoxs.mid{
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.sideBoxs .header {
+    height: 25px;
+    border-bottom: 1px dashed #e4e4e4;
+    position: relative;
+    margin-bottom: 10px;
+    color: gray;
+}
+.postcategury ul {
+    list-style: none;
+    padding: 0;
+}
+.postcategury .checkmark {
+    float: right;
+    right: 0;
+}
+
+.postcategury label {
+    margin-bottom: 20px;
+    font-size: 12px;
+    padding: 0;
+    padding-right: 30px;
+    width: 100% !important;
+}
+
+.postcategury li ul li
+{
+    background: none;
+}
+.postcategury li ul li:hover
+{
+    background: none !important;
 }

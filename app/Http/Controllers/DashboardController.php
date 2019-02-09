@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Model_admin\cms_term_relation;
 use Illuminate\Http\Request;
 use App\Mylibrary\DashboardClass;
 use App\Mylibrary\PublicClass;
@@ -57,6 +58,13 @@ class DashboardController extends Controller
       //  return view('/dashboard');
     }
 
+
+    public function dashboardSideMenu()
+    {
+
+        return cms_term_relation::where('trmrel_term_id', '=', 7)
+                ->get();
+    }
 
 
 

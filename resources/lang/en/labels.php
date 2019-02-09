@@ -332,4 +332,23 @@ return [
 'rePassNotValid'=> ' تکرار پسورد صحیح نیست',
 
 
+//** Posts */
+'posts'=>'نوشته ها ',
+'allPosts'=>'همه نوشته ها',
+'Management'=>'مدیریت',
+    'posts'=>'نوشته ها',
+    'posts_all'=>'همه نوشته ها ',
+    'posts_category'=>'دسته ها ',
+    'posts_title'=>'عنوان ',
+    'posts_cat'=>'دسته بندی',
+    'posts_status'=>'وضعیت ',
+    'posts_author'=>'نویسنده',
+    'posts_created_at'=>'تاریخ ایجاد',
+    'posts_updated_at'=>'تاریخ ویرایش',
+    'published'=>'منتشر شده' ,
+    'unPublished'=> 'منتشر نشده',
+    'archived'=> 'آرشیو شده',
+    'trash' => 'زباله',
+    'newPost'=>'افزودن جدید',
+    'update'=>'بروزرسانی',
 ];

@@ -1,5 +1,5 @@
 
-
+{{--@inject('dashMenu', 'App\Http\Controllers\DashboardController')--}}
 @section('sidebar')
 
 @show
@@ -9,8 +9,55 @@
 
 
   <div id="accordian">
+
     <ul>
       <!-- ///////////////////////////////////////////////-->
+
+        {{--@foreach ($dashMenu->dashboardSideMenu() as $menu)--}}
+            {{--@if ($menu->trmrel_parent ==0)--}}
+            {{--<li id="dashboard" class="accMenu">--}}
+                {{--<h3>--}}
+                    {{--@if ($menu->trmrel_value !=null)--}}
+                        {{--<a href="{{ url($menu->trmrel_value) }}" >--}}
+                            {{--<i class="{{ $menu->trmrel_icon }}" aria-hidden="true"></i>--}}
+                            {{--{{ Lang::get('labels.'.$menu->trmrel_lang_label) }}--}}
+                        {{--</a>--}}
+
+                    {{--@else--}}
+                        {{--<i class="{{ $menu->trmrel_icon }}" aria-hidden="true"></i>--}}
+                        {{--{{ Lang::get('labels.'.$menu->trmrel_lang_label) }}--}}
+                        {{--@endif--}}
+                {{--</h3>--}}
+
+                {{--@foreach ($dashMenu->dashboardSideMenu() as $subMenu)--}}
+                    {{--@if ($subMenu->trmrel_parent ==$menu->id)--}}
+                        {{--<ul>--}}
+                    {{--@endif--}}
+                {{--@endforeach--}}
+
+                    {{--@foreach ($dashMenu->dashboardSideMenu() as $subMenu)--}}
+                    {{--@if ($subMenu->trmrel_parent ==$menu->id)--}}
+                                    {{--<a id="{{$subMenu->trmrel_class}}" href="{{ url($subMenu->trmrel_value) }}" >--}}
+                                        {{--<li >--}}
+                                            {{--<i class="{{$subMenu->trmrel_icon}}" aria-hidden="true"></i>--}}
+                                            {{--{{ Lang::get('labels.'.$subMenu->trmrel_lang_label) }}</li>--}}
+                                    {{--</a>--}}
+                    {{--@endif--}}
+                    {{--@endforeach--}}
+
+                {{--@foreach ($dashMenu->dashboardSideMenu() as $subMenu)--}}
+                    {{--@if ($subMenu->trmrel_parent ==$menu->id)--}}
+                    {{--</ul>--}}
+                    {{--@endif--}}
+                {{--@endforeach--}}
+
+
+            {{--</li>--}}
+            {{--@endif--}}
+
+        {{--@endforeach--}}
+
+
       <li id="dashboard" class="accMenu">
         <h3>
             <a href="{{ url('/dashboard') }}" >
@@ -74,7 +121,7 @@
             <li><a href="#">...</a></li>
           </ul>
       </li>
-
+        <!-- ///////////////////////////////////////////////-->
         <li id="Settings" class="accMenu">
             <h3><i class="icon settings" aria-hidden="true"></i>
                  {{ Lang::get('labels.settings') }}  </h3>
@@ -84,6 +131,17 @@
                         {{Lang::get('labels.userSetting')}}</a></li>
             </ul>
         </li>
+        <!-- ///////////////////////////////////////////////-->
+        <li id="posts" class="accMenu">
+            <h3><i class="icon settings" aria-hidden="true"></i>
+                {{ Lang::get('labels.posts') }}  </h3>
+            <ul>
+                <li><a href="{{ url('all-posts/posts') }}">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        {{Lang::get('labels.allPosts')}}</a></li>
+            </ul>
+        </li>
+
 
     </ul>
   </div>

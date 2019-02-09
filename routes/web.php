@@ -261,14 +261,15 @@ Route::get('sell/TakeOutProducts', function () {return view('sell/view_TakeOutPr
 /*Setting*/
 Route::get('setting/users', function () {return view('setting/users/ManageRoles');});
 Route::post('setting/{controller}/{function}/{value?}','setting\SettingController@manageRequest');
-
 Route::get('setting/user/changePassword','setting\SettingController@changePassword');
 
 Route::get('/test' ,'setting\SettingController@dotest');
 
 //Route::get('/movepartnumbers' ,'LabController@movePartNumbers');
 
+/*Posts*/
+Route::get('/all-posts/{postType}'         ,'CMS\Posts\PostController@showAllPosts');
+Route::get('/all-posts/{postType}/{action}','CMS\Posts\PostController@editPage');
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');

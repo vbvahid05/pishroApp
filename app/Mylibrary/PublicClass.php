@@ -102,6 +102,49 @@ function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
   }
 //---------------------------------
 
+    public function renderMenu($array, $level) {
+        $output = "<ul>";
+        foreach ($array as $i) {
+            if ($i->trmrel_parent == $level) {
+                $output = $output .
+                    "<li>
+                    <a href='" . $i->trmrel_value . "'>" . $i->trmrel_title . "</a>" .
+                    $this->renderMenu($array, $i->ItemID) .
+                    "</li>";
+            }
+        }
+        $output = $output . "</ul>";
+        return $output;
+    }
+//---------------------------------
+    public function checkBoxList($array, $level ,$selected) {
+
+        $output = "<ul>";
+        foreach ($array as $i) {
+            if ($i->trmrel_parent == $level) {
+                $checked='';
+                if ($i->ItemID ==$selected) $checked='checked="checked"';
+                $output = $output .
+                    "<li>
+ <label class=\"containerx ng-binding\">
+        <input type=\"checkbox\" ng-click=\"setAction(".$i->ItemID.")\" lass=\"checkboxz\" value=\"$i->ItemID\"    $checked    >
+        <span class=\"checkmark\"></span>
+       ".$i->trmrel_title."
+    </label>
+                    ".$this->checkBoxList($array, $i->ItemID,$selected) ."
+ 
+ 
+                    
+                     </li>";
+            }
+        }
+        $output = $output . "</ul>";
+        return $output;
+    }
+
+//---------------------------------
+
+
 
   public static function get_Table_Name($slug)
     {
