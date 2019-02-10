@@ -1595,6 +1595,9 @@ button#mode1 {
     z-index: 15000 !important;
 }
 /*Invoice*/
+.linkStyle{
+    color: #0066b7;cursor: pointer;
+}
 
 label.invcsting {
     text-align: right;
@@ -2294,3 +2297,4 @@ i.fa.fa-key.changepass {
     cursor: pointer;
     padding: 0px !important;
 }
+

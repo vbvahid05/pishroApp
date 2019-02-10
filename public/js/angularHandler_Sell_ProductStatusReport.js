@@ -1935,7 +1935,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.custommerID="";
 
         }
-
+        //-------------------
+        $scope.showInvoiceInSearch =function(invoiceID) {
+            $scope.Show_Selected_invoice(invoiceID);
+        }
 
 
 //---------------###############################---------------
@@ -3770,7 +3773,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.SearchInvoice=function () {
             SelectDimmer('section_searchInvoice');
             $('#Dimmer_page').dimmer('show');
-            $scope.FormTitle="Search Invoice";
+            $scope.FormTitle="جستجوی پیشرفته در محتوای پیش فاکتورها";
         }
 
         $scope.searchInvoice=function () {
