@@ -1269,7 +1269,6 @@ $scope.removeProductRow =function (rowid,Order_id,putting_productsID,productId) 
 
     $scope.ReloadData = function (OrderID) {
         $scope.EditSelected(OrderID);
-        alert('s');
     }
 
 }]);
