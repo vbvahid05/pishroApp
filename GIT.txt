@@ -1,0 +1,136 @@
+﻿ https://www.youtube.com/watch?v=PrCk7y-K9rs&index=31&list=PL3Y-E4YSE4wYFlcomsBtJy1nCu3jclA8L
+https://roocket.ir/series/learn-git-and-github/episode/3
+connectTo GIT
+New changes
+
+vahid@vahid2018
+(2)
+*git initialise :
+	git init
+*status 
+	git status 
+*Add to Stage :
+	git add 
+        git add .
+*commit:
+	git commit -m "message is"
+        git commit -a -m " message "	   //Add To Stage + Commit to repo
+
+	git commit --amend -m "New Message" //  change the last commit Message
+
+(3)
+*Remove From Stage:
+	git rm --cached   file.css     //Remove From Stage
+	git rm --cached -r .          // Remove All fils From Stage 
+
+*what's Changed?
+	git diff
+*commit 
+*logs
+	git log
+	git log --oneline       
+	git -2  --oneline // show 2 of latest commit Log
+	git log --stat
+	git log --graph	
+
+
+(4)
+*Checkout     //roul Back
+	git checkout -- file.name
+	git checkout -- .
+
+*                 
+	git reset HEAD .    //UnStage 
+	git reset Commit-ID	
+	git reset –hard Commit-ID
+
+(5)
+*branch   
+	git branch branchName    // create New branch
+	git branch -a            // show All Branches   >>> git log --graph  //tree of Branchs
+	git branch -d branchName // Delete 'branchName' Branch 
+
+*Checkout //switch between branches
+	git  Checkout     branchName
+	git  checkout -b  branchName  //switch to a new branch 'branchName'
+
+*merge 
+	git merge branchName        // switch to master branch and then run merge command 
+
+
+(6)
+*stash 
+	git stash  // SAVE status in temp variable , and we can switch to other Branches with out Commit 
+	git stash save "message for this stash"
+	git stash list  
+	git stash drop stash@{0}ID  //delete specific stash from stash List
+	git stash show -p  stash@{0}ID  // show shash changes in stash@{0}ID 
+
+	git stash apply stash@{0}ID // Apply Stash    >> then must be  add to stage and commit
+	git stash pop stash@{0}ID  // Applay Stash and delete stash@{0}ID from stash list >> then must be  add to stage and commit
+
+
+(7)
+*gitignore
+
+	touch  .gitignore   // create  gitignore to untrack specific files and folders 
+			    // in gitignore file  >>      folder/	  //folder and subfolders
+							  *.txt           // ignore All txt files 
+							  !a.txt          // false-false =>true  don't ignore a.txt
+	
+	git  rm --cached -r .    //delete cached , unfolow folowing folders and files
+	
+*config 
+	git config user.name         	"user name "  // set userName for current project
+	git config --global user.name 	"user name " //  set userName Globaly 
+	git config --global user.email 	"user name " //  set email Globaly
+
+(8 )GitHub
+ git remote add pishroMasterApp https://github.com/vbvahid05/pishroApp
+
+	git remote add  name  urlAddress   // name:custom Name   urlAddress: myProject adderess on gitHub
+	git remote        // show remote List
+
+	git remote -v   	   # View current remotes	
+	git remote rm destination  # Remove remote
+
+	git push -u name master  // push master to name on github 
+		   origin 	
+	git push  -u name branchName  // upload branch to gitHub on name
+
+(9)
+	git pull origin       // download project to local Area
+	git pull origin master  // master or branch name
+
+	git clone 
+	git remote add upstream LINK 
+	git remote show
+--------------------------------------------------
+3efeba8 (HEAD -> develop_1.2.6_Alpha) edited
+fc29cef (origin/develop_1.2.6_Alpha, master) invoice and footer edited
+e4f51dd The invoice description section was moved
+4f2413f (origin/master) add Filter On Order List
+aa27522 edit StackRequest PDF
+a1f6adf update Invoice And Dashboard moduls
+3ac9229 (edit_Invoice) invoice details added
+26df15f change dimmer position
+b0fbbc8 StockRequests Font changed to Yekan
+c143d0d invoice ÊäÙíã ÇÓÊÇíá
+a34dfdc fix StockRequest issue
+15bda88 add farsi Font to invoice Numbers
+17f5816 change invoice_PDF has error
+e2398c0 darj kalaye Namojud dar havale taahodi
+ab554a5 invoice dev commited
+d9ddfb5 add Filters for stockRequest List
+a8c1c0f add Filter for StockRequest Form
+bbd8313 (develop_1.2.5) add Sub Product in invoice
+ed3a47e develop user Role Setting panel
+cfda220 Start version 1.2.5
+3c86f38 (develop_1.2.4, Dev_New_stockrequset_architecture) complate new stockRequest , convert StockRequest
+b3272f6 update stockrequest pdf Genrator_ begin convert solution
+624bdc0 stockRequest Old version
+9ff2a0b add partchassis in stockRequest directly
+609285a userAcl Panel before stockRequest Changes
+b5fc501 fix Product Status Report  bug
+
+
