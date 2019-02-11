@@ -1935,7 +1935,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.custommerID="";
 
         }
-
+        //-------------------
+        $scope.showInvoiceInSearch =function(invoiceID) {
+            $scope.Show_Selected_invoice(invoiceID);
+        }
 
 
 //---------------###############################---------------
@@ -1950,6 +1953,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.selectedModeIs=  'new';
                     $scope.FormTitle=lbl_sell_AddNew_stockRequest;
                     $scope.section_new_edit_in_Dimmer=true; //show add_new_putting
+                    $scope.section_sub_chassis_list=false;
                     //Page Decoration
                     $scope.newStockRequestForm=true;
                     $scope.ViewStockRequestForm =false;
@@ -1974,6 +1978,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
                     $scope.section_new_edit_in_Dimmer=true; //show add_new_putting
                     $scope.section_sub_chassis_list=false;
+                    $scope.section_pdf_Setting_dimmer=false;
                     //Page Decoration
                     $scope.newStockRequestForm=false;
                     $scope.ViewStockRequestForm =true;
@@ -1998,9 +2003,18 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
                 case 'convert_StockRequest':
                     $scope.section_convert_stockrequerst_in_Dimmer=true;
+                    $scope.section_pdf_Setting_dimmer=false;
                     $scope.FormTitle_convert='CONVERT';
-
                     break;
+
+                case 'section_pdf_Setting_dimmer':
+                    $scope.section_pdf_Setting_dimmer=true;
+                    $scope.section_convert_stockrequerst_in_Dimmer=false;
+                    $scope.section_new_edit_in_Dimmer=false;
+                    $scope.FormTitle_Setting='pdf Setting ';
+                    break;
+
+
 
                 case 'new_invoice':
                     $scope.section_new_edit_invoice_in_Dimmer=true;
@@ -3766,13 +3780,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $('#Dimmer_page').dimmer('hide');
         }
 
-
+//*********************************
         $scope.SearchInvoice=function () {
             SelectDimmer('section_searchInvoice');
             $('#Dimmer_page').dimmer('show');
-            $scope.FormTitle="Search Invoice";
+            $scope.FormTitle="جستجوی پیشرفته در محتوای پیش فاکتورها";
         }
-
+//*********************************
         $scope.searchInvoice=function () {
             var args= {
                 Action:"SearchInvoice",
@@ -3795,6 +3809,14 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 console.log(response.data)
             }), function xError(response)
             {}
-
         }
+//*********************************
+    $scope.StkReqPDFSetting=function (id) {
+
+        SelectDimmer('section_pdf_Setting_dimmer');
+        $('#Dimmer_page').dimmer('show');
+    }
+
+
+
     }]);

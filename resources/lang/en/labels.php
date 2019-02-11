@@ -308,7 +308,7 @@ return [
 
 'invocePdfSting_lbl_mainTableFontSize'=>'اندازه فونت جدول محصولات',
 'invocePdfSting_lbl_Desc_fontSize'=>'اندازه فونت بخش توضیحات',
-
+'invoiceAdvanceSearch' =>'جستجوی محتوای پیش فاکتور',
     'CM'=>'سانتی متر',
 'pixel'=>'پیکسل',
 

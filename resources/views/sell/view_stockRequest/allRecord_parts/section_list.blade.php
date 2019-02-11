@@ -59,10 +59,10 @@
 
                       </a>
 
-                  <a id="action_pdf@{{row.id}}" class="toggleButton" href="/sell/stockRequest/pdf/@{{row.id}}" style="float: left;"  >
-
-                      <i class="fa fa-file-pdf-o  pdf_btn" ></i>
-                  </a>
+                  <span id="action_pdf@{{row.id}}" class="toggleButton" style="float: left;"  >
+                      <a href="/sell/stockRequest/pdf/@{{row.id}}" > <i class="fa fa-file-pdf-o  pdf_btn" ></i></a>
+                      <span ng-click="StkReqPDFSetting(row.id)" > <i class="fa fa-cog pdfconf" style="margin-right: 25px;"> </i> </span>
+                  </span>
 
 
                     <td>

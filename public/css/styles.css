@@ -1601,6 +1601,9 @@ button#mode1 {
     z-index: 15000 !important;
 }
 /*Invoice*/
+.linkStyle{
+    color: #0066b7;cursor: pointer;
+}
 
 label.invcsting {
     text-align: right;
@@ -2301,6 +2304,7 @@ i.fa.fa-key.changepass {
     padding: 0px !important;
 }
 
+<<<<<<< HEAD
 
 /*POSTs*/
 .ToolBar {
@@ -2365,3 +2369,5 @@ i.fa.fa-key.changepass {
 {
     background: none !important;
 }
+=======
+>>>>>>> 74a46d1740ed76dace23ef5c017ca7d0ff1d1f71

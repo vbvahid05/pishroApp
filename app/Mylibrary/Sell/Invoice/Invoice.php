@@ -1074,7 +1074,7 @@ public function add_subProduct_in_Invoice   ($request)
             ->where('products.stkr_prodct_partnumber_commercial', 'LIKE', "%$keyWord%" )
             ->orWhere('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
 //            ->where('products.stkr_prodct_title', 'LIKE', "%$keyWord%")
-            ->select('*')
+            ->select('*','invoices.id as rowID')
             ->orderBy('invoices.si_date', 'desc')
 //           ->orderBy('sell_invoice_details.sid_product_id', 'desc')
             ->get();

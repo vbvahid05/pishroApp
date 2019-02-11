@@ -33,7 +33,9 @@
                                 <input ng-model="SearchFor" class="form-control" type="text" style="width: 100% !important; " required>
                             </div>
                             <div class="col-md-3 col-md-offset-1 pull-right">
-                                <button type="submit" class="btn btn-success" style="width: 100% ;">Find</button>
+                                <button type="submit" class="btn btn-success" style="width: 100% ;">
+                                    {{lang::get('labels.search')}}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -52,7 +54,7 @@
                             <tr ng-repeat="SRslt in SreachResalt">
                                 <td> @{{SRslt.stkr_prodct_partnumber_commercial}}</td>
                                 <td> @{{ SRslt.stkr_prodct_title }} </td>
-                                <td> @{{ SRslt.si_Alias_id }} </td>
+                                <td class="linkStyle" ng-click="showInvoiceInSearch(SRslt.rowID)"> @{{ SRslt.si_Alias_id }} </td>
                                 <td> @{{ SRslt.si_date |Jdate }} </td>
                                 <td> @{{ SRslt.sid_qty }} </td>
                                 <td> @{{ SRslt.sid_Unit_price }} </td>

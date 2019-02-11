@@ -981,6 +981,12 @@ $scope.changeQTY=function (rowid )
           sritems[rowid].QTY=newQTY;
     }
 }
+
+$scope.testIt =function(id)
+{
+    alert('s'+id);
+}
+
 //---------------------------------------
   $scope.changeSubQTY=function (rowid ,Qty,orderID,ProductID,puttingStockID)
   {
@@ -1053,7 +1059,7 @@ $scope.removeProductRow =function (rowid,Order_id,putting_productsID,productId) 
             sritems[i].rowID = i;
         }
     }
-
+}
 
     function GetPuttingID() {
         //arr = $.unique(puttingIDList);
@@ -1264,5 +1270,5 @@ $scope.removeProductRow =function (rowid,Order_id,putting_productsID,productId) 
     $scope.ReloadData = function (OrderID) {
         $scope.EditSelected(OrderID);
     }
-}
+
 }]);
