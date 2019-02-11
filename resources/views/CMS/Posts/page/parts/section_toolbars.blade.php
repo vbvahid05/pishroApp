@@ -1,9 +1,11 @@
 @section('section_toolbars')
     <div class="ToolBar col-md-12 ">
-        <button  class="btn btn-success"  >
-            <i class="fa fa-file-o"></i>
-            {{Lang::get('labels.newPost')}}
-        </button>
+        <a href="/all-posts/posts/new">
+            <button  class="btn btn-success"  >
+                <i class="fa fa-file-o"></i>
+                {{Lang::get('labels.newPost')}}
+            </button>
+        </a>
         <div class="col-md-2 pull-left">
             <div  class="btn btn-primary  btn-block "  ng-click="updatePostPage()" >
                 <i class="fa fa-save"></i>

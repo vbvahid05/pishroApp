@@ -270,6 +270,7 @@ Route::get('/test' ,'setting\SettingController@dotest');
 /*Posts*/
 Route::get('/all-posts/{postType}'         ,'CMS\Posts\PostController@showAllPosts');
 Route::get('/all-posts/{postType}/{action}','CMS\Posts\PostController@editPage');
+Route::post('/all-posts/postActions/{postType}/{action}','CMS\Posts\PostController@CRUD');
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

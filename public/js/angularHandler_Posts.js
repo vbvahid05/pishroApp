@@ -16,8 +16,23 @@ function($scope, $http,Pagination)
         {
         case 'posts':{
                         arg={
+                            postAction:$('#post_action').val(),
                             postID:$('#postID').val(),
-                            postTitle:$('#postTitle').val(),
+                            postTitle:$('#post_Title').val(),
+                            postCategury:$('#post_Categury').val(),
+                            postContent:$('#post_content').val(),
+                        }
+
+                        $http.post('/all-posts/postActions/'+postType+'/newOrUpdate',arg).then
+                        (function pSuccess(response)
+                        {
+                            if (response.data)
+                                ;
+                            toast_alert(response.data,'success');
+
+                        }), function xError(response)
+                        {
+                            toast_alert(response.data,'danger');
                         }
                    }
         }
@@ -25,11 +40,12 @@ function($scope, $http,Pagination)
     }
     /*-----------*/
 
-$scope.setAction =function(id)
+$scope.setPostCategory =function(id)
 {
     $baseVal=$("#categuryList").val();
     $baseVal=$baseVal+','+id;
     $("#categuryList").val($baseVal);
+    $(".catCheckBox").addClass('hidden');
 }
 
 }]); //controller

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CMS\Posts;
 
+use App\Model_admin\cms_post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -30,7 +31,7 @@ class PostController extends Controller
                 ->where('lang.lang_title','=',$local)
                 ->where('postType.pst_typ_title','=',$postType)
                 ->where('categories.trmrel_term_id','=',$catID)
-                ->where('posts.flag_delete','=',0)
+                ->where('posts.deleted_flag','=',0)
                 ->select(['*','posts.id as Postid'  ,'posts.created_at AS postsCreatedAt' ])
                 ->orderby('Postid','DESC')
                 ->get();
@@ -48,6 +49,17 @@ class PostController extends Controller
 //        }
     }
 
+    public function GetAllCategory($locale,$postType)
+    {
+         return    \DB::table('cms_terms as terms')
+            ->Join('cms_languages as language' ,'language.id','=','terms.trm_lang' )
+            ->Join('cms_term_relations as relations' ,'relations.trmrel_term_id','=','terms.id' )
+            ->where('language.lang_title','=',$locale)
+            ->where('terms.trm_type','=',$postType)
+            ->where('terms.deleted_flag','=',0)
+            ->select(['*','relations.id as ItemID' ])
+            ->get();
+    }
 //----------------------
     public  function  editPage(Request $request,$postType,$action)
     {
@@ -70,18 +82,11 @@ class PostController extends Controller
                 ->where('posts.id','=',$postId)
                 ->where('lang.lang_title','=',$locale)
                 ->where('postType.pst_typ_title','=',$postType)
-                ->where('posts.flag_delete','=',0)
+                ->where('posts.deleted_flag','=',0)
                 ->orderby('Postid','DESC')
                 ->get();
 //            //----------------------------------
-            $categuryList= \DB::table('cms_terms as terms')
-            ->Join('cms_languages as language' ,'language.id','=','terms.trm_lang' )
-            ->Join('cms_term_relations as relations' ,'relations.trmrel_term_id','=','terms.id' )
-            ->where('language.lang_title','=',$locale)
-            ->where('terms.trm_type','=',$postType)
-            ->where('terms.deleted_flag','=',0)
-            ->select(['*','relations.id as ItemID' ])
-            ->get();
+            $categuryList =$this->GetAllCategory($locale,$postType);
               //----------------------------------
 
             if (count($dataList)!=0 && $action=='edit') $hasValue=true; else $hasValue=false;
@@ -92,17 +97,53 @@ class PostController extends Controller
        }
         else if ('new')
         {
+            $hasValue=false;
             $pageTitle=  \Lang::get('labels.new').' '.\Lang::get('labels.'.$postType);
             $pageIcon="fa fa-file-text-o";
-
+            $categuryList =$this->GetAllCategory($locale,$postType);
+            $postId='';
 
             return view('/CMS/Posts/page/page',
                 compact(
-                    'action','local','postType' ,'pageTitle' ,'pageIcon'
+                    'action','local','postId','postType' ,'pageTitle' ,'pageIcon','hasValue','categuryList'
                 ));
          }
     }
 
 //----------------------------------
+    public function CRUD(Request $request,$postType,$action)
+    {
+        $postAction= $request['postAction'];
+        if ($action =='newOrUpdate')
+        {
+            switch($postType)
+            {
+                case 'posts':
+                    {
+                        switch ($postAction)
+                        {
+                            case 'edit':
+                                {
+                                    try{
+                                        cms_post::where('id', '=', $request['postID'])
+                                            ->update(array(
+                                                'post_title' => $request['postTitle'] ,
+                                                'post_categury'=>$request['postCategury'] ,
+                                                'post_content'=>$request['postContent'] ,
+                                            ));
+                                        return 1;
+                                        }
+                                        catch (\Exception $e)
+                                        {
+                                            return $e->getMessage();
+                                        }
 
+                                }
+                        }
+                    }
+            }
+        }
+
+
+    }
 }

@@ -127,7 +127,7 @@ function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
                 $output = $output .
                     "<li>
  <label class=\"containerx ng-binding\">
-        <input type=\"checkbox\" ng-click=\"setAction(".$i->ItemID.")\" lass=\"checkboxz\" value=\"$i->ItemID\"    $checked    >
+        <input type=\"checkbox\" class='catCheckBox' ng-click=\"setPostCategory(".$i->ItemID.")\" lass=\"checkboxz\" value=\"$i->ItemID\"    $checked    >
         <span class=\"checkmark\"></span>
        ".$i->trmrel_title."
     </label>
@@ -143,7 +143,25 @@ function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
     }
 
 //---------------------------------
-
+    public function DropDownList($array, $level ,$selected,$cunter) {
+         $sub="";
+            for( $c=1;$c<=$cunter;$c++)
+             $sub=$sub.'_';
+        if ($cunter !=0) $subEnd='|';else $subEnd='';
+        $cunter++;
+        $output = "";
+        foreach ($array as $i) {
+            if ($i->trmrel_parent == $level) {
+                $checked='';
+                if ($i->ItemID ==$selected) $checked='selected';
+                $output = $output .
+                    " 
+                <option value='$i->ItemID' $checked >$sub$subEnd $i->trmrel_title </option>
+                    ".$this->DropDownList($array, $i->ItemID,$selected,$cunter)  ;
+            }
+        }
+        return $output;
+    }
 
 
   public static function get_Table_Name($slug)

@@ -2304,24 +2304,22 @@ i.fa.fa-key.changepass {
     padding: 0px !important;
 }
 
-<<<<<<< HEAD
 
 /*POSTs*/
-.ToolBar {
+.ToolBar.col-md-12 {
     border: 1px solid #e4e0e0;
     padding: 10px;
     background: #F0F0F0;
     position: relative;
     margin-bottom: 10px;
+    margin-top: 20px;
 }
-
 .SCleftSideBar {
     padding-right: 0px !important;
 }
 .SCmainBody {
     padding-right: 0px !important;
 }
-
 
 .sideBoxs {
     position: relative;
@@ -2333,7 +2331,7 @@ i.fa.fa-key.changepass {
 }
 
 .sideBoxs.mid{
-    height: 300px;
+    height: 150px;
     overflow-x: hidden;
     overflow-y: auto;
 }

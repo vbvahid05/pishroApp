@@ -15,15 +15,17 @@
     <div class="sideBoxs mid">
         <div class="header"> {{lang::get('labels.posts_category')}}</div>
         <div class="postcategury">
-            <input id="categuryList" type="hidden" >
-            <?php echo  $publicLibrary->checkBoxList($categuryList,0,$dataList[0]->post_categury)?>
+            <?php //echo  $publicLibrary->checkBoxList($categuryList,0,$dataList[0]->post_categury)?>
+            <select id="post_Categury" class="form-control" >
+            <?php
+                    if ($hasValue)
+                       echo  $publicLibrary->DropDownList($categuryList,0,$dataList[0]->post_categury,0);
+                    else
+                        echo  $publicLibrary->DropDownList($categuryList,0,0,0);
+            ?>
+            </select>
         </div>
     </div>
-    {{--<ul>--}}
-    {{--@foreach($categuryList as $catList)--}}
-            {{--<li>{{$catList->trmrel_title}}</li>--}}
-    {{--@endforeach--}}
-    {{--</ul>--}}
     <div class="ui sub header"></div>
     <select name="skills" class="ui fluid search dropdown">
         <option value="">Skills</option>

@@ -9,10 +9,11 @@
 <div ng-app="Posts_App" ng-controller="Posts_Ctrl" >
     <input id="postType" type="hidden" value="{{$postType}}" >
     <input id="postID" type="hidden" value="{{$postId}}" >
+    <input id="post_action" type="hidden" value="{{$action}}" >
     {{--ToolBar--}}
     @section ('section_toolbars') @show
     {{--Notification Bar--}}
-    {{--<div id="publicNotificationMessage" class="publicNotificationMessage"></div>--}}
+    <div id="publicNotificationMessage" class="publicNotificationMessage"></div>
     {{--Content Section--}}
     <div class="row col-md-12">
         {{----------------------------}}
