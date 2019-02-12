@@ -13,6 +13,7 @@ use App\stockroom_product_statu;
 use App\Stockroom_products_brands;
 use App\stockroom_products_types;
 use App\Stockroom_products;
+use App\sell_stockrequest;
 //>>>>>>>>>>>> Model
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -304,6 +305,14 @@ public function Invoice(request $request ,$function)
                         return $data->editStackrequest_info($request);
                         break;
 
+                    case 'pdfSetting' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->pdfSetting($request,$value);
+                        break;
+                    case 'getPdfSettingValue' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->getPdfSettingValue($request);
+                        break;
                 }
             break;
             case 'TakeOutProducts':
@@ -955,7 +964,8 @@ public  function get_SubChassisParts (request $request)
             ->where('takeoutproducts.sl_top_stockrequest_id', '=', $id)
             ->get();
         //----------
-
+        $stackReq=  sell_stockrequest::where('id', '=', $id)->firstOrFail();
+        $Pdfsetting= json_decode($stackReq['sel_sr_pdf_setting'], false);
         $delivery_date=$RequestData[0]->sel_sr_delivery_date;
         $DateArray=explode("-",$delivery_date);
         $year=$DateArray[0];$month=$DateArray[1];$day=$DateArray[2];
@@ -977,7 +987,7 @@ public  function get_SubChassisParts (request $request)
         $lbl_number=\Lang::get('labels.Number');
         $lbl_pageNumber=\Lang::get('labels.pageNumber');
        $header='<img src="img/sr_print_logo_PDF.png"  >
-        <div style="text-align: left; padding-left: 60px; margin-top: -20px" >صفحه  {PAGENO}از{nb}</div>
+        <div style="text-align: left; padding-left: 60px; margin-top: -20px" >صفحه  {PAGENO}از{nb}</div> 
 <div style="width: 100%;text-align: left;padding-left: 100px ;margin-bottom: 10px;height: 100px;"></div> ';
 
        $cstmr_name= $RequestData[0]->cstmr_name;
@@ -1033,7 +1043,7 @@ public  function get_SubChassisParts (request $request)
         $content_Table1 =$e->ContentType_A($RequestData);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         $e=new makePdf();
-        $content_Table3 =$e->ContentType_C($RequestData);
+        $content_Table3 =$e->ContentType_C($RequestData,$Pdfsetting);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         $signature="<table width='100%'   class='signature cellBorder bordergray'>                  
                     <tr>

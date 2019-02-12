@@ -1356,5 +1356,30 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
     }
 
 //----------------------------------------------------------------------------------
+    public function pdfSetting($req,$value)
+    {
+       $settingArray=  array(
+                      "mainTableFontSize"=> $req['mainTableFontSize'] ,
+                      "SerialNumberFontSize"=> $req['SerialNumberFontSize'],
+        );
+        $JsonSettingArray= json_encode($settingArray);
+        sell_stockrequest::where('id', '=', $value)
+                        ->update(array('sel_sr_pdf_setting' => $JsonSettingArray));
+    }
 
+//----------------------------------------------------------------------------------
+    public function getPdfSettingValue($req )
+    {
+        try
+        { $stackReq=  sell_stockrequest::where('id', '=', $req['StkReqID'])->firstOrFail();
+            $Pdfsetting= json_decode($stackReq['sel_sr_pdf_setting'], false);
+            return array(
+                "mainTableFontSize"=> $Pdfsetting->mainTableFontSize ,
+                "SerialNumberFontSize"=>$Pdfsetting->SerialNumberFontSize,
+            );}
+            catch (\Exception $e)
+            {
+                return $e->getMessage();
+            }
+    }
 }
