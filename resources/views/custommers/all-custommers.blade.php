@@ -5,7 +5,6 @@
 @include('custommers.all_customers_Parts.section_allcustomers_filter')
 @include('custommers.all_customers_Parts.section_allcustomers_list')
 @include('custommers.all_customers_Parts.section_allcustomers_toolbars')
-//----------------------------
 <?php
 
 //var_dump($val);

@@ -6,7 +6,7 @@
 @include('custommers.custommer_parts.section_Step1_customerPerson')
 @include('custommers.custommer_parts.section_Step2_CustommerOrganization')
 @include('custommers.custommer_parts.section_Step3_PersonInOrganization')
-//----------------------------
+
 
 @section('content')
 @if ($errors->any())

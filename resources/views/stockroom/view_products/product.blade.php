@@ -4,7 +4,7 @@
 @section('sidebar') @endsection
 
 
-//----------------------------
+
 
 @section('content')
 @if ($errors->any())

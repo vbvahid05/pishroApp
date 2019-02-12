@@ -14,7 +14,7 @@
   @include('stockroom.view_products.typeOfProducts_parts.section_type_filter')
   @include('stockroom.view_products.typeOfProducts_parts.section_type_toolbars')
 
-//----------------------------
+
 
 @section('content')
 <div ng-app="productsApp" ng-controller="productsCtrl" >

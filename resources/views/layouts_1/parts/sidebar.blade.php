@@ -55,8 +55,11 @@
               </a>
 
               <a id="invoice" href="{{ url('sell/invoice') }}" >
-                  <li  > <i class="fa fa-money" aria-hidden="true"></i> {{ Lang::get('labels.invoice') }}	</li>
+                  <li  > <i class="fa fa-money" aria-hidden="true"></i>
+                      {{ Lang::get('labels.invoice') }}	</li>
               </a>
+
+
               <li><a href="#">...</a></li>
           </ul>
       </li>
@@ -74,7 +77,8 @@
                  {{ Lang::get('labels.settings') }}  </h3>
             <ul>
                 <li><a href="{{ url('setting/users') }}">
-                        <i class="fa fa-user" aria-hidden="true"></i>{{Lang::get('labels.userSetting')}}</a></li>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        {{Lang::get('labels.userSetting')}}</a></li>
             </ul>
         </li>
 

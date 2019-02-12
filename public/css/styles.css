@@ -134,16 +134,21 @@ input.ng-valid {
 }
 
 /* Side bar */
+
+/*.left-sidebar{*/
+    /*background: #1c334e;*/
+    /*color: #fff;*/
+    /*height: 100%;*/
+    /*position: fixed !important;*/
+    /*top: 0;*/
+    /*right: 0 !important;*/
+/*}*/
 .left-sidebar{
-    background: #1c334e;
     color: #fff;
     height: 100%;
-    position: fixed !important;
-    top: 0;
     right: 0 !important;
-    /*width: 250px; */
+    width: 95% !important;
 }
-
 
 /* Side Bar Menu     */
 /*custom font for text*/
@@ -214,10 +219,10 @@ canvas.canvasjs-chart-canvas {
 li ul {
     margin-top: -10px !important;
 }
-li ul li {
+.sidebar-menu li ul li {
     font-size: 12px;
     padding-right: 30px !important;
-    background: #285686;
+    /*background: #285686;*/
     margin-left: 0px !important;
 }
 li ul li i {
@@ -225,7 +230,7 @@ li ul li i {
 }
 
 li ul li:hover {
-    background: #295585cf !important;
+    /*background: #295585cf !important;*/
 }
 
 
