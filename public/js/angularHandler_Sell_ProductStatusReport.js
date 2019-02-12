@@ -3813,10 +3813,12 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 //*********************************
     $scope.StkReqPDFSetting=function (id) {
         $scope.thisSelectedStockrequestID=id;
+        $scope.stng_mainTableFontSize    ="";
+        $scope.stng_SerialNumberFontSize ="";
         var args= {
             StkReqID:  id
         };
-        $http.post('/services_sell/Stockrequest/getPdfSettingValue/',args).then
+        $http.post('/services_sell/Stockrequest/getPdfSettingValue',args).then
         (function xSuccess(response) {
          arrayx=response.data;
          $scope.stng_mainTableFontSize    =arrayx.mainTableFontSize;

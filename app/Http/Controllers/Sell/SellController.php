@@ -966,8 +966,6 @@ public  function get_SubChassisParts (request $request)
         //----------
         $stackReq=  sell_stockrequest::where('id', '=', $id)->firstOrFail();
         $Pdfsetting= json_decode($stackReq['sel_sr_pdf_setting'], false);
-        $serialNumber_FontSize = $Pdfsetting->SerialNumberFontSize;
-
         $delivery_date=$RequestData[0]->sel_sr_delivery_date;
         $DateArray=explode("-",$delivery_date);
         $year=$DateArray[0];$month=$DateArray[1];$day=$DateArray[2];
