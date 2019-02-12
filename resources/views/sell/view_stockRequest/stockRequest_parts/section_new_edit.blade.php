@@ -53,7 +53,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
                                 اندازه فونت سریال نامبر
                             </div>
                             <div class="col-md-3 pull-right">
-                                <input placeholder="12" class="inputStyle ng-pristine ng-untouched ng-valid ng-empty" ng-model="stng_mainTableFontSize" type="number">
+                                <input placeholder="12" class="inputStyle ng-pristine ng-untouched ng-valid ng-empty" ng-model="stng_SerialNumberFontSize" type="number">
                             </div>
                             <div class="col-md-2"> پیکسل </div>
                         </div>
@@ -62,7 +62,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-md-4 pull-right"> </div>
                             <div class="col-md-2 pull-right">
-                                <div class="btn btn-success" ng-click="allSettingSave()" style="width: 100%;">ذخیره</div>
+                                <div class="btn btn-success" ng-click="stackReqstPDFSettingSave()" style="width: 100%;">ذخیره</div>
                             </div>
                             <div class="col-md-2 pull-right">
                                 <div class="btn btn-danger" ng-click="closepdfSetting()" style="width: 100%;">بستن</div>

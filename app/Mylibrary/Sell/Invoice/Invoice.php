@@ -1095,7 +1095,7 @@ public function add_subProduct_in_Invoice   ($request)
         $productList=$data[1];
         $invoiceTolalInfo=$data[2];
         $invoice_Setting=json_decode($InvoiceInfo->si_pdf_settings,'true');
-
+         $dateConvert=new PublicClass();
         //--------------------------------
         $ee="";
      // Defult Value
@@ -1360,6 +1360,7 @@ public function add_subProduct_in_Invoice   ($request)
         $Seprator_date_To_sellerInfo ='<div  style="height: '. $space_date_To_sellerInfo.'cm " > </div>';
         $Seprator_seller_To_InvoiceTable='<div  style="height: '.  $space_seller_To_InvoiceTable.'cm " > </div>';
         $Seprator_InvoiceTable_To_DescriptionTable='<div  style="height: '.  $space_InvoiceTable_To_DescriptionTable.'cm " ></div>';
+        $Jdate=$dateConvert->gregorian_to_jalali_byString($InvoiceInfo->si_date);
         $html =
 <<<EOT
         <!DOCTYPE>
@@ -1465,7 +1466,7 @@ public function add_subProduct_in_Invoice   ($request)
                     <div style="width: 60%; float: right;"> </div>
                     <div style="width: 20%; float: left;" >  
                         <div> </div>                      
-                        <div> $date  :    $InvoiceInfo->si_date </div>
+                        <div> $date  : <span  class="farsiNumber"> $Jdate[0]/$Jdate[1]/$Jdate[2] </span> </div>
                         <div > $Number  :  $InvoiceInfo->si_Alias_id </div>                      
                     </div>                
                 </div>  

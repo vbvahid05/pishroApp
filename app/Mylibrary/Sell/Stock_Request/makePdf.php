@@ -11,8 +11,11 @@ namespace App\Mylibrary\Sell\Stock_Request;
 use App\Http\Controllers\Sell\SellController;
 class makePdf
 {
-    function  ContentType_C($RequestData)
+    function  ContentType_C($RequestData,$Pdfsetting)
     {
+     ($Pdfsetting->mainTableFontSize !=null)? $mainTable_FontSize='font-size:'.$Pdfsetting->mainTableFontSize.'px':$mainTable_FontSize='font-size: 12px';
+     ($Pdfsetting->SerialNumberFontSize !=null)? $SN_FontSize='font-size:'.$Pdfsetting->SerialNumberFontSize.'px':$SN_FontSize='font-size: 12px';
+
         $counter=0; $content="";
 
         foreach ($RequestData AS $RD)
@@ -35,12 +38,12 @@ class makePdf
 
             $content= $content.'<tr>';
             $content= $content.
-                '<td class="farsiNumber" style="text-align: center ; font-weight: bold"> '. $counter .'</td>'.
-                '<td style="font-size:13px; text-align: left">'.$RD->stkr_prodct_brand_title.' '.
+                '<td class="farsiNumber" style="text-align: center ; font-weight: bold;'.$mainTable_FontSize.'"> '. $counter .'</td>'.
+                '<td style="text-align: left;'.$mainTable_FontSize.'">'.$RD->stkr_prodct_brand_title.' '.
                 $RD->stkr_prodct_type_title.' '.
                 $RD->stkr_prodct_title.'</td>'.
-                '<td style="font-size: 12px ; text-align: center">'.$RD->stkr_prodct_partnumber_commercial.'</td>' .
-                '<td class="farsiNumber" style="text-align: center"> '.$RD->ssr_d_qty.'</td>';
+                '<td style="text-align: center;'.$mainTable_FontSize.'">'.$RD->stkr_prodct_partnumber_commercial.'</td>' .
+                '<td class="farsiNumber" style="text-align: center;'.$mainTable_FontSize.'"> '.$RD->ssr_d_qty.'</td>';
             $content= $content.'</tr>';
             $content= $content.'</table>';
             $content= $content.'<hr/>';
@@ -73,7 +76,7 @@ class makePdf
                        '<tr>';
                    if ($RD->stkr_prodct_type_cat == 3) $catType = 'Chassis  '; else $catType = '';
                    $content = $content .
-                       '<td style="text-align: left">' . $catType . '</td>';
+                       '<td style="text-align:left ;">' . $catType . '</td>';
                    $SN = explode("@", $sn->stkr_srial_serial_numbers_a);
                    if (count($SN) >= 2 && $SN[0] == 'noserial' || $SN[0] == 'nosrial' || $SN[0] == 'norserial')
                    {
@@ -88,7 +91,7 @@ class makePdf
                        $SN2 = ' ';
 
                        $content = $content .
-                           '<td>' . $SN1  . $SN2 .'</td>';
+                           '<td style="'.$SN_FontSize.'">' . $SN1  . $SN2 .'</td>';
 
                    $content = $content .
                        '</tr>';
@@ -134,7 +137,7 @@ class makePdf
                 else
                     $sn = $prdcs->stkr_srial_serial_numbers_a . '<br/>' . $prdcs->stkr_srial_serial_numbers_b;
                 //............
-                $content = $content . '<td>' . $sn . '</td>';
+                $content = $content . '<td style="'.$SN_FontSize.'">' . $sn . '</td>';
                 $content= $content.'<td></td>';
 
                 //---------------------

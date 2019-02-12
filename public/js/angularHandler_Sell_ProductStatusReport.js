@@ -3812,11 +3812,40 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         }
 //*********************************
     $scope.StkReqPDFSetting=function (id) {
-
+        $scope.thisSelectedStockrequestID=id;
+        var args= {
+            StkReqID:  id
+        };
+        $http.post('/services_sell/Stockrequest/getPdfSettingValue/',args).then
+        (function xSuccess(response) {
+         arrayx=response.data;
+         $scope.stng_mainTableFontSize    =arrayx.mainTableFontSize;
+         $scope.stng_SerialNumberFontSize =arrayx.SerialNumberFontSize;
+        }), function xError(response)
+        {}
         SelectDimmer('section_pdf_Setting_dimmer');
         $('#Dimmer_page').dimmer('show');
     }
+//*********************************
+        $scope.stackReqstPDFSettingSave =function ()
+        {
+            stID=($scope.thisSelectedStockrequestID);
+            mainTableFontSize=$scope.stng_mainTableFontSize;
+            SerialNumberFontSize=$scope.stng_SerialNumberFontSize;
+            var args= {
+                mainTableFontSize:$scope.stng_mainTableFontSize,
+                SerialNumberFontSize:$scope.stng_SerialNumberFontSize
+            };
 
+            $http.post('/services_sell/Stockrequest/pdfSetting/'+stID,args).then
+            (function xSuccess(response) {
+                $('#Dimmer_page').dimmer('hide');
+                toast_alert('saved','success');
+            }), function xError(response)
+            {}
+
+
+        }
 
 
     }]);
