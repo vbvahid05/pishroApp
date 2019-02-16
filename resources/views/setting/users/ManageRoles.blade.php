@@ -19,18 +19,14 @@
     <div class="col-md-6   pull-right"  >
         <div class="settingPanel ui middle aligned divided list" style="padding: 20px;">
                 <h3>{{lang::get('labels.roles')}}</h3>
-                <div class="item" ng-repeat="RD in RolesData">
-                    <div class="right floated content" style="width: 140px !important;">
-                        <div class="ui button fontIransans" ng-click="show(RD.id ,RD.role_title )">
-                            {{Lang::get('labels.edit')}}
-                        </div>
-                        <div class="btn btn-danger" ng-click="delete_role(RD.id)" >
-                            <i class="fa fa-trash-o" style="font-size: 19px;"></i>
-                        </div>
-                    </div>
-                    <img class="ui avatar image" src="/img/avatar/matthew.png">
-                    <div class="content" style="width: 150px !important;">
-                        @{{ RD.role_title  }}
+                <div class="itemx" ng-repeat="RD in RolesData">
+                    <div class="row RoalRow">
+                        <div class="col-md-1"><img class="ui avatar image" src="/img/avatar/matthew.png"></div>
+                        <div class="col-md-8">@{{ RD.role_title  }}</div>
+                        <div class="col-md-2"><div class="ui button fontIransans" ng-click="show(RD.id ,RD.role_title )">{{Lang::get('labels.edit')}} </div></div>
+                        <div class="col-md-1"><div class="btn btn-danger" ng-click="delete_role(RD.id)" ><i class="fa fa-trash-o" style="font-size: 19px;"></i> </div></div>
+
+
                     </div>
                 </div>
         </div>
