@@ -395,7 +395,9 @@ li ul li:hover {
 }
 .alert
 {
-
+    z-index: 10000;
+    opacity: 0.8;
+    top: 0;
     /*position: fixed !important;*/
     /*z-index: 1000 !important;*/
     /*width: 100%;*/
@@ -2311,6 +2313,18 @@ i.fa.fa-key.changepass {
 
 
 /*POSTs*/
+.TitleSection .col-md-6 {
+    padding: 0 !important;
+}
+.TitleSection .slog {
+    line-height: 2.9;
+    font-size: 11px;
+}
+.Content_Section.row.col-md-12 {
+    padding-left: 0;
+    width: 101% !important;
+}
+
 .ToolBar.col-md-12 {
     border: 1px solid #e4e0e0;
     padding: 10px;
@@ -2321,6 +2335,9 @@ i.fa.fa-key.changepass {
 }
 .SCleftSideBar {
     padding-right: 0px !important;
+}
+.col-md-3.SCleftSideBar.pull-right {
+    padding-left: 0px !important;
 }
 .SCmainBody {
     padding-right: 0px !important;
@@ -2372,5 +2389,3 @@ i.fa.fa-key.changepass {
 {
     background: none !important;
 }
-=======
->>>>>>> 74a46d1740ed76dace23ef5c017ca7d0ff1d1f71

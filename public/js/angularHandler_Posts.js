@@ -10,33 +10,47 @@ function($scope, $http,Pagination)
     OnBoot();
 
     /*-----------*/
-    $scope.updatePostPage=function ()
-    {
+    $scope.updatePostPage=function (){
+        // alert( $("input[name='mainBodyEditor']").val());
         switch (postType)
         {
-        case 'posts':{
+            case 'posts':
+                var content = CKEDITOR.instances.post_content.getData();
                         arg={
                             postAction:$('#post_action').val(),
                             postID:$('#postID').val(),
                             postTitle:$('#post_Title').val(),
                             postCategury:$('#post_Categury').val(),
-                            postContent:$('#post_content').val(),
+                            postContent: content
                         }
 
-                        $http.post('/all-posts/postActions/'+postType+'/newOrUpdate',arg).then
-                        (function pSuccess(response)
-                        {
-                            if (response.data)
-                                ;
-                            toast_alert(response.data,'success');
-
-                        }), function xError(response)
-                        {
-                            toast_alert(response.data,'danger');
-                        }
-                   }
+            break;
+            case 'pages':
+                arg={
+                    postAction:$('#post_action').val(),
+                    postID:$('#postID').val(),
+                    postTitle:$('#post_Title').val(),
+                    postContent:$('#post_content').val(),
+                }
+            break;
         }
-    console.log(arg);
+        if (arg)
+        {
+
+            $http.post('/all-posts/postActions/'+postType+'/newOrUpdate',arg).then
+            (function pSuccess(response)
+            {
+                console.log(response.data);
+                if (response.data==1)
+                    toast_alert(Seved_Message,'success');
+                else if (response.data==23000)
+                    toast_alert('content cant be null','danger');
+
+            }), function xError(response)
+            {
+                toast_alert(response.data,'danger');
+            }
+        }
     }
     /*-----------*/
 

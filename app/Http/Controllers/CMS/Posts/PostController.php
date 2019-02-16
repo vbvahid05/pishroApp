@@ -125,9 +125,18 @@ class PostController extends Controller
                             case 'edit':
                                 {
                                     try{
+                                        $slog='';
+                                        $str=explode(" ",$request['postTitle']);
+                                        for($i=0 ;$i<=count($str)-1;$i++)
+                                            if ($slog=='')
+                                            $slog=$slog.$str[$i];
+                                        else
+                                            $slog=$slog.'-'.$str[$i];
+
                                         cms_post::where('id', '=', $request['postID'])
                                             ->update(array(
                                                 'post_title' => $request['postTitle'] ,
+                                                'post_slug'=>$slog,
                                                 'post_categury'=>$request['postCategury'] ,
                                                 'post_content'=>$request['postContent'] ,
                                             ));
@@ -137,6 +146,61 @@ class PostController extends Controller
                                         {
                                             return $e->getMessage();
                                         }
+                                }
+                            case 'new':
+                                {
+
+                                    try{
+                                        $slog='';
+                                        $str=explode(" ",$request['postTitle']);
+                                        for($i=0 ;$i<=count($str)-1;$i++)
+                                            if ($slog=='')
+                                                $slog=$slog.$str[$i];
+                                            else
+                                                $slog=$slog.'-'.$str[$i];
+
+                                        $cms_post = new cms_post;
+                                        $cms_post->post_title=$request['postTitle'];
+                                        $cms_post->post_slug=$slog;
+                                        $cms_post->post_type=1;
+                                        $cms_post->post_lang=1;
+                                        $cms_post->post_status=1;
+                                        $cms_post->post_author_id=1;
+                                        $cms_post->deleted_flag=0;
+                                        $cms_post->archive_flag=0;
+                                        $cms_post->post_categury=$request['postCategury'];
+                                        $cms_post->post_content=$request['postContent'];
+                                        $cms_post->save();
+
+                                        return 1;
+                                    }
+                                    catch (\Exception $e)
+                                    {
+                                        return $e->getCode();
+                                    }
+                                }
+
+                        }
+                    }
+
+                case 'pages':
+                    {
+                        switch ($postAction)
+                        {
+                            case 'edit':
+                                {
+                                    try{
+                                        cms_post::where('id', '=', $request['postID'])
+                                            ->update(array(
+                                                'post_title' => $request['postTitle'] ,
+                                                'post_content'=>$request['postContent'] ,
+                                            ));
+                                        return 1;
+                                    }
+                                    catch (\Exception $e)
+                                    {
+                                        return $e->getMessage();
+                                    }
 
                                 }
                         }

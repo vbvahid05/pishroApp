@@ -11,11 +11,12 @@
     <input id="postID" type="hidden" value="{{$postId}}" >
     <input id="post_action" type="hidden" value="{{$action}}" >
     {{--ToolBar--}}
+    <form ng-submit="updatePostPage()">
     @section ('section_toolbars') @show
     {{--Notification Bar--}}
     <div id="publicNotificationMessage" class="publicNotificationMessage"></div>
     {{--Content Section--}}
-    <div class="row col-md-12">
+    <div class="Content_Section row col-md-12">
         {{----------------------------}}
         <div class="col-md-9 SCmainBody pull-right">
              @section ('section_mainBody') @show
@@ -24,7 +25,9 @@
         <div class="col-md-3 SCleftSideBar pull-right">
              @section ('section_leftSideBar') @show
         </div>
+        <input type="submit">
         {{----------------------------}}
     </div>
+    </form>
 </div>
 @endsection

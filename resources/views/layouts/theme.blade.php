@@ -1,24 +1,7 @@
 <!DOCTYPE html>
 
 <html>
-<<<<<<< HEAD
-    <head>
-         @include('layouts.parts.head')
-    </head>
-    <body>
-      <div class="headerBar col-md-11">
-        @include('layouts.parts.header')
-      </div>
-      <div class="col-md-1 ">
-      </div>
-    <div class="col-md-12">
 
-
-
-          <div class="content-side col-md-11">
-    <!-- ------------ ---------- -->
-            @section('alerts')
-=======
 <head>
     @include('layouts.parts.head')
     <meta charset="UTF-8">
@@ -288,7 +271,6 @@
                         <li><a href=""> ...</a></li>
                     </ul>
                 </li>
->>>>>>> 58b135036ce74c54af52280f66e102f1e3127690
 
                 <li id="Settings" class="treeview">
                     <a href="">
@@ -300,6 +282,18 @@
                         <li><a id="userSetting"  href="{{ url('setting/users') }}">    <i class="fa fa-user" aria-hidden="true"></i>{{Lang::get('labels.userSetting')}} </a></li>
                     </ul>
                 </li>
+
+                <li id="posts" class="treeview">
+                    <a href="">
+                        <i class="icon settings" aria-hidden="true"></i>
+                        <span> {{ Lang::get('labels.posts') }}</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul  class="treeview-menu">
+                        <li><a id="allPosts"  href="{{ url('all-posts/posts') }}">     <i class="fa fa-user" aria-hidden="true"></i>{{Lang::get('labels.allPosts')}} </a></li>
+                    </ul>
+                </li>
+
 
 
             </ul><!-- /.sidebar-menu -->
@@ -392,9 +386,9 @@
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.1.4 -->
-<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+{{--<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>--}}
 <!-- Bootstrap 3.3.4 -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
+{{--<script src="bootstrap/js/bootstrap.min.js"></script>--}}
 <!-- AdminLTE App -->
 <script src="/dist/js/app.min.js"></script>
 
