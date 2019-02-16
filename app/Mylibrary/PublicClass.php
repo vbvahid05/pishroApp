@@ -3,9 +3,18 @@ namespace App\Mylibrary;
 
 use App\user_activity_log;
 use App\acl_userRoleAction;
+use Illuminate\Support\Facades\Auth;
 
 class PublicClass
 {
+
+    public static  function  userProfileInfo()
+    {
+         $userID= Auth::user()->id;
+         $user = acl_userRoleAction::where('ura_user_id', '=',$userID)->firstOrFail();
+         return $user->ura_avatar;
+    }
+//-------------------------------------------
 
 
 public static   function jalali_to_gregorian($jy,$jm,$jd,$mod=''){

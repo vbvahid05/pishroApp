@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+@inject('PublicClass','App\Mylibrary\PublicClass')
 <html>
 <head>
     @include('layouts.parts.head')
@@ -24,7 +24,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>P</b>DS</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>P</b>ISHRO</span>
+            <span class="logo-lg"><b>P</b>ISHRO  </span>
         </a>
 
         <!-- Header Navbar -->
@@ -131,7 +131,7 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img src="/img/avatar/{{$PublicClass->userProfileInfo()}}" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs"> {{ Auth::user()->name }}</span>
                         </a>
@@ -189,7 +189,7 @@
             {{--<!-- Sidebar user panel (optional) -->--}}
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img  src="/img/avatar/{{$PublicClass->userProfileInfo()}}"  class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p> {{ Auth::user()->name }}</p>

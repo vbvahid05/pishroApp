@@ -234,8 +234,7 @@ return [
 'sum' => 'مجموع',
 'AvailableStock' => 'موجودی در دسترس' ,
 'AvailableProducts'=>' موجود',
-
-
+'ExportExcel_Report'=>'دریافت گزارش موجودی',
 /*stockRequest*/
 'stockRequest_ID' =>    'شماره حواله' ,
 'stockRequest_type' => 'نوع حواله',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Stockroom;
 //>>>>>>>>>>>> Model
 use App\Mylibrary\excel\InvoicesExport;
 use App\Mylibrary\excel\productsExport;
+use App\Mylibrary\excel\StockReportExport;
 use App\Stockroom_products;
 use App\Stockroom_products_brands;
 use App\Stockroom_products_type;
@@ -27,7 +28,10 @@ class ProductsController extends Controller
     else return view('/login');
 }
 
-
+    public  function  ExportProductsStatus()
+    {
+        return Excel::download(new StockReportExport(), 'PishroProductsStatus.xlsx');
+    }
 
   public  function showProducts()
   {

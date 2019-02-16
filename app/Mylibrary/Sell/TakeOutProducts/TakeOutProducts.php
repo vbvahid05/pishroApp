@@ -239,40 +239,44 @@ class TakeOutProducts
 
    }
 
-   public function showAllSerialNumbers()
-   {
-       $result=  \DB::table('stockroom_serialnumbers AS serialnumbers')
-           ->join('stockroom_stock_putting_products AS putting_products', 'putting_products.id', '=','serialnumbers.stkr_srial_putting_product_id')
-           ->join('stockroom_products AS products', 'products.id', '=','putting_products.stkr_stk_putng_prdct_product_id')
+
+
+   //-----------------------------
+
+    public function showAllSerialNumbers()
+    {
+        $result=  \DB::table('stockroom_serialnumbers AS serialnumbers')
+            ->join('stockroom_stock_putting_products AS putting_products', 'putting_products.id', '=','serialnumbers.stkr_srial_putting_product_id')
+            ->join('stockroom_products AS products', 'products.id', '=','putting_products.stkr_stk_putng_prdct_product_id')
 //           ->select('*')
-          ->select('*',\DB::raw('serialnumbers.created_at AS serialCreatedAt ,
+            ->select('*',\DB::raw('serialnumbers.created_at AS serialCreatedAt ,
                                  serialnumbers.updated_at AS serialUpdatedAt     
                               
           
           '))
-           //->orderBy('stockroom_products.id', 'desc')
-           ->get();
-       $ro='<html>
+            //->orderBy('stockroom_products.id', 'desc')
+            ->get();
+        $ro='<html>
             <style>tr:hover {background: #c3e5ff !important;cursor: pointer;}</style>
             <body> <table style="width: 65%;display: block;margin: auto;font-family: sans-serif;"><tbody>';
 
-       $ro=$ro.'<tr>';
-       $ro=$ro .'<td style="width: 50px;" > #  </td>';
-       $ro=$ro .'<th style="    text-align: left;"> PartNumber</th>';
-       $ro=$ro.'<th style="text-align: left;">title </th> ';
-       $ro=$ro.'<th>serial_numbers_a </th> ';
-       $ro=$ro.'<th>serial_numbers_b  </th> ';
-       $ro=$ro.'<th> srial_status  </th> ';
-       $ro=$ro.'<th> Order ID  </th> ';
-       $ro=$ro.'<th style="width: 100px;"> تاریخ ورود  </th> ';
-       $ro=$ro.'<th style="width: 100px;"> تاریخ خروج  </th> ';
-       $ro=$ro.'</tr>';
+        $ro=$ro.'<tr>';
+        $ro=$ro .'<td style="width: 50px;" > #  </td>';
+        $ro=$ro .'<th style="    text-align: left;"> PartNumber</th>';
+        $ro=$ro.'<th style="text-align: left;">title </th> ';
+        $ro=$ro.'<th>serial_numbers_a </th> ';
+        $ro=$ro.'<th>serial_numbers_b  </th> ';
+        $ro=$ro.'<th> srial_status  </th> ';
+        $ro=$ro.'<th> Order ID  </th> ';
+        $ro=$ro.'<th style="width: 100px;"> تاریخ ورود  </th> ';
+        $ro=$ro.'<th style="width: 100px;"> تاریخ خروج  </th> ';
+        $ro=$ro.'</tr>';
 
 
-       $i=0;
-       $oldTitle="";
-       foreach ($result AS $r)
-       {
+        $i=0;
+        $oldTitle="";
+        foreach ($result AS $r)
+        {
 //           if ($oldTitle !=$r->stkr_prodct_partnumber_commercial )
 //           {
 //               $partNumber=$r->stkr_prodct_partnumber_commercial;
@@ -285,36 +289,155 @@ class TakeOutProducts
 //               $prodct_title='';
 //
 //           }
-           $partNumber=$r->stkr_prodct_partnumber_commercial;
-           $prodct_title=$r->stkr_prodct_title;
-           if ($i%2 ==0) $color='style="background: #d0d0d0; "';
-           else  $color='style="background: #fff;"';
+            $partNumber=$r->stkr_prodct_partnumber_commercial;
+            $prodct_title=$r->stkr_prodct_title;
+            if ($i%2 ==0) $color='style="background: #d0d0d0; "';
+            else  $color='style="background: #fff;"';
 
-           if ($r->stkr_srial_status==1) $status='ناموجود';
-           else $status='';
-           $ro=$ro.'<tr '. $color.' >';
-               $ro=$ro .'<td> '.$i++ .'   </td>';
-               $ro=$ro .'<td>  '.$partNumber.'   </td>';
-               $ro=$ro.'<td>'.$prodct_title.'  </td> ';
-               $ro=$ro.'<td>'.$r->stkr_srial_serial_numbers_a .'  </td> ';
-               $ro=$ro.'<td>'.$r->stkr_srial_serial_numbers_b.'  </td> ';
-               $ro=$ro.'<td>'.$status.'  </td> ';
-               $orderID= $r->stkr_stk_putng_prdct_order_id+1000;
-               $ro=$ro.'<td>'.$orderID.'  </td> ';
-               $date=new PublicClass();
-               $de=$date->gregorian_to_jalali_byString($r->serialCreatedAt);
-               $ro=$ro.'<td>'.$de[0].'-'.$de[1].'-'.$de[2] .'  </td> ';
+            if ($r->stkr_srial_status==1) $status='ناموجود';
+            else $status='';
+            $ro=$ro.'<tr '. $color.' >';
+            $ro=$ro .'<td> '.$i++ .'   </td>';
+            $ro=$ro .'<td>  '.$partNumber.'   </td>';
+            $ro=$ro.'<td>'.$prodct_title.'  </td> ';
+            $ro=$ro.'<td>'.$r->stkr_srial_serial_numbers_a .'  </td> ';
+            $ro=$ro.'<td>'.$r->stkr_srial_serial_numbers_b.'  </td> ';
+            $ro=$ro.'<td>'.$status.'  </td> ';
+            $orderID= $r->stkr_stk_putng_prdct_order_id+1000;
+            $ro=$ro.'<td>'.$orderID.'  </td> ';
+            $date=new PublicClass();
+            $de=$date->gregorian_to_jalali_byString($r->serialCreatedAt);
+            $ro=$ro.'<td>'.$de[0].'-'.$de[1].'-'.$de[2] .'  </td> ';
 
-           $de=$date->gregorian_to_jalali_byString($r->serialUpdatedAt);
-           if ($r->serialUpdatedAt != $r->serialCreatedAt)
+            $de=$date->gregorian_to_jalali_byString($r->serialUpdatedAt);
+            if ($r->serialUpdatedAt != $r->serialCreatedAt)
                 $Udate=$de[0].'-'.$de[1].'-'.$de[2];
-           else
+            else
                 $Udate="";
-           $ro=$ro.'<td>'. $Udate.'  </td> ';
-           $ro=$ro.'</tr>';
+            $ro=$ro.'<td>'. $Udate.'  </td> ';
+            $ro=$ro.'</tr>';
 
-           $oldTitle =$r->stkr_prodct_partnumber_commercial;
-       }
+            $oldTitle =$r->stkr_prodct_partnumber_commercial;
+        }
+        return  $rows=$ro."</tbody></table></body><p></p></html>";
+    }
+
+
+
+
+   //------------------------
+   public function reservedQTY( $productsId)
+   {
+       $result=  \DB::table('sell_stockrequests AS stockrequests')
+           ->join('sell_stockrequests_details AS stockrequests_details', 'stockrequests.id', '=','stockrequests_details.ssr_d_stockrequerst_id')
+           ->where ('stockrequests_details.ssr_d_product_id','=',$productsId)
+           ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+           ->select('*')
+           ->get();
+
+        $TotalCount=0;
+        foreach ($result as $re)
+        {
+            $TotalCount=$TotalCount+$re->ssr_d_qty;
+        }
+
+        // jame  kharej shodeha
+       $result2=  \DB::table('sell_stockrequests AS stockrequests')
+           ->join('sell_takeoutproducts AS takeoutproducts', 'takeoutproducts.sl_top_stockrequest_id', '=','stockrequests.id')
+           ->where ('takeoutproducts.sl_top_productid','=',$productsId)
+           ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+           ->select('*')
+           ->count();
+
+
+       return  $TotalCount-$result2;
+   }
+
+   public function INandOutReport()
+   {
+       $result=  \DB::table('stockroom_serialnumbers AS serialnumbers')
+           ->join('stockroom_stock_putting_products AS putting_products', 'putting_products.id', '=','serialnumbers.stkr_srial_putting_product_id')
+           ->join('stockroom_products AS products', 'products.id', '=','putting_products.stkr_stk_putng_prdct_product_id')
+//           ->select('*')
+          ->select('*',\DB::raw('serialnumbers.created_at AS serialCreatedAt ,
+                                 serialnumbers.updated_at AS serialUpdatedAt ,
+                                 products.id AS productsId   
+                              
+          
+          '))
+           //->orderBy('stockroom_products.id', 'desc')
+           ->get();
+       $ro='<html>
+            <style>tr:hover {background: #c3e5ff !important;cursor: pointer;}</style>
+            <body> 
+            
+            
+            
+            
+            <table style="width: 65%;display: block;margin: auto;font-family: sans-serif;"><tbody>';
+
+       $ro=$ro.'<tr>';
+       $ro=$ro .'<th style="width: 50px;" > PartNumber  </th>';
+       $ro=$ro .'<th style="    text-align: left;">جمع کل ورودی </th>';
+       $ro=$ro.'<th style="width: 100px;">  رزور  </th> ';
+       $ro=$ro.'<th style="text-align: left;"> جمع خروجی </th> ';
+       $ro=$ro.'<th style="width: 100px;">باقی مانده انبار </th> ';
+       $ro=$ro.'<th>   </th> ';
+       $ro=$ro.'<th>   </th> ';
+       $ro=$ro.'<th>   </th> ';
+       $ro=$ro.'<th style="width: 100px;">    </th> ';
+       $ro=$ro.'<th style="width: 100px;">  </th> ';
+       $ro=$ro.'</tr>';
+
+
+       $i=0;
+       $oldTitle="";
+       $buffer="";
+       $buf=array();
+       foreach ($result AS $r)
+       {
+           if ( !in_array( $r->stkr_prodct_partnumber_commercial,$buf ) )
+           {
+               array_push($buf,$r->stkr_prodct_partnumber_commercial);
+
+               $AllSerialInQTY=  \DB::table('stockroom_serialnumbers AS serialnumbers')
+                   ->join('stockroom_stock_putting_products AS putting_products', 'putting_products.id', '=','serialnumbers.stkr_srial_putting_product_id')
+                   ->join('stockroom_products AS products', 'products.id', '=','putting_products.stkr_stk_putng_prdct_product_id')
+//           ->select('*')
+                   ->where ( 'products.stkr_prodct_partnumber_commercial','=',$r->stkr_prodct_partnumber_commercial )
+                   ->select('*' )
+                   //->orderBy('stockroom_products.id', 'desc')
+                   ->count();
+
+
+               $takeoutQTY=  \DB::table('sell_takeoutproducts AS takeoutproducts')
+
+                   ->where ( 'takeoutproducts.sl_top_productid','=',$r->productsId )
+                   ->select('*',\DB::raw('serialnumbers.created_at AS serialCreatedAt ,
+                                 serialnumbers.updated_at AS serialUpdatedAt '))
+                   ->count();
+
+
+               $reservedQTY =$this->reservedQTY($r->productsId);//
+               $reminedQTY=($AllSerialInQTY-($takeoutQTY+$reservedQTY));
+
+               $ro=$ro.'<tr>';
+                  $ro=$ro.'<td>'.$r->stkr_prodct_partnumber_commercial.'</td>';
+                  $ro=$ro.'<td style="text-align: center">'.$AllSerialInQTY.'</td>';
+               $ro=$ro.'<td style="text-align: center">'.($reservedQTY).'</td>';
+                  $ro=$ro.'<td style="text-align: center">'.$takeoutQTY.'</td>';
+                  $ro=$ro.'<td style="text-align: center">'.$reminedQTY.'</td>';
+
+               $ro=$ro.'</tr>';
+
+           }
+           }
+
+
        return  $rows=$ro."</tbody></table></body><p></p></html>";
    }
+
+
+
+
 }
