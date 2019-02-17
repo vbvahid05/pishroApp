@@ -308,6 +308,19 @@ angular.module('firstApp', [
 
 
 
+$(document).ready(function() {
+    $('select').select2(
+        {
+            dir: "rtl"
+        }
+    );
+    $(".js-example-tokenizer").select2({
+        dir: "rtl",
+        tags: true,
+        tokenSeparators: [',', ' ']
+    })
+
+});
 
 
 

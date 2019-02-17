@@ -345,10 +345,12 @@ return [
     'posts_author'=>'نویسنده',
     'posts_created_at'=>'تاریخ ایجاد',
     'posts_updated_at'=>'تاریخ ویرایش',
+    'posts_tags'=>'برچسب ها',
     'published'=>'منتشر شده' ,
     'unPublished'=> 'منتشر نشده',
     'archived'=> 'آرشیو شده',
     'trash' => 'زباله',
     'newPost'=>'افزودن جدید',
     'update'=>'بروزرسانی',
+
 ];

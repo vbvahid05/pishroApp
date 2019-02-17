@@ -1,6 +1,7 @@
 <?php
 namespace App\Mylibrary;
 
+use App\Model_admin\cms_post_meta;
 use App\user_activity_log;
 use App\acl_userRoleAction;
 
@@ -291,6 +292,54 @@ function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
         }
         return $str_return;
 //        return $val;
+    }
+
+
+    //post Public Functions
+    public  static function getTagList($postID)
+    {
+        $rows= \DB::table('cms_terms AS terms')
+            ->join('cms_term_relations AS term_relations'   ,   'terms.id' , '=' ,'term_relations.trmrel_term_id')
+                        ->select('*', \DB::raw('
+                            term_relations.trmrel_title   AS  TagTitle,
+                            term_relations.id   AS  TagId
+                                '))
+             ->where('terms.trm_type', '=', 'tag')
+            ->get();
+
+
+        $tagArray=array();
+        if ($postID)
+        {
+            try{
+                $record=  cms_post_meta::where('pst_meta_post_id','=',$postID)
+                    ->where('pst_meta_key', '=', '_tags')
+                    ->firstOrFail();
+                if ($record)
+                {
+                    $tagArray= json_decode($record['pst_meta_value'], true);
+                }
+                else $tagArray="";
+            }
+            catch (\Exception $e){}
+        }
+        $string="";
+
+        foreach ( $rows as $r)
+        {
+            {
+                if (in_array($r->TagId,$tagArray) )
+                    $selected='selected="selected"';
+                else
+                    $selected='';
+            }
+    $string='<option '.$selected.' value="'.$r->TagId.'">'.$r->TagTitle.'</option>'.$string;
+//          if(array_search($r->TagId,$tagArray))
+//             ;
+//          else
+//
+        }
+        return $string;
     }
 
 }

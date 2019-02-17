@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\CMS\Posts;
 
 use App\Model_admin\cms_post;
+use App\Model_admin\cms_post_meta;
+use App\Model_admin\cms_term;
+use App\Model_admin\cms_term_relation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -110,6 +113,95 @@ class PostController extends Controller
          }
     }
 
+ public function renderSlug($title)
+ {
+     $slog='';
+     $str=explode(" ",$title);
+     for($i=0 ;$i<=count($str)-1;$i++)
+         if ($slog=='')
+             $slog=$slog.$str[$i];
+         else
+             $slog=$slog.'-'.$str[$i];
+         return $slog;
+ }
+//----------------------------------
+   public function updateMetaTable_Tags($postID,$tagsArray)
+   {
+            $masterArray=array();
+            for ($i=0;$i<= count($tagsArray)-1 ;$i++)
+            {
+              if( !cms_term_relation::find($tagsArray[$i])) // it's Not a number and  unavailable in table
+              {
+                  $term= cms_term::where('trm_type', '=', 'tag')->firstOrFail();
+                  $termTypeID=$term['id'];
+
+                   if (!cms_term_relation::
+                     where('trmrel_title', '=', $tagsArray[$i])
+                    ->where('trmrel_term_id', '=', $termTypeID)
+                    ->count())
+                       {
+                           $cms_term_relation = new cms_term_relation;
+                           $cms_term_relation->trmrel_term_id = $termTypeID;
+                           $cms_term_relation->trmrel_title = $tagsArray[$i];
+                           $cms_term_relation->trmrel_slug = '';
+                           $cms_term_relation->trmrel_action = '';
+                           $cms_term_relation->trmrel_value = '';
+                           $cms_term_relation->trmrel_icon = '';
+                           $cms_term_relation->trmrel_class = '';
+                           $cms_term_relation->trmrel_lang_label = '';
+                           $cms_term_relation->deleted_flag=0;
+                           $cms_term_relation->archive_flag=0;
+                           $cms_term_relation->save();
+                               $tableStatus = \DB::select("show table status from  ratis_cms where Name = 'cms_term_relations'");
+                               if (empty($tableStatus)) {
+                                   throw new \Exception("Table not found");
+                               }
+                               $newId= $tableStatus[0]->Auto_increment;
+                              array_push($masterArray ,$newId-1);
+                       }
+                       else
+                       {
+             $cms_term_rel=cms_term_relation::
+                           where('trmrel_title', '=', $tagsArray[$i])
+                           ->where('trmrel_term_id', '=', $termTypeID)
+                           ->firstOrFail();
+                           $trmrel= $cms_term_rel['id'];
+                           array_push($masterArray ,$trmrel);
+                       }
+              }
+              else
+              array_push($masterArray ,(int)$tagsArray[$i]);
+            }
+
+
+           $tags=json_encode($masterArray);
+           $count= cms_post_meta::where('pst_meta_post_id', '=',$postID)->count();
+           if ($count) //update
+           {
+               cms_post_meta::where('pst_meta_post_id', '=', $postID)
+                   ->update(array('pst_meta_value' => $tags));
+           }
+           else        //new
+           {
+
+               $cms_post_meta = new cms_post_meta;
+               $cms_post_meta->pst_meta_post_id = $postID;
+               $cms_post_meta->pst_meta_key = '_tags';
+               $cms_post_meta->pst_meta_value = $tags;
+               $cms_post_meta->deleted_flag = 0;
+               $cms_post_meta->archive_flag = 0;
+               $cms_post_meta->save();
+           }
+
+
+
+//
+//       $tableStatus = \DB::select("show table status from  ratis_cms where Name = 'cms_posts'");
+//       if (empty($tableStatus)) {
+//           throw new \Exception("Table not found");
+//       }
+//   return    $newId= $tableStatus[0]->Auto_increment;
+   }
 //----------------------------------
     public function CRUD(Request $request,$postType,$action)
     {
@@ -125,21 +217,17 @@ class PostController extends Controller
                             case 'edit':
                                 {
                                     try{
-                                        $slog='';
-                                        $str=explode(" ",$request['postTitle']);
-                                        for($i=0 ;$i<=count($str)-1;$i++)
-                                            if ($slog=='')
-                                            $slog=$slog.$str[$i];
-                                        else
-                                            $slog=$slog.'-'.$str[$i];
 
+                                       $slug=$this->renderSlug( $request['postTitle']);
                                         cms_post::where('id', '=', $request['postID'])
                                             ->update(array(
                                                 'post_title' => $request['postTitle'] ,
-                                                'post_slug'=>$slog,
+                                                'post_slug'=>$slug,
                                                 'post_categury'=>$request['postCategury'] ,
                                                 'post_content'=>$request['postContent'] ,
                                             ));
+
+                                           $this->updateMetaTable_Tags($request['postID'],$request['tags']);
                                         return 1;
                                         }
                                         catch (\Exception $e)

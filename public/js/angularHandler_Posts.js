@@ -12,6 +12,7 @@ function($scope, $http,Pagination)
     /*-----------*/
     $scope.updatePostPage=function (){
         // alert( $("input[name='mainBodyEditor']").val());
+
         switch (postType)
         {
             case 'posts':
@@ -21,8 +22,10 @@ function($scope, $http,Pagination)
                             postID:$('#postID').val(),
                             postTitle:$('#post_Title').val(),
                             postCategury:$('#post_Categury').val(),
-                            postContent: content
+                            postContent: content,
+                            tags:$('#post_tags').val()
                         }
+
 
             break;
             case 'pages':
