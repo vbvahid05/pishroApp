@@ -115,8 +115,11 @@ return Custommerorganization::all();
 }); */
 //Route::post('/services/addOrg',function(){  return App\Custommerorganization::create(\Illuminate\Support\Facades\Input::all()); });
 
+
+
 //Stockroom Products ...
 Route::get('/showProducts','Stockroom\ProductsController@showProducts');
+Route::get('/ProductsStatus','Stockroom\ProductsController@ExportProductsStatus');
 //Route::get('stock/allproducts', function () {return view('stockroom/view_products/allProducts');});
 Route::get('stock/allproducts/{keyword?}', 'Stockroom\ProductsController@showAll');
 //\Illuminate\Support\Facades\Route::get ('stock/allproducts/{keyword?}' ,'Stockroom\ProductsController@showAll');
@@ -234,6 +237,8 @@ Route::get('sell/stockRequest', function () {return view('sell/view_stockRequest
 //New Stock Request Routs
   Route::post('/services_sell/{controller}/{function}/{value?}','sell\SellController@manageRequest');
   Route::get('/showsn','sell\SellController@showsn');
+  Route::get('/showInOut','sell\SellController@showInOut');
+
    //Route::post('/services/sell/getSubChassisParts','sell\SellController@get_SubChassisParts');
 
 

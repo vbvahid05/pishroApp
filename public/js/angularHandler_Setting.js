@@ -3,6 +3,13 @@ var app = angular.module('Setting_App', ['simplePagination']);
 app.controller('setting_Ctrl', ['$scope', '$http','Pagination',
     function($scope, $http,Pagination)
     {
+       function onload()
+       {
+           getAllRoles();
+           getAllUserRoles();
+       }
+       onload();
+
         var id_array =[];
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         $scope.updateRole=function()
@@ -25,7 +32,7 @@ app.controller('setting_Ctrl', ['$scope', '$http','Pagination',
                 toast_alert(response.data,'danger');
             }
         }
-        getAllRoles();
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         function getAllActions()
         {
@@ -56,7 +63,7 @@ app.controller('setting_Ctrl', ['$scope', '$http','Pagination',
                 toast_alert(response.data,'danger');
             }
         }
-        getAllUserRoles();
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         $scope.show=function(id,formTitle)

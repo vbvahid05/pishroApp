@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class acl_userRoleAction extends Model
 {
     protected $fillable = [
-        'ura_user_id', 'ura_role_action_Id', 'ura_details',
+        'ura_user_id', 'ura_role_action_Id', 'ura_details','ura_avatar',
         'deleted_flag' ,'archive_flag'
     ];
 

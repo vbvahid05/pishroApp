@@ -355,8 +355,14 @@ public function Invoice(request $request ,$function)
     {
         $data=new TakeOutProducts();
         return $data->showAllSerialNumbers();
-
     }
+
+    public function showInOut()
+    {
+        $data=new TakeOutProducts();
+        return $data->INandOutReport();
+    }
+
 
 //%%%%%%%%%%%% All Stock Request Page %%%%%%%%%%%%%%%%%%%%%%%
   public function Get_AllstockRequest(request $request)

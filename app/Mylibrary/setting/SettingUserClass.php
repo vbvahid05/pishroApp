@@ -26,8 +26,9 @@ class SettingUserClass
 //------------------------------------------
     function  get_ACL_All_roles()
     {
+
         return acl_role::all();
-//        return  acl_role::where('deleted_flag', '=', '0')->all();
+
     }
 //-------------------------------------------
     function get_ACL_AllActionsAndSelectedActions($value)

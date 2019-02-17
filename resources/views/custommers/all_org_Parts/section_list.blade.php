@@ -9,7 +9,7 @@
         <div class="col-sm-4 pull-right"> {{Lang::get('labels.address')}} </div>
         <div class="col-sm-2 pull-right"> {{Lang::get('labels.postalcode')}} </div>
     </div>
-    <div ng-repeat="row in allRows" ng-if="row.org_name != '---'" class="row divTableRowB  BigDivTabel  col-md-12 ng-scope" id="DivRow@{{ row.id}}">
+    <div ng-repeat="row in allRows" ng-if="row.org_name != '---'" class="row divTableRowB  BigDivTabel  col-md-12 ng-scope" id="DivRow@{{ row.id}}" style="    margin-right: 15px;">
         <div class="col-sm-4 actionField  pull-right ng-binding">
                 @{{row.org_name }}
                 <p style="margin-top: -31px;"></p>

@@ -5,16 +5,17 @@
     <div class="content">
       <div class="center">
         <div class="ui text container">
-            <div class="ui segments">
+            <div class="ui segments" >
               <div class="ui segment" style="height:auto  ;color:#000;">
                 <h2 ng-model="message" > {{ Lang::get('labels.edit') }}</h2>
                 <input type="hidden" ng-model="thisProductID"  >
+
                   <table class="form-table">
                     <tbody>
                       <tr>
                         <th><label for="inpt_Product_brand">{{ Lang::get('labels.Product_brand') }} </label></th>
                         <td>
-                            <div class="ui container"    data-live-search="true" data-selected-text-format="values" style="margin-right: 50px;width:  350;margin-bottom:  20;padding-right: 20px;">
+                            <div class="ui container"    data-live-search="true" data-selected-text-format="values" style="margin-right: 50px !important;width:  350px;margin-bottom:  20;padding-right: 20px;">
                                 <select ng-model="SelectBrand" ng-change="setRelatedPtype()" class="ui search selection dropdown ng-pristine ng-valid ng-not-empty ng-touched" >
                                   <option ng-repeat="brand in AllBrands"   value="@{{brand.id}}">
                                      @{{brand.stkr_prodct_brand_title}}
@@ -26,7 +27,7 @@
                       <tr>
                         <th><label for="inpt_Product_type">{{ Lang::get('labels.Product_type') }} </label></th>
                         <td>
-                          <div class="ui container"    data-live-search="true" data-selected-text-format="values" style="margin-right: 50px;width:  350;margin-bottom:  20;padding-right: 20px;">
+                          <div class="ui container"    data-live-search="true" data-selected-text-format="values" style="margin-right: 50px !important;width:  350px;margin-bottom:  20;padding-right: 20px;">
                           <select ng-model="SelectType" class="ui search selection dropdown ng-pristine ng-valid ng-not-empty ng-touched">
                             <option   ng-repeat="Type in AllTypes" value="@{{Type.id}}" > @{{Type.stkr_prodct_type_title}} </option>
                           </select>

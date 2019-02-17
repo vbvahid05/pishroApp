@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+@inject('PublicClass','App\Mylibrary\PublicClass')
 <html>
 
 <head>
@@ -25,11 +25,11 @@
     <!-- Main Header -->
     <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>A</b>LT</span>
+            <span class="logo-mini"><b>P</b>DS</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-lg"><b>P</b>ISHRO  </span>
         </a>
 
         <!-- Header Navbar -->
@@ -136,38 +136,43 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img src="/img/avatar/{{$PublicClass->userProfileInfo()}}" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs"> {{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
-                            <li class="user-header">
-                                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
-                                </p>
-                            </li>
+
                             <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Followers</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Sales</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Friends</a>
-                                </div>
-                            </li>
+                            {{--<li class="user-body">--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Followers</a>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Sales</a>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Friends</a>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="/editUser" class="btn btn-default btn-flat">
+                                        {{Lang::get('labels.ChangePassword')}}
+                                    </a>
+
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                                        {{Lang::get('labels.logOut')}}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
                                 </div>
                             </li>
                         </ul>
@@ -189,12 +194,12 @@
             {{--<!-- Sidebar user panel (optional) -->--}}
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img  src="/img/avatar/{{$PublicClass->userProfileInfo()}}"  class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Alexander Pierce</p>
+                    <p> {{ Auth::user()->name }}</p>
                     <!-- Status -->
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    {{--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>--}}
                 </div>
             </div>
             {{--<div class="left-sidebar col-md-1 ">--}}
@@ -316,13 +321,14 @@
     </div><!-- /.content-wrapper -->
 
     <!-- Main Footer -->
-    <footer class="main-footer">
+    <footer class="main-footer" style="height: 50px;">
         <!-- To the right -->
-        <div class="pull-right hidden-xs">
-            Anything you want
+        <div class="pull-left hidden-xs">
+            گروه شرکت های مهندسی پیشرو © Copyright 2017-2019
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+        {{--<strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.--}}
+
     </footer>
 
     <!-- Control Sidebar -->
