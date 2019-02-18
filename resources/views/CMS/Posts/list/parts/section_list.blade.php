@@ -20,7 +20,9 @@
                 <td><input type="checkbox" style="width: 15px !important;"></td>
                 <td>{{$dl->post_title}}
                     ( <a href="<?php echo URL::current();?>/edit?id=<?php  echo $dl->Postid?>" >
-                        {{lang::get('labels.edit')}} </a>)
+                        {{lang::get('labels.edit')}} </a>
+                       <span ng-click="post_delete( )"  > {{lang::get('labels.delete')}} </span>
+                    )
                 </td>
                 <td>{{$dl->name}}</td>
                  <td>{{$dl->trmrel_title}}</td>
@@ -31,6 +33,13 @@
                 <td>{{$dl->Postid}}</td>
             </tr>
         @endforeach
+            <tr>
+                <td colspan="6">
+                    <div style="float:  right;">
+                        {{ $dataList->links() }}
+                    </div>
+                </td>
+            </tr>
         </table>
 
 

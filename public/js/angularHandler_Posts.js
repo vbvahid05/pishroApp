@@ -29,11 +29,12 @@ function($scope, $http,Pagination)
 
             break;
             case 'pages':
+                var content = CKEDITOR.instances.post_content.getData();
                 arg={
                     postAction:$('#post_action').val(),
                     postID:$('#postID').val(),
                     postTitle:$('#post_Title').val(),
-                    postContent:$('#post_content').val(),
+                    postContent:content,
                 }
             break;
         }
@@ -55,7 +56,11 @@ function($scope, $http,Pagination)
             }
         }
     }
-    /*-----------*/
+   /*-----------*/
+    $scope.post_delete=function()
+    {
+        alert('d');
+    }
 
 $scope.setPostCategory =function(id)
 {

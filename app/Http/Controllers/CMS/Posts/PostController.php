@@ -8,11 +8,22 @@ use App\Model_admin\cms_term;
 use App\Model_admin\cms_term_relation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class PostController extends Controller
 {
     public function showAllPosts(Request $request, $postType)
     {
+        $viewListMode=Input::get("view");
+        switch (Input::get("view"))
+        {
+            case 'trash':
+                $deleted_flag=1;
+            break;
+            default:
+                $deleted_flag=0;
+
+        }
         $local='fa';
 
 //        try
@@ -34,14 +45,15 @@ class PostController extends Controller
                 ->where('lang.lang_title','=',$local)
                 ->where('postType.pst_typ_title','=',$postType)
                 ->where('categories.trmrel_term_id','=',$catID)
-                ->where('posts.deleted_flag','=',0)
+                ->where('posts.deleted_flag','=',$deleted_flag)
                 ->select(['*','posts.id as Postid'  ,'posts.created_at AS postsCreatedAt' ])
                 ->orderby('Postid','DESC')
-                ->get();
+                //->get();
+                ->paginate(10);
             //-----------
             return view('CMS/Posts/list/list',
                 compact(
-                    'local','postType' ,
+                    'local','postType' ,'viewListMode',
                     'pageTitle' ,'pageIcon','dataList','temcat'
                 ));
 //        }
@@ -85,7 +97,7 @@ class PostController extends Controller
                 ->where('posts.id','=',$postId)
                 ->where('lang.lang_title','=',$locale)
                 ->where('postType.pst_typ_title','=',$postType)
-                ->where('posts.deleted_flag','=',0)
+//                ->where('posts.deleted_flag','=',0)
                 ->orderby('Postid','DESC')
                 ->get();
 //            //----------------------------------
@@ -260,6 +272,12 @@ class PostController extends Controller
                                         $cms_post->post_content=$request['postContent'];
                                         $cms_post->save();
 
+                                        $tableStatus = \DB::select("show table status from  ratis_cms where Name = 'cms_posts'");
+                                        if (empty($tableStatus)) {
+                                            throw new \Exception("Table not found");
+                                        }
+                                        $postID= $tableStatus[0]->Auto_increment-1;
+                                        $this->updateMetaTable_Tags($postID,$request['tags']);
                                         return 1;
                                     }
                                     catch (\Exception $e)
