@@ -266,6 +266,7 @@ class SettingUserClass
                     $userRlAC->ura_user_id=$userID;
                     $userRlAC->ura_roleAction_id=$roleID;
                     $userRlAC->ura_details='کاربر سایت';
+                    $userRlAC->ura_avatar='matthew.png';
                     $userRlAC->deleted_flag=0;
                     $userRlAC->archive_flag=0;
 
