@@ -35,9 +35,12 @@ return [
   'allOrders'=>'سفارشات',
   'addtoStock'=>'ورود به انبار',
   'outStock'=>'خروج از انبار',
+  'WarrantyoutStock'=>'جايگزيني و تعويض',
+
 'sell'=>'فروش',
   'ProductStatusReport' =>'گزارش موجودی کالا',
   'stockRequest' => 'صدور حواله انبار',
+  'warrantyStockRequest' => '  حواله گرانتی ',
 'financial'=>'امور مالی',
  'settings'=>'تنظیمات',
 

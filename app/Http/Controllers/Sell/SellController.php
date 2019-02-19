@@ -257,6 +257,21 @@ public function Invoice(request $request ,$function)
     {
         switch ($controller)
         {
+            case 'warranty' :
+                switch ($function)
+                {
+                    case 'addRequest':
+                        $pageType='addRequest';
+                        return view('sell/view_warranty/allRecord',compact('pageType'));
+                    break;
+
+                    case 'stockOut':
+                        $pageType='stockOut';
+                        return view('sell/view_warranty/allRecord',compact('pageType'));
+                    break;
+                }
+            break ;
+
             case 'Stockrequest' :
                 switch ($function)
                 {

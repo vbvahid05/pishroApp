@@ -1,6 +1,6 @@
 
 
-var app = angular.module('Sell_ProductStatusReport_App', ['simplePagination']);
+var app = angular.module('Sell_warranty_App', ['simplePagination']);
 
 app.directive('onFinishRender', ['$timeout', '$parse', function ($timeout, $parse) {
     return {
@@ -19,10 +19,6 @@ app.directive('onFinishRender', ['$timeout', '$parse', function ($timeout, $pars
     }
 }])
 
-/*  On Start up
-   -> All_invoice_Date(0,0);
-*/
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 app.filter('isZiro', function() {
     return function(value,rowID,rowCol) {
 
@@ -140,14 +136,28 @@ app.filter('pTypeCat', function() {
 });
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','$filter','$sce',
+app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$sce',
     function($scope, $http,Pagination,$filter,$sce )
     {
-        var stockRequestProducts = [];
-        var listArray=[];
-        var sritems = [];
-        var invoice_detilas=[];
-        totalEPL=0;
+//---------------###############################---------------
+     function OnInit()
+        {
+            $scope.pageTypeIs=$('#pageType').val();
+            var stockRequestProducts = [];
+            var listArray=[];
+            var sritems = [];
+            var invoice_detilas=[];
+            totalEPL=0;
+
+
+            get_StatusReport_list (0);
+            pushtoFilters();
+            All_invoice_Date(0,0);
+
+        }
+        OnInit();
+//---------------###############################---------------
+
 
 //---------------###############################---------------
         //@@@ Product Status Report @@@
@@ -176,8 +186,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     }
                 );
         }
-        get_StatusReport_list (0);
-        pushtoFilters();
+
 
         //----------------
         $scope.change_list_mode=function()
@@ -299,8 +308,8 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.addDotToPrice=function(index)
         {
 
-          value= $("#inputID"+index).val();
-          console.log(value);
+            value= $("#inputID"+index).val();
+            console.log(value);
             if (value!=null)
             {
                 BaseValue=value;
@@ -383,7 +392,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-        All_invoice_Date(0,0);
+
 //------------------------------------
         $scope.closeInvoice=function ()
         {
@@ -491,7 +500,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {
                 // $scope.myHTML =$sce.trustAsHtml(response.data);
                 // <p ng-bind-html="myHTML" compile-template></p>
-              //  $scope.allCustommers=response.data;
+                //  $scope.allCustommers=response.data;
             }), function xError(response)
             {}
         }
@@ -647,7 +656,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     break;
 
 
-                    case 'invoice_delivery_Type':
+                case 'invoice_delivery_Type':
                     if (mode=='editbtn')
                     {
                         $scope.invoice_delivery_Type_show=false;
@@ -815,9 +824,9 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             (function xSuccess(response) {
                 Rdata=response.data[0];
                 $scope.echo_prodct_type_cat =Rdata['TypeCat'];
-                 $scope.echo_Brand=Rdata['brand'];
-                 $scope.echo_Type= Rdata['type'];
-                 $scope.echo_ProductTitle= Rdata['prodct_title'];
+                $scope.echo_Brand=Rdata['brand'];
+                $scope.echo_Type= Rdata['type'];
+                $scope.echo_ProductTitle= Rdata['prodct_title'];
                 $scope.echo_EPLPrice=Rdata['price'];
                 reset();
             }), function xError(response)
@@ -867,47 +876,47 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $("#partnumber_list").change(function() {
             partnumbers_id=$("#partnumber_list").val();
             var args= {
-                        Action:"select_product_by_partNum",
-                        Product_id:partnumbers_id
-                    };
+                Action:"select_product_by_partNum",
+                Product_id:partnumbers_id
+            };
 
             $http.post('/services/sell/select_product_by_partNum',args).then
-                (function xSuccess(response) {
-                    Rdata=response.data[0];
-                    $scope.echo_Brand=Rdata['brand'];
-                    $scope.echo_Type=Rdata['type'];
-                    $scope.echo_ProductTitle=Rdata['prodct_title'];
-                    $scope.echo_EPLPrice=Rdata['price'];
-                    //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
-                    reset();
-                }), function xError(response)
-                {}
+            (function xSuccess(response) {
+                Rdata=response.data[0];
+                $scope.echo_Brand=Rdata['brand'];
+                $scope.echo_Type=Rdata['type'];
+                $scope.echo_ProductTitle=Rdata['prodct_title'];
+                $scope.echo_EPLPrice=Rdata['price'];
+                //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
+                reset();
+            }), function xError(response)
+            {}
         });
 
 
         $("#selectProductByPartNum_SubProduct").change(function() {
 
-                if ($scope.mode==1)
-                    productIDx=$scope.ProductID;
-                else
-                    productIDx=$("#selectProductByPartNum_SubProduct").val();
+            if ($scope.mode==1)
+                productIDx=$scope.ProductID;
+            else
+                productIDx=$("#selectProductByPartNum_SubProduct").val();
 
-                var args= {
-                    Action:"select_product_by_partNum",
-                    Product_id:productIDx
-                };
-                $http.post('/services/sell/select_product_by_partNum',args).then
-                (function xSuccess(response) {
-                    $scope.product_details=true;
-                    Rdata=response.data[0];
-                    $scope.echo_Brand_B=Rdata['brand'];
-                    $scope.echo_Type_B=Rdata['type'];
-                    $scope.echo_ProductTitle_B=Rdata['prodct_title'];
-                    $scope.echo_EPLPrice_B=Rdata['price'];
-                    //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
-                    // reset();
-                }), function xError(response)
-                {}
+            var args= {
+                Action:"select_product_by_partNum",
+                Product_id:productIDx
+            };
+            $http.post('/services/sell/select_product_by_partNum',args).then
+            (function xSuccess(response) {
+                $scope.product_details=true;
+                Rdata=response.data[0];
+                $scope.echo_Brand_B=Rdata['brand'];
+                $scope.echo_Type_B=Rdata['type'];
+                $scope.echo_ProductTitle_B=Rdata['prodct_title'];
+                $scope.echo_EPLPrice_B=Rdata['price'];
+                //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
+                // reset();
+            }), function xError(response)
+            {}
         });
 
         //-0-------------------------------
@@ -1728,36 +1737,36 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //----------------------
         $scope.change_invoice_unit_price=function(invoiceID,producID, OLDUnit_price,roID)
         {
-        var Args=
-            {
-                Action:"Update_invoice_price",
-                invoiceID :invoiceID,
-                producID :producID,
-                NewPrice:RemoveCama($('#inputID'+roID).val())
-            };
-        $http.post('/services/sell/Update_invoice_price',Args).then(
-            function xSuccess(response)
-            {
-                if ($scope.formStatus=='edit') {
-                    $scope.EditInvoiceLIST(1);
-                    $scope.Show_Selected_invoice(invoiceID);
-                    $(".editUnitpriceInput").addClass('hidden');
-
-                }
-                else
+            var Args=
                 {
-                    sritems[roID].Unit_price=newprice;
-                    $('#TotalPrice'+producID).html( sritems[roID].qty* sritems[roID].Unit_price);
-                    // $scope.echo_TotalQty= (($scope.echo_TotalQty-OldQty)+parseInt(newQTY));
-                    $scope.echo_Total_EPL_price="...";
-                    $scope.echo_TotalPrice ="...";
-                    $scope.echo_tax_price  ="...";
+                    Action:"Update_invoice_price",
+                    invoiceID :invoiceID,
+                    producID :producID,
+                    NewPrice:RemoveCama($('#inputID'+roID).val())
+                };
+            $http.post('/services/sell/Update_invoice_price',Args).then(
+                function xSuccess(response)
+                {
+                    if ($scope.formStatus=='edit') {
+                        $scope.EditInvoiceLIST(1);
+                        $scope.Show_Selected_invoice(invoiceID);
+                        $(".editUnitpriceInput").addClass('hidden');
+
+                    }
+                    else
+                    {
+                        sritems[roID].Unit_price=newprice;
+                        $('#TotalPrice'+producID).html( sritems[roID].qty* sritems[roID].Unit_price);
+                        // $scope.echo_TotalQty= (($scope.echo_TotalQty-OldQty)+parseInt(newQTY));
+                        $scope.echo_Total_EPL_price="...";
+                        $scope.echo_TotalPrice ="...";
+                        $scope.echo_tax_price  ="...";
+                    }
+                }),
+                function xError(response)
+                {
+                    toast_alert(response.data,'warning');
                 }
-            }),
-            function xError(response)
-            {
-                toast_alert(response.data,'warning');
-            }
         }
         //----------------------
         $scope.delete_itemFromInvoiceList=function(invoice_id,product_id,rowId)
@@ -1828,7 +1837,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $http.post('/services/sell/update_NewSubProduct_Qty',Args).then(
                 function xSuccess(response)
                 {
-                     console.log(response.data);
+                    console.log(response.data);
                     if (response.data==1)
                     {
                         toast_alert('Qty Updated','success');
@@ -1872,7 +1881,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.Edit_invoice_Row_BTN=function()
         {
             Load_curency();
-           // load_custommers();
+            // load_custommers();
             $scope.EditinvoiceRow=true;
             $scope.selectProductx=false;
             $scope.mode0_fiald =false;
@@ -1893,7 +1902,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 Action:"edit_invoice_Base_data",
                 invoicesID : $scope.echo_invoicesID,
                 // new_date:$("#datesXD").attr("data-mdpersiandatetimepickerselecteddatetime"),
-                 new_date:$("#datesXD").val(),
+                new_date:$("#datesXD").val(),
                 new_Currency:$scope.Currency,
                 new_custommerID :  $('#EditcustommerID').val()
             };
@@ -2223,7 +2232,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             (function xSuccess(response)
             {
                 $resp=response.data[0];
-                 $scope.sr_cstmr_id=  $resp.cstmr_id
+                $scope.sr_cstmr_id=  $resp.cstmr_id
                 $scope.sr_custommer=$resp.cstmrName+' '+$resp.cstmrFamily;
                 $scope.sr_type=$resp.stockRequestsType.toString();
                 $scope.sr_preFaktorNum=$resp.contract_number;
@@ -2231,20 +2240,20 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 $('.selectpicker').selectpicker('val', $resp.cstmr_id.toString());
 
                 $scope.sr_deliveryDate=$resp.delivery_date;
-                    var res =$scope.sr_deliveryDate.split("-");
-                    $scope.jalaiDliver=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
-                    var res =$scope.jalaiDliver.split("/");
-                        $scope.Dliverdays=res[2];
-                        $scope.DliverMonths=res[1];
-                        $scope.Dliveryears=res[0];
+                var res =$scope.sr_deliveryDate.split("-");
+                $scope.jalaiDliver=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
+                var res =$scope.jalaiDliver.split("/");
+                $scope.Dliverdays=res[2];
+                $scope.DliverMonths=res[1];
+                $scope.Dliveryears=res[0];
 
                 $scope.sr_registration_date=$resp.registration_date;
-                    var res =$scope.sr_registration_date.split("-")
+                var res =$scope.sr_registration_date.split("-")
                 $scope.jalaiRegistr=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
-                    var res =$scope.jalaiRegistr.split("/");
-                    $scope.Registrdays=res[2];
-                    $scope.RegistrMonths = res[1];
-                    $scope.Registryears = res[0];
+                var res =$scope.jalaiRegistr.split("/");
+                $scope.Registrdays=res[2];
+                $scope.RegistrMonths = res[1];
+                $scope.Registryears = res[0];
 
 
 //-----------------Get Organization Name -------
@@ -2645,9 +2654,9 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         $("#product_partnumbers_SR").change(function(){
 
-         j=0;
-         productID=$('#product_partnumbers_SR').val();
-         Marray=$scope.ListOfPartNumbers;
+            j=0;
+            productID=$('#product_partnumbers_SR').val();
+            Marray=$scope.ListOfPartNumbers;
             for (var i=0; i<Marray.length; i++)
             {
                 if (Marray[i].productID == productID)
@@ -2936,7 +2945,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 $scope.mode0_fiald=false;
                 $scope.resultProduct=false;
 
-                    $scope.brandsID=[];
+                $scope.brandsID=[];
 
 
                 $( ".brandsID .text.ng-binding" ).empty();
@@ -3132,13 +3141,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         {
             serialA_value= $("#serialA"+productID+""+inputIndex).val();
             serialB_value= $("#serialB"+productID+""+inputIndex).val();
-             c=0;
+            c=0;
             for (i=0;i<=$scope.choicesx.length;i++)
             {
                 if ($scope.choicesx[i])
                 {
                     if (serialA_value == $scope.choicesx[i]['SerialA']  )
-                       c++;
+                        c++;
                 }
             }
 
@@ -3811,23 +3820,23 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
         }
 //*********************************
-    $scope.StkReqPDFSetting=function (id) {
-        $scope.thisSelectedStockrequestID=id;
-        $scope.stng_mainTableFontSize    ="";
-        $scope.stng_SerialNumberFontSize ="";
-        var args= {
-            StkReqID:  id
-        };
-        $http.post('/services_sell/Stockrequest/getPdfSettingValue',args).then
-        (function xSuccess(response) {
-         arrayx=response.data;
-         $scope.stng_mainTableFontSize    =arrayx.mainTableFontSize;
-         $scope.stng_SerialNumberFontSize =arrayx.SerialNumberFontSize;
-        }), function xError(response)
-        {}
-        SelectDimmer('section_pdf_Setting_dimmer');
-        $('#Dimmer_page').dimmer('show');
-    }
+        $scope.StkReqPDFSetting=function (id) {
+            $scope.thisSelectedStockrequestID=id;
+            $scope.stng_mainTableFontSize    ="";
+            $scope.stng_SerialNumberFontSize ="";
+            var args= {
+                StkReqID:  id
+            };
+            $http.post('/services_sell/Stockrequest/getPdfSettingValue',args).then
+            (function xSuccess(response) {
+                arrayx=response.data;
+                $scope.stng_mainTableFontSize    =arrayx.mainTableFontSize;
+                $scope.stng_SerialNumberFontSize =arrayx.SerialNumberFontSize;
+            }), function xError(response)
+            {}
+            SelectDimmer('section_pdf_Setting_dimmer');
+            $('#Dimmer_page').dimmer('show');
+        }
 //*********************************
         $scope.stackReqstPDFSettingSave =function ()
         {

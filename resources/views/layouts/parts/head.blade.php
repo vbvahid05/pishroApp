@@ -43,6 +43,8 @@
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Sell_ProductStatusReport.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Setting.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_userSetting.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/angularHandler_Sell_waranty.js') }}"></script>
+
 
 <!-- accordian Side Menu -->
 <script type="text/javascript" src="{{ URL::asset('js/prefixfree-1.0.7.js') }}"></script>

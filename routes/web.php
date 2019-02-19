@@ -239,6 +239,9 @@ Route::get('sell/stockRequest', function () {return view('sell/view_stockRequest
   Route::get('/showsn','sell\SellController@showsn');
   Route::get('/showInOut','sell\SellController@showInOut');
 
+//Warranty
+    Route::get('sell/stockRequest/{controller}/{function}/{value?}','sell\SellController@manageRequest');
+
    //Route::post('/services/sell/getSubChassisParts','sell\SellController@get_SubChassisParts');
 
 
