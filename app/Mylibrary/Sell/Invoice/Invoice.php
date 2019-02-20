@@ -1087,9 +1087,78 @@ public function add_subProduct_in_Invoice   ($request)
         $model = sell_invoice::find($invoiceID);
       return  $si_pdf_settings= $model['si_pdf_settings'];
     }
+
+    public function getPdf_2($data)
+    {
+        $html="<!DOCTYPE html>
+<html>
+<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head>
+<body>
+
+<h2 title=\"I'm a header\">سلام</h2>
+
+<p title=\"I'm a tooltip\">
+Mouse over this paragraph, to display the title attribute as a tooltip.
+</p>
+
+</body>
+</html>
+";
+//        $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  10, 45,
+//            1,  9,   'P');
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [190, 236],
+            'orientation' => 'L',
+            'default_font'=>'vYekan'
+        ]);
+        $mpdf->SetFont('vYekan');
+        $mpdf->allow_charset_conversion=true;  // Set by default to TRUE
+
+
+// Write some HTML code:
+        $mpdf->WriteHTML($html);
+
+// Output a PDF file directly to the browser
+        $mpdf->Output();
+
+    }
+
 //--------------------
     public function getPdf($data)
     {
+
+//        $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
+//            1,  9,   'P');
+
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontdata = $defaultFontConfig['fontdata'];
+//        'mode' => 'en',
+//    'default_font_size' => 10,
+//    'margin_left' => 9.5,
+//    'margin_right' => 0,
+//    'margin_top' => 42.5,
+//    'margin_bottom' => 0,
+//    'margin_header' => 7.1,
+//    'margin_footer' => 2,
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'orientation' => 'P',
+            'default_font'=>'vYekan',
+            'fontdir' => array_merge($fontDirs, [__DIR__ . '/custom']),
+            'fontdata' => $fontdata + [
+                    'vYekan' => [
+                        'R' => 'BYekan.ttf',
+                        'B' => 'BYekan.ttf',
+                        'useOTL' => 0xFF
+                    ]]
+
+        ]);
+        //$mpdf->SetFont('vYekan');
+        $mpdf->allow_charset_conversion=true;
 
         $InvoiceInfo=$data[0][0];
         $productList=$data[1];
@@ -1160,11 +1229,7 @@ public function add_subProduct_in_Invoice   ($request)
    $space=0; //Separator Spacing in pixel
    $marginTop = ($stng_header_To_InvoiceBody ? $stng_header_To_InvoiceBody : 30);
 
-
-
-
         //--------------------------------
-
         $CreatedBy= $invoiceTolalInfo['CreatedBy'];
         $verified_By="";
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
@@ -1175,8 +1240,7 @@ public function add_subProduct_in_Invoice   ($request)
         $officeAddress=\Lang::get('labels.officeAddress'); $webSiteURL=\Lang::get('labels.webSiteURL'); $Tel=\Lang::get('labels.Tel');
         $invoiceSeller=\Lang::get('labels.invoiceSeller');  $invoiceSalesExpert=\Lang::get('labels.invoiceSalesExpert');$invoiceVerifiedBy=\Lang::get('labels.invoiceVerifiedBy');
 
-    $footer='                 
-                                
+    $footer='                                
                  <table style="width: 100% ;   border: 1px solid gray;"  >
                     <tr >
                         <td class="invoice_Creator_Cells" style="vertical-align:top ;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSalesExpert.' : '.$CreatedBy.'</td>
@@ -1185,8 +1249,7 @@ public function add_subProduct_in_Invoice   ($request)
                     </tr>                      
                 </table>                                                                     
                 <img style="margin-top: 10px " src="img/footer.png">';
-        $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
-            1,  9,   'P');
+
         //        $mpdf->SetFont('garuda');
         //LANG
        $codeghtesadi=\Lang::get('labels.codeghtesadi'); $codeEghtesadiPishro= \Lang::get('labels.codeEghtesadiPishro');$date= \Lang::get('labels.date'); $Number=\Lang::get('labels.Number');$invoiceSalesExpert=\Lang::get('labels.invoiceSalesExpert');$invoice_seller=\Lang::get('labels.invoice_seller');$address2=\Lang::get('labels.address2');$Orders_row=\Lang::get('labels.Orders_row');$Product_title=\Lang::get('labels.Product_title');$QTY=\Lang::get('labels.QTY');$invoice_Unit_price=\Lang::get('labels.invoice_Unit_price');$invoice_Total_Price=\Lang::get('labels.invoice_Total_Price');$invoice_Info=\Lang::get('labels.invoice_Info');$tel=\Lang::get('labels.tel');
@@ -1299,11 +1362,10 @@ public function add_subProduct_in_Invoice   ($request)
 
 
         $invoice_Result='
- 
-     <tr>
-        <td colspan="6" style="height: 3px;">  </td>
-      </tr>
-     <tr>
+                         <tr>
+                            <td colspan="6" style="height: 3px;">  </td>
+                          </tr>
+                         <tr>
                         <td  style="vertical-align:top" colspan="3" rowspan="5">'.
                             $show_invoice_Description.
                             '<div style="height: 3mm !important;color: #fff;font-size: 5px">.</div>'.
@@ -1369,7 +1431,7 @@ public function add_subProduct_in_Invoice   ($request)
                 <style>
                 body {
                 direction: rtl;                
-                font-family: byekan !important;            
+                font-family: vYekan !important;            
                 } 
                 .font12
                 {
@@ -1456,9 +1518,9 @@ public function add_subProduct_in_Invoice   ($request)
                 </style>
             </head>
             <body>  
-            $s     
+                  
             $Separator 
-           <h4 style="font-family: byekan; text-align: center ;font-size: 20px"> 
+           <h4 style="font-family: vYekan; text-align: center ;font-size: 20px"> 
             پیش فاکتور فروش
             </h4>
             $Separator
@@ -1508,10 +1570,10 @@ public function add_subProduct_in_Invoice   ($request)
             </body>
         </html>
 EOT;
-        $mpdf->SetHTMLHeader($header);
-        $mpdf->SetHTMLFooter($footer);
-        $mpdf->AddPage(); // force pagebreak
-        $mpdf->WriteHTML($html);
+      $mpdf->SetHTMLHeader($header);
+      $mpdf->SetHTMLFooter($footer);
+      $mpdf->AddPage(); // force pagebreak
+      $mpdf->WriteHTML($html);
 
         $file_name=$InvoiceInfo->si_Alias_id ;
         if ($InvoiceInfo->org_name !=null) $file_name =$file_name.'_'.$InvoiceInfo->org_name.'.pdf';
