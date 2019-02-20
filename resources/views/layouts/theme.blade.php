@@ -254,6 +254,8 @@
                         <li><a id="AllOrders"        href="{{ url('stock/AllOrders') }}">            <i class="fa fa-cart-plus" aria-hidden="true"></i>{{ Lang::get('labels.allOrders') }}  </a></li>
                         <li><a id="PuttingProducts"       href="{{ url('stock/PuttingProducts') }}"> <i class="fa fa-level-down" aria-hidden="true"></i>{{ Lang::get('labels.addtoStock') }}     </a></li>
                         <li><a id="TakeOutProducts"       href="{{ url('sell/TakeOutProducts') }}">  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>  {{ Lang::get('labels.outStock') }}    </a></li>
+                        <li><a id="TakeOutProducts"       href="{{ url('sell/stockRequest/warranty/stockOut') }}">  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>  {{ Lang::get('labels.WarrantyoutStock') }}    </a></li>
+
                     </ul>
                 </li>
 
@@ -266,6 +268,7 @@
                     <ul  class="treeview-menu">
                         <li><a id="ProductStatusReport"      href="{{ url('sell/ProductStatusReport') }}">    <i class="fa fa-file-text" aria-hidden="true"></i>{{ Lang::get('labels.ProductStatusReport') }}</a></li>
                         <li><a id="stockRequest"             href="{{ url('sell/stockRequest') }}">           <i class="fa fa-cubes" aria-hidden="true"></i>{{ Lang::get('labels.stockRequest') }} </a></li>
+                        <li><a id="stockRequest"             href="{{ url('sell/stockRequest/warranty/addRequest') }}">           <i class="fa fa-cubes" aria-hidden="true"></i>{{ Lang::get('labels.warrantyStockRequest') }} </a></li>
                         <li><a id="invoice"                  href="{{ url('sell/invoice') }}">                <i class="fa fa-money" aria-hidden="true"></i> {{ Lang::get('labels.invoice') }}  </a></li>
                     </ul>
                 </li>
