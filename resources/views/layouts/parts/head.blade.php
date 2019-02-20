@@ -43,12 +43,9 @@
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Sell_ProductStatusReport.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Setting.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_userSetting.js') }}"></script>
-<<<<<<< HEAD
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Posts.js') }}"></script>
-=======
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Sell_waranty.js') }}"></script>
 
->>>>>>> 508328c2bc13c201b1e7cd74546294871d5c68a2
 
 <!-- accordian Side Menu -->
 <script type="text/javascript" src="{{ URL::asset('js/prefixfree-1.0.7.js') }}"></script>
