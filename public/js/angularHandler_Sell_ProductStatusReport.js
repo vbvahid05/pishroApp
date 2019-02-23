@@ -863,7 +863,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //     }), function xError(response)
         //     {}
         // }
-
+//--
         $("#partnumber_list").change(function() {
             partnumbers_id=$("#partnumber_list").val();
             var args= {

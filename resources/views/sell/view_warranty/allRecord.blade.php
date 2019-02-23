@@ -12,7 +12,12 @@
 @section('content')
   <div ng-app="Sell_warranty_App" ng-controller="Sell_warranty_Ctrl" >
       <br/>
-        <h2 ><i class="fa fa-paper-plane-o" aria-hidden="true"></i>  {{ Lang::get('labels.outStock') }}</h2>
+        @if($pageType=='addRequest')
+          <h2 ><i class="fa fa-microchip"></i>  {{ Lang::get('labels.warrantyStockRequest') }} </h2>
+        @endif
+        @if($pageType=='stockOut')
+          <h2 ><i class="fa fa-microchip"></i>  {{ Lang::get('labels.WarrantyoutStock') }} </h2>
+        @endif
       <br/>
     <!-- TOOLBAR -->
 

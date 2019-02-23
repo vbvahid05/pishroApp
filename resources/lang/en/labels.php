@@ -40,7 +40,7 @@ return [
 'sell'=>'فروش',
   'ProductStatusReport' =>'گزارش موجودی کالا',
   'stockRequest' => 'صدور حواله انبار',
-  'warrantyStockRequest' => '  حواله گرانتی ',
+  'warrantyStockRequest' => '  حواله گارانتی ',
 'financial'=>'امور مالی',
  'settings'=>'تنظیمات',
 
@@ -315,6 +315,9 @@ return [
 'pixel'=>'پیکسل',
 
 
+'warranty_start_date'=>'تاريخ شروع گارانتي',
+'warranty_duration'=>'مدت گارانتي',
+'warranty_delevery_date'=>'تاريخ تحويل',
 
 
 //** SETTING */

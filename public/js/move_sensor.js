@@ -12,6 +12,12 @@ jQuery(document).ready(function(e)
             // e( "table.publicTable.Moveable_header" ).removeClass( "show" );
          }
     }
+
+
+
+
+
+
 });
 
 
@@ -19,3 +25,5 @@ jQuery(document).ready(function(e)
 $( window ).load(function() {
     $(".MainLoading").removeClass("show");
 });
+
+

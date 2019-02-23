@@ -1,4 +1,4 @@
-@include('sell.view_TakeOutProducts.takeOutProducts_parts.section_new_edit')
+@include('sell.view_warranty.single_parts.section_new_edit')
 
 
 @section('section_dimmerPage')
