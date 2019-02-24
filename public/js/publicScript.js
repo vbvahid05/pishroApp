@@ -64,6 +64,7 @@ var lbl_edit_org_info ="ویرایش اطلاعات سازمان";
 var lbl_setting_Edit="ویرایش اطلاعات";
  var lbl_new_invoice="پیش فاکتور جدید";
  var lbl_Edit_invoice="ویرایش پیش فاکتور";
+ var lbl_Warranty_StockRequest="صدور حواله گارانتی";
 
 
 //----------------
@@ -321,7 +322,6 @@ $(document).ready(function() {
     })
 
 });
-
 
 
  /*

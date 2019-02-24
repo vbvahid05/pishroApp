@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sell;
 //>>>>>>>>>>>> Model
 
 use App\Mylibrary\Sell\TakeOutProducts\TakeOutProducts;
+use App\Mylibrary\Sell\warranty\Warranty;
 use App\sell_stockrequests_detail;
 use App\sell_takeoutproduct ;
 use App\Stockroom_stock_putting_product;
@@ -269,6 +270,21 @@ public function Invoice(request $request ,$function)
                         $pageType='stockOut';
                         return view('sell/view_warranty/allRecord',compact('pageType'));
                     break;
+
+                    case 'getWarrantyList':
+                          $data= new Warranty();
+                          return $data->getWarrantyList();
+                    break;
+                    case 'GetSerialNumbers':
+                          $data= new Warranty();
+                          return $data->GetSerialNumbers();
+                    break;
+                    case 'getInfoAroundSerialNumber':
+                        $data= new Warranty();
+                        return $data->getInfoAroundSerialNumber($request);
+                        break;
+
+
                 }
             break ;
 
