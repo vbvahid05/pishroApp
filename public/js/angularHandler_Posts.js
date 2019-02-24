@@ -6,6 +6,7 @@ function($scope, $http,Pagination)
     function OnBoot()
     {
         postType=$('#postType').val();
+
     }
     OnBoot();
 
@@ -23,8 +24,11 @@ function($scope, $http,Pagination)
                             postTitle:$('#post_Title').val(),
                             postCategury:$('#post_Categury').val(),
                             postContent: content,
-                            tags:$('#post_tags').val()
+                            tags:$('#post_tags').val(),
+                            postImage:$('#mediaLib').val()
                         }
+
+
 
 
             break;
@@ -45,6 +49,7 @@ function($scope, $http,Pagination)
             (function pSuccess(response)
             {
                 console.log(response.data);
+                $scope.imageUrl=response.data;
                 if (response.data==1)
                     toast_alert(Seved_Message,'success');
                 else if (response.data==23000)

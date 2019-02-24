@@ -42,6 +42,36 @@
         {{--<option selected="selected">orange</option>--}}
     </select>
     </div>
+<br/>
+
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-bug" aria-hidden="true" style="color: #49758c;"></i>&nbsp;{{Lang::get('labels.images')}}</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            @foreach($media as $m)
+                <img class="img-responsive" src="/storage/{{$m->id}}/{{ $m->file_name }}" >
+
+            @endforeach
+            <div class="input-group mb-3">
+
+                <div class="custom-file">
+                    {{--@if($media)--}}
+
+                    {{--@endif--}}
+
+                    <img src="@{{imageUrl}}" style="width: 70%">
+                    <input type="file" name="mediaLib" class="custom-file-input" id="mediaLib">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 @endsection

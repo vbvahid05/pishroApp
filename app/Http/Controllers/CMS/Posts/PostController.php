@@ -9,6 +9,7 @@ use App\Model_admin\cms_term_relation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -79,7 +80,7 @@ class PostController extends Controller
     public  function  editPage(Request $request,$postType,$action)
     {
 
-        $locale ='fa';
+        $local ='fa';
         if ($action=='edit')
         {
             $pageTitle=  \Lang::get('labels.edit').' '.\Lang::get('labels.'.$postType);
@@ -95,27 +96,31 @@ class PostController extends Controller
                 ->Join('cms_post_types as postType' ,'postType.id','=','posts.post_type' )
                 ->select(['*','posts.id as Postid' ])
                 ->where('posts.id','=',$postId)
-                ->where('lang.lang_title','=',$locale)
+                ->where('lang.lang_title','=',$local)
                 ->where('postType.pst_typ_title','=',$postType)
 //                ->where('posts.deleted_flag','=',0)
                 ->orderby('Postid','DESC')
                 ->get();
 //            //----------------------------------
-            $categuryList =$this->GetAllCategory($locale,$postType);
+            $categuryList =$this->GetAllCategory($local,$postType);
               //----------------------------------
+            $post= cms_post::find($postId);
+              //$media= $post->getMedia()->first()->getUrl();;
+             $media= $post->getMedia() ;
+
 
             if (count($dataList)!=0 && $action=='edit') $hasValue=true; else $hasValue=false;
             return view('/CMS/Posts/page/page',
                 compact(
                     'action','local','postId','postType' ,'pageTitle' ,'pageIcon',
-                    'dataList','categuryList','hasValue'));
+                    'dataList','categuryList','hasValue','media'));
        }
         else if ('new')
         {
             $hasValue=false;
             $pageTitle=  \Lang::get('labels.new').' '.\Lang::get('labels.'.$postType);
             $pageIcon="fa fa-file-text-o";
-            $categuryList =$this->GetAllCategory($locale,$postType);
+            $categuryList =$this->GetAllCategory($local,$postType);
             $postId='';
 
             return view('/CMS/Posts/page/page',
@@ -240,7 +245,14 @@ class PostController extends Controller
                                             ));
 
                                            $this->updateMetaTable_Tags($request['postID'],$request['tags']);
-                                        return 1;
+                                           //----------------------------Upload Image
+                                           $post= cms_post::find($request['postID']);
+                                           $post ->addMedia($request['postImage'])->toMediaCollection();
+                                           //$post ->addMediaFromUrl($url)->toMediaCollection();
+                                           $Imageid=$post->media[0]['id'];
+                                           $imageName= $post->media[0]['file_name'];
+                                            //----------------------------Upload Image
+                                            return Storage::url($Imageid.'/'.$imageName);
                                         }
                                         catch (\Exception $e)
                                         {

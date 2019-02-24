@@ -11,7 +11,7 @@
     <input id="postID" type="hidden" value="{{$postId}}" >
     <input id="post_action" type="hidden" value="{{$action}}" >
     {{--ToolBar--}}
-    <form ng-submit="updatePostPage()">
+    <form ng-submit="updatePostPage()" method="post" enctype="multipart/form-data">
     @section ('section_toolbars') @show
     {{--Notification Bar--}}
     <div id="publicNotificationMessage" class="publicNotificationMessage"></div>

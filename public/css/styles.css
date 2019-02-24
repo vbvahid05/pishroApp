@@ -1936,7 +1936,9 @@ label.invcsting {
     height: 50px;
     line-height: 4;
 }
-
+.content{
+    min-height: 1500px !important;
+}
 .content .header {
     cursor: pointer !important;
 }
