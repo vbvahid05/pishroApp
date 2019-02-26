@@ -315,6 +315,7 @@ return [
 'pixel'=>'پیکسل',
 
 
+'warranty_id'=>'شماره حواله گارنتی',
 'warranty_start_date'=>'تاريخ شروع گارانتي',
 'warranty_duration'=>'مدت گارانتي',
 'warranty_delevery_date'=>'تاريخ تحويل',

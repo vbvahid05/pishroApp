@@ -273,8 +273,9 @@ public function Invoice(request $request ,$function)
 
                     case 'getWarrantyList':
                           $data= new Warranty();
-                          return $data->getWarrantyList();
+                          return $data->getWarrantyList($request);
                     break;
+
                     case 'GetSerialNumbers':
                           $data= new Warranty();
                           return $data->GetSerialNumbers();
@@ -283,6 +284,21 @@ public function Invoice(request $request ,$function)
                         $data= new Warranty();
                         return $data->getInfoAroundSerialNumber($request);
                         break;
+                    case 'SaveWarrantyForm':
+                        $data= new Warranty();
+                        return $data->SaveWarrantyForm($request);
+                    break;
+
+                    case 'UpdateWarrantyForm':
+                        $data= new Warranty();
+                        return $data->UpdateWarrantyForm($request);
+                        break;
+
+                    case 'getSavedWarrantyDataByID':
+                        $data= new Warranty();
+                        return $data->getSavedWarrantyDataByID($request);
+                        break;
+
 
 
                 }

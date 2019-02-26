@@ -383,8 +383,9 @@ li ul li:hover {
     width: 100%;
     left: 0;
     right: 0;
-    top: 30px;
-
+    top: 0;
+    z-index: 10000;
+    opacity: 0.9;
 
 }
 .alert

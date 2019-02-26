@@ -56,14 +56,15 @@
 
         <tr>
             <th><input type="checkbox" ng-model="confirmed" ng-change="checkall(2)" id="checkall2" /></th>
+            <th style="width:  150px;"  >{{ Lang::get('labels.warranty_id') }} </th>
             <th style="width:  150px;"  >{{ Lang::get('labels.stockRequest_ID') }} </th>
-            <th>{{ Lang::get('labels.custommer') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_type') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_RequestDate') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_deliveryDate') }}</th>
-            <th>{{ Lang::get('labels.stockRequest_preFaktorNum') }} </th>
+            <th> {{ Lang::get('labels.custommer') }} </th>
+            <th> {{ Lang::get('labels.warranty_delevery_date') }} </th>
+            <th> {{ Lang::get('labels.warranty_start_date') }} </th></th>
+            <th> </th>
+            <th> </th>
             <th> <i class="fa fa-print" style="font-size: 20px;"></i></th>
-            <th>{{ Lang::get('labels.status') }} </th>
+            <th> </th>
         </tr>
         <tr ng-repeat="row in allRowsZ
                     | startFrom: pagination.page * pagination.perPage
@@ -75,11 +76,11 @@
 
               <td><input type="checkbox" class="checkbox" name="itemIdList" value="@{{ row.id }}"></td>
                 <td>
-                  @{{ row.id}}
+                  @{{ row.warranty_id}}
                   <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
                   @can('TakeOutProducts_update', 1)
                    <span class="edit">
-                      <span class="editBtn"  ng-click="EditSelected(row.id)" aria-label="{{Lang::get('labels.edit')}}" >
+                      <span class="editBtn"  ng-click="newUpdateWarranty('edit',row.warranty_id)" aria-label="{{Lang::get('labels.edit')}}" >
                          {{ Lang::get('labels.stockRequest_Edit') }}
                        </span>
                     </span>
@@ -87,12 +88,10 @@
 
                   </div>
                   </td>
-
+                <td> @{{ row.stkRq_ID }}</td>
                 <td>@{{ row.cstmr_name}} @{{ row.cstmr_family}}  <br/> @{{ row.org_name}} </td>
-                <td>@{{ row.sel_sr_type  | stockRequestTYPE}}</td>
-                <td>@{{ row.sel_sr_registration_date | Jdate}}</td>
-                <td>@{{ row.sel_sr_delivery_date | Jdate}}</td>
-                <td>@{{ row.sel_sr_pre_contract_number}}</td>
+                <td>@{{ row.ssw_delivery_date | Jdate}}</td>
+                <td>@{{ row.ssw_warranty_start_date | Jdate}}</td>
                 <td> <a class="btn btn-success" href="/sell/stockRequest/reports/@{{row.id}}" >
                   <i class="fa fa-print" ></i>
                   {{Lang::get('labels.print')}}

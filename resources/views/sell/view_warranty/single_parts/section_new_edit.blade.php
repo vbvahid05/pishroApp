@@ -36,10 +36,10 @@
                <br/>
                <i class="fa fa-calendar"></i>
                    <strong>{{lang::get('labels.stockRequest_deliveryDate')}}: </strong>
-                   @{{ RegistrDate }}
+                   @{{ RegistrDate |Jdate}}
                    &nbsp;&nbsp;
                    <strong>{{lang::get('labels.stockRequest_RequestDate')}}:</strong>
-                   @{{ DeliveryDate }}
+                   @{{ DeliveryDate | Jdate}}
            </div>
           </div>
           <hr style="margin-top: 0;">
@@ -61,6 +61,7 @@
                           <td>@{{ prodctTitle }}</td>
                           <td>@{{ snA }}</td>
                           <td>@{{ snB }}</td>
+
                       </tr>
                   </table>
               </div>
@@ -73,8 +74,10 @@
           </div>
           <hr>
               <div class="row">
+                  <div ng-show="defultStockRId" style="text-align: right;padding-right: 20px;" > شماره حواله :  @{{ defultStockRId }}</div>
+
                   <table class="">
-                   <tr ng-repeat="Sn in SeriallistArray track by $index">
+                   <tr ng-repeat="Sn in SeriallistArray track by $index" style="height: 25px;">
                        <td>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                        </td>
@@ -90,11 +93,12 @@
                            <span class="label label-primary ng-binding">@{{ Sn.snA }} </span>
                        </td>
                        <td>
-                           <span class="label label-success ng-binding">@{{ Sn.snB }} </span>
+                           <span ng-show="Sn.snB" class="label label-success ng-binding">@{{ Sn.snB }} </span>
                        </td>
                        <td>
                            <span class=""> <i class="fa fa-trash gray " ng-click="removeFromList($index)"></i> </span>
                        </td>
+
 
                    </tr>
                   </table>
@@ -105,25 +109,27 @@
               <div class="fields">
                   <div class="five wide field">`
                       <label>{{lang::get('labels.warranty_delevery_date')}}  </label>
-                      <input type="text" class="form-control" id="warranty_delevery_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" />
+                      <input type="text" class="form-control" ng-model="warranty_delevery_date" id="warranty_delevery_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" required />
                   </div>
                   <div class="five wide field">
                       <label>{{lang::get('labels.warranty_start_date')}}</label>
-                      <input type="text" class="form-control" id="warranty_start_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" />
+                      <input type="text" class="form-control" id="warranty_start_date" ng-model="warranty_start_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" />
                   </div>
+
                   <div class="two wide field">
                       <label>{{lang::get('labels.warranty_duration')}} </label>
-                      <select>
-                          <option>1</option>
-                          <option>1</option>
-                      </select>
+                  <select id="WarrantyPeriod" ng-model="WarrantyPeriod" >
+                      <option  ng-repeat="n in [] | range:12"  value="@{{ $index+1 }}">
+                          @{{$index+1}}
+                      </option>
+                  </select>
                   </div>
 
                   <div class="two wide field">
                       <label> &nbsp; </label>
-                      <select>
-                          <option>ماه</option>
-                          <option>سال</option>
+                      <select id="WarrantyDuration" ng-model="WarrantyDuration" >
+                          <option value="30">ماه</option>
+                          <option value="365">سال</option>
                       </select>
                   </div>
 
@@ -132,8 +138,9 @@
           </div>
           <hr>
           <div class="row">
-              <div class="btn btn-success"> save</div>
-              <div class="btn btn-danger"> cancel</div>
+              <div ng-show="!ViewMode" class="btn btn-success" ng-click="save_Update_Warranty('save')"> save</div>
+              <div ng-show="ViewMode" class="btn btn-success" ng-click="save_Update_Warranty('update')"> update</div>
+              <div class="btn btn-danger" ng-click="close_warranty_dimmer()"> cancel</div>
 
           </div>
 

@@ -5,7 +5,7 @@
 
      
 <!--  trash view -->
-<div class="btn btn-default" ng-click="newWarranty()"> صدور حواله گارانتی </div>
+<div class="btn btn-default" ng-click="newUpdateWarranty('new')"> صدور حواله گارانتی </div>
 <div ng-show="BtnRestoreProducts"  class="btn btn-default"  ng-click="RestoreGroupFromTrash()"  >
     <i class="fa fa-undo" aria-hidden="true"></i>
     {{ Lang::get('labels.RestoreFromTrash') }}

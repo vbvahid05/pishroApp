@@ -146,8 +146,8 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             var sritems = [];
             var invoice_detilas=[];
             totalEPL=0;
-
-            getList_StockRequest(0,0);
+            getList_StockRequest($scope.pageTypeIs);
+            $scope.masterArray=[];
 
 
         }
@@ -155,15 +155,16 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
 //---------------###############################---------------
         //@@@ stock Request @@@
 //---------------###############################---------------
-        function getList_StockRequest(amode,currentPage,pagin)
+        function getList_StockRequest(pageType)
         {
 
-            var Args={mode:0,}
+
+            var Args={mode:pageType}
             $http.post('/sell/stockRequest/service/warranty/getWarrantyList/1',Args).then(function xSuccess(response)
                  {
                      listArray=response.data;
                      $scope.allRowsZ=listArray;
-
+                     console.log(response.data);
 
                      $http.post('/sell/stockRequest/service/warranty/GetSerialNumbers/1',Args).then(function xSuccess(response)
                         {
@@ -188,6 +189,74 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                 {
                 }
         }
+///-------------------------------------------------
+        $scope.newUpdateWarranty=function ($action,id) {
+            switch ($action)
+            {
+                case 'new':
+                    $scope.ViewMode=0;
+                    SelectDimmer('new');
+                    $('#Dimmer_page').dimmer('show');
+                    $scope.stockrequestsID       ='';
+                    $scope.custommerName         ='';
+                    $scope.custommerFamily       ='';
+                    $scope.orgName               ='';
+                    $scope.DeliveryDate ='';
+                    $scope.RegistrDate  ='';
+                    $scope.warranty_delevery_date='';
+                    $scope.warranty_start_date   ='';
+                    $scope.WarrantyPeriod ='';
+                    $scope.WarrantyDuration ='';
+                    $scope.SeriallistArray=[];
+                break;
+                case 'edit':
+                    $scope.Public_warrantyID=id;
+                    $scope.ViewMode=1;
+                    SelectDimmer('new');
+                    $('#Dimmer_page').dimmer('show');
+
+                    var Args={warrantyID:id}
+                    $http.post('/sell/stockRequest/service/warranty/getSavedWarrantyDataByID',Args).then(function xSuccess(response)
+                    {
+                        $scope.SeriallistArray=[];
+                       $data= response.data;
+                       console.log($data);
+                       i=0;
+                       $data.forEach(doThisAction);
+                       function doThisAction()
+                        {
+                            var myArray = {
+                                    id:$data[i]['SN_ID'],
+                                    snA:$data[i]['snA'] ,
+                                    snB: $data[i]['snB'] ,
+                                    prodctTitle:  $data[i]['prodctTitle'] ,
+                                    partNumber:    $data[i]['partnumber']
+                                };
+                               $scope.SeriallistArray.push(myArray);
+                            i++;
+                        }
+
+                        $DefultstockrequestID=$data[0]['stockrequestsID'];
+                        $scope.defultStockRId=$DefultstockrequestID;
+
+                        $scope.stockrequestsID       =$data[0]['stockrequestsID'];
+                        $scope.custommerName         =$data[0]['custommerName'];
+                        $scope.custommerFamily       =$data[0]['custommerFamily'];
+                        $scope.orgName               ='-'+$data[0]['orgName'];
+                        $scope.DeliveryDate =$data[0]['stockreqDelivery_date'];
+                        $scope.RegistrDate  =$data[0]['stockreqRegistr_date'];
+                        $scope.warranty_delevery_date=Date_Convert_gregorianToJalali($data[0]['warranty_delivery_date']);
+                        $scope.warranty_start_date   =Date_Convert_gregorianToJalali($data[0]['warranty_start_date']);
+                        $scope.WarrantyPeriod =$data[0]['WarrantyPeriod'].toString();
+                        $scope.WarrantyDuration =$data[0]['WarrantyDuration'].toString();
+
+                    }), function xError(response)
+                    {
+                    }
+                break;
+            }
+        }
+
 ///-------------------------------------------------
         $("#SerialNumberList").change(function() {
 
@@ -217,42 +286,52 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             }), function xError(response)
             {
             }
-
-
         });
-
-
 
 ///-------------------------------------------------
 
+   function addToArray()
+   {
+       var myArray = {
+           id:$scope.serialId,
+           snA: $scope.snA,
+           snB: $scope.snB,
+           prodctTitle:  $scope.prodctTitle ,
+           partNumber:  $scope.partnumber
+       };
+       $scope.SeriallistArray.push(myArray);
+   }
+///-------------------------------------------------
  $scope.addSerialToList=function()
  {
+     i=0;
+     result=0;
      if ($scope.serialId )
      {
          if ($scope.SeriallistArray.length==0)
+         {
+             addToArray();
              $DefultstockrequestID=$scope.stockrequestsID;
-
+             $scope.defultStockRId=$DefultstockrequestID;
+         }
+         else
+         {
+             $scope.SeriallistArray.forEach(doAction);
+             function doAction()
+             {
+             if ($scope.SeriallistArray[i].id == $scope.serialId) { result++;  }i++;}
+             if (result<1 && $DefultstockrequestID == $scope.stockrequestsID)
+             {  addToArray();  }
+         }
          if ($DefultstockrequestID != $scope.stockrequestsID)
          {
              toast_alert('stockrequest is Changed','danger');
          }
-         else
-         {
-             var myArray = {id:$scope.serialId,
-                            snA: $scope.snA,
-                            snB: $scope.snB,
-                            prodctTitle:  $scope.prodctTitle ,
-                            partNumber:  $scope.partnumber
-             };
-             $scope.SeriallistArray.push(myArray);
-         }
-
-
          console.log($scope.SeriallistArray);
      }
-    else  toast_alert('select a Serial Number' ,'warnign');
+     else  toast_alert('select a Serial Number' ,'warnign');
  }
-
+///-------------------------------------------------
  $scope.removeFromList=function(id)
  {
      /*confirm ؟ */
@@ -263,15 +342,56 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
      }
  }
 
+///-------------------------------------------------
+$scope.save_Update_Warranty=function (action) {
+    var WarrantyInfoArray = {
+        stockrequestsID:$scope.stockrequestsID,
+        delevery_date:$("#warranty_delevery_date").val(),
+        start_date: $("#warranty_start_date").val(),
+        WarrantyPeriod:$("#WarrantyPeriod").val(),
+        WarrantyDuration:$scope.WarrantyDuration
+    };
+    // $scope.SeriallistArray.push(myArray);
+        masterArray=[];
 
+    if ($scope.SeriallistArray.length !=0 )
+    {
+        masterArray.push(WarrantyInfoArray);
+        masterArray.push($scope.SeriallistArray);
+
+        switch (action)
+        {
+            case 'save':
+                  $url='/sell/stockRequest/service/warranty/SaveWarrantyForm';
+            break;
+            case 'update':
+                 $url='/sell/stockRequest/service/warranty/UpdateWarrantyForm';
+                 masterArray.push($scope.Public_warrantyID);
+            break;
+        }
+
+        $http.post($url,masterArray).
+        then(function xSuccess(response)
+        {
+            console.log(response.data);
+            if (response.data)
+                console.log(response.data);
+                toast_alert(Seved_Message,'success')
+
+        }), function xError(response)
+        {
+        }
+
+    }
+    // console.log(masterArray);
+}
+///-------------------------------------------------
 
 ///-------------------------------------------------
-       $scope.newWarranty=function () {
-           SelectDimmer('new');
-           $('#Dimmer_page').dimmer('show');
-           $scope.SeriallistArray=[];
-       }
-
+    $scope.close_warranty_dimmer=function()
+    {
+        $('#Dimmer_page').dimmer('hide');
+    }
 
 //**************Public Functions
         function SelectDimmer(dimmer)
