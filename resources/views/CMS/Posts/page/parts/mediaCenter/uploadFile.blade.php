@@ -9,9 +9,18 @@
         <img ng-src="@{{image_source}}" style="width:300px;">
     </form>
     <div class="progress">
-        <div class="UploadBar progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+        <div id="UploadBar0" class="UploadBar progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
              aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" >
-
+        </div>
+        <div class="progress">
+        <div id="UploadBar1" class="UploadBar progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" >
+        </div>
+        </div>
+        <div class="progress">
+        <div id="UploadBar2" class="UploadBar progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" >
+        </div>
         </div>
     </div>
 

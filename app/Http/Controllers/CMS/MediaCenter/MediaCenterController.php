@@ -17,12 +17,11 @@ class MediaCenterController extends Controller
             case 'upload':
                 try
                 {
-
                     if(!empty($_FILES['image'])){
                         $ext = pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
-                        $image = time().'.'.$ext;
+                        $image = rand().time().'.'.$ext;
                         move_uploaded_file($_FILES["image"]["tmp_name"], 'uploads/'.$image);
-                         echo $_FILES["image"]["tmp_name"]."Image uploaded successfully as ".$image;
+                         echo $image;
                     }else{
                         echo "Image Is Empty";
                     }

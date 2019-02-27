@@ -113,30 +113,69 @@ function($scope, $http,Pagination)
     $scope.files = [];
     /*-----------*/
     $scope.submit = function() {
-        $scope.form.image = $scope.files[0];
-        $http({
-            method  : 'POST',
-            url     : '/mediaLibrary/Actions/upload',
-            processData: false,
-            transformRequest: function (data) {
-                var formData = new FormData();
-                console.log($scope.form.image);
-                formData.append("image", $scope.form.image);
-                return formData;
-            },
-            data : $scope.form,
-            headers: {
-                'Content-Type': undefined
-            }
-        }).then
-        (function pSuccess(response)
-        {
-            $(".UploadBar").addClass('done');
-            // alert(response.data);
-        });
 
+         Totalcount =$scope.files.length;
+
+            image = $scope.files[0];
+            console.log(image);
+            $http({
+                method  : 'POST',
+                url     : '/mediaLibrary/Actions/upload',
+                processData: false,
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("image", image);
+                    return formData;
+                },
+                data : $scope.form,
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then
+            (function pSuccess(response)
+            {
+                console.log(response.data);
+                $("#UploadBar0").addClass('done');
+                  uploadData(Totalcount ,0 );
+             });
 
     };
+
+    function uploadData(Totalcount ,currentItem )
+    {
+
+        if (currentItem<Totalcount)
+        {
+
+            currentItem++;
+            image = $scope.files[currentItem];
+            $("#UploadBar"+currentItem).addClass('done');
+
+            $http({
+                method  : 'POST',
+                url     : '/mediaLibrary/Actions/upload',
+                processData: false,
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("image", image);
+                    return formData;
+                },
+                data : $scope.form,
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then
+            (function pSuccess(response)
+            {
+                console.log(response.data);
+                $(".UploadBar").addClass('done');
+                  uploadData(Totalcount ,currentItem );
+             });
+        }
+        else
+            console.log('completed')
+    }
+
     /*-----------*/
 
     $scope.uploadedFile = function(element) {
