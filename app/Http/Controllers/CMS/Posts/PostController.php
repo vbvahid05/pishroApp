@@ -234,7 +234,7 @@ class PostController extends Controller
                             case 'edit':
                                 {
                                     try{
-
+                                  return       $_FILES;
                                        $slug=$this->renderSlug( $request['postTitle']);
                                         cms_post::where('id', '=', $request['postID'])
                                             ->update(array(
@@ -252,7 +252,8 @@ class PostController extends Controller
                                            $Imageid=$post->media[0]['id'];
                                            $imageName= $post->media[0]['file_name'];
                                             //----------------------------Upload Image
-                                            return Storage::url($Imageid.'/'.$imageName);
+                                             Storage::url($Imageid.'/'.$imageName);
+                                             return 1;
                                         }
                                         catch (\Exception $e)
                                         {

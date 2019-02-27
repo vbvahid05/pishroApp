@@ -4,9 +4,10 @@
 @include('CMS.Posts.page.parts.section_toolbars')
 @include ('CMS.Posts.page.parts.section_mainBody')
 @include('CMS.Posts.page.parts.section_leftSideBar')
+@include('CMS.Posts.page.parts.section_dimmerPage')
 {{--##############################################--}}
 @section('content')
-<div ng-app="Posts_App" ng-controller="Posts_Ctrl" >
+<div ng-app="Posts_App" ng-controller="Posts_Ctrl" uploader="uploader" flow-init >
     <input id="postType" type="hidden" value="{{$postType}}" >
     <input id="postID" type="hidden" value="{{$postId}}" >
     <input id="post_action" type="hidden" value="{{$action}}" >
@@ -29,5 +30,7 @@
         {{----------------------------}}
     </div>
     </form>
+    @section ('section_dimmerPage') @show
 </div>
+
 @endsection

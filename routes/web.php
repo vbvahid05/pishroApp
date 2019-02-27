@@ -280,5 +280,9 @@ Route::get('/all-posts/{postType}'         ,'CMS\Posts\PostController@showAllPos
 Route::get('/all-posts/{postType}/{action}','CMS\Posts\PostController@editPage');
 Route::post('/all-posts/postActions/{postType}/{action}','CMS\Posts\PostController@CRUD');
 
+/*Media Center*/
+Route::post('/mediaLibrary/Actions/{Type}','CMS\MediaCenter\MediaCenterController@manageRequest');
+
+
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

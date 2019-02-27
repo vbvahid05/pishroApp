@@ -65,3 +65,11 @@
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/calendar.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
+
+
+{{--<script type="text/javascript" src="{{ URL::asset('js/mediaCenter/ng-flow-standalone.js') }}"></script>--}}
+
+
+
+
+

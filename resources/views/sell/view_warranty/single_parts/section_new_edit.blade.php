@@ -5,7 +5,16 @@
 
 @section('section_new_edit')
   <div ng-show="section_new_edit_in_Dimmer">
-    <div   class="ui segment" style="position: absolute !important;top: -300px;min-height:600px ;width: 190%!important;right: -300px;border-top: 4px solid #3fadff;">
+    <div   class="ui segment" style="
+        position: fixed;
+    top: 10%;
+    bottom: 10%;
+    left: 10%;
+    right: 10%;
+    background-color: #fff;
+    z-index: 1001;
+    border-top: 4px solid #3fadff;">
+
       <h3 class="dimmer-title">@{{ FormTitle }}</h3>
       <hr/>
       <!-- Notifications-->

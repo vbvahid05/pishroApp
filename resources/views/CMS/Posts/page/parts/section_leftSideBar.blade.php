@@ -67,6 +67,7 @@
                     <img src="@{{imageUrl}}" style="width: 70%">
                     <input type="file" name="mediaLib" class="custom-file-input" id="mediaLib">
                     <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    <div class="btn btn-info" ng-click="showMediaCenter()">upload Image</div>
                 </div>
             </div>
         </div>
