@@ -10,7 +10,10 @@
     right: 5%;
     background-color: #fff;
     z-index: 1001;
-    border-top: 4px solid #4CAF50;">
+    border-top: 4px solid #4CAF50;
+    overflow: auto;
+    overflow-x: hidden;
+">
             <h3 class="dimmer-title">@{{ FormTitle }}</h3>
 
             <!-- Notifications-->
@@ -22,7 +25,8 @@
                 <hr/>
                 <!------ ------>
                 <div class="ui tabular menu">
-                    <div class="item " data-tab="tab-home">All Media</div>
+                    @{{$scope.TargetFolder}}
+                    <div class="item " ng-click="showAllMedia('all')"  data-tab="tab-home">All Media</div>
                     <div class="item active" data-tab="tab-name11">Upload</div>
                 </div>
                 <div class="ui tab " data-tab="tab-home"> @section('allMedia')  @show</div>

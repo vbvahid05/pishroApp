@@ -103,14 +103,74 @@ function($scope, $http,Pagination)
         alert('d');
     }
 /*----Media Center-------------------------------------*/
+/*----Media Center-------------------------------------*/
+
     $scope.showMediaCenter=function()
     {
-        SelectDimmer('mediaCenter');
-        $('#Dimmer_page').dimmer('show');
+        $scope.folderIsSelected=false;
+        var Args={
+            cms_terms:'filesGallery',
+            folder:'',
+        }
+
+        $http.post('/mediaLibrary/Actions/showMediaCenterFolders',Args).then(
+            function xSuccess(response)
+            {
+                SelectDimmer('mediaCenter');
+                $('#Dimmer_page').dimmer('show');
+                console.log(response.data)
+                $scope.MediaCenterFolders=response.data;
+            }), function xError(response)
+            {
+                toast_alert(response.data,'warning');
+            }
+    }
+ /*---showMediaFiles---------------------*/
+     $scope.showAllMedia=function(viewmode,folder)
+     {
+
+         var Args={
+             viewmode:viewmode, //sort by type Or AllFiles
+             folder:folder
+         }
+         console.log(Args);
+
+         $http.post('/mediaLibrary/Actions/showMediaCenterFiles',Args).then(
+             function xSuccess(response)
+             {
+
+                 console.log(response.data)
+                 $scope.MediaCenterFiles=response.data;
+             }), function xError(response)
+         {
+             toast_alert(response.data,'warning');
+         }
+
+     }
+
+// __________________
+    $scope.selectToViewFolderData=function(folderID)
+    {
+        $('.uploadFolder').removeClass('active');
+        $('#folderx'+folderID).addClass('active');
+        $scope.TargetFolderToView=folderID;
+        $scope.folderIsSelected=true;
+        $scope.view_Mode='all';
+        $scope.showAllMedia($scope.view_Mode,$scope.TargetFolderToView);
+    }
+
+/*---UPLOAD----*/
+    $scope.selectUploadFolder=function(folderID)
+    {
+        $('.uploadFolder').removeClass('active');
+        $('#folder'+folderID).addClass('active');
+        $scope.TargetFolder=folderID;
+        $scope.folderIsSelected=true;
     }
 /*-----------*/
     $scope.form = [];
     $scope.files = [];
+    $scope.UploadedFileList=[];
     /*-----------*/
     $scope.submit = function() {
 
@@ -125,6 +185,7 @@ function($scope, $http,Pagination)
                 transformRequest: function (data) {
                     var formData = new FormData();
                     formData.append("image", image);
+                    formData.append("folder",  $scope.TargetFolder);
                     return formData;
                 },
                 data : $scope.form,
@@ -134,6 +195,7 @@ function($scope, $http,Pagination)
             }).then
             (function pSuccess(response)
             {
+                $scope.UploadedFileList.push(response.data)
                 console.log(response.data);
                 $("#UploadBar0").addClass('done');
                   uploadData(Totalcount ,0 );
@@ -158,6 +220,7 @@ function($scope, $http,Pagination)
                 transformRequest: function (data) {
                     var formData = new FormData();
                     formData.append("image", image);
+                    formData.append("folder",  $scope.TargetFolder);
                     return formData;
                 },
                 data : $scope.form,
@@ -167,6 +230,7 @@ function($scope, $http,Pagination)
             }).then
             (function pSuccess(response)
             {
+                $scope.UploadedFileList.push(response.data)
                 console.log(response.data);
                 $(".UploadBar").addClass('done');
                   uploadData(Totalcount ,currentItem );
@@ -190,38 +254,6 @@ function($scope, $http,Pagination)
         reader.readAsDataURL(element.files[0]);
     }
 
-
-
-/*------------------*/
-    $scope.UploadFileX=function()
-    {
-        // var form_Data= new FormData();
-        // angular.forEach($scope.files,function (file) {
-        // form_Data.append('file',file);
-        // });
-        //
-        // $http.post('/mediaLibrary/Actions/upload' ,form_Data,
-        //     {
-        //         transformRequest: angular.identity,
-        //         headers:{'Content-Type':undefined ,'Process-Data':false}
-        //
-        //     }).then(function spSuccess (response) {
-        //         console.log(response.data);
-        // }), function xError(response)
-        // {
-        //     toast_alert(response.data,'danger');
-        // }
-
-
-
-
-
-// Display the key/value pairs
-//         for (var pair of form_Data.entries()) {
-//             console.log(pair[0]+ ', ' + pair[1]);
-//         }
-
-    }
 /*----Media Center-------------------------------------*/
 $scope.setPostCategory =function(id)
 {

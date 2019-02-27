@@ -2430,6 +2430,26 @@ canvas {
     height: 100px;
     margin: 6px 0 0 6px;
 }
+
+/*________________Media Center*/
+
 .UploadBar.done {
     width: 100%;
 }
+.mediaCenterImages{
+    height: 188px;
+    width: 188px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid lightgray;
+    margin-bottom: 10px;
+}
+.uploadFolder
+{
+    cursor: pointer;
+}
+.uploadFolder.active {
+    color: #ff8000;
+}
+/*________________Media Center*/

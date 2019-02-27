@@ -2,33 +2,87 @@
 
 namespace App\Http\Controllers\CMS\MediaCenter;
 
+
+use App\File;
 use App\Model_admin\cms_post;
+use App\Model_admin\cms_term_relation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use App\Model_admin\cms_media_center;
+use App\Model_admin\cms_term;
+
 
 class MediaCenterController extends Controller
 {
     public function manageRequest(Request $request,$action)
     {
-//        $postAction= $request['postAction'];
 
         switch ($action) {
+
+            case 'showMediaCenterFiles':
+                $viewmode=$request['viewmode'];
+                $folder=$request['folder'];
+
+                switch ($viewmode)
+                {
+                    case 'all':
+                       return cms_media_center::where('mdiac_category', '=', $folder)->get();
+                    break;
+                }
+
+            break;
+            case 'showMediaCenterFolders':
+                $term=$request['filesGallery'];
+                $cms_term = cms_term::where('trm_type', '=', 'filesGallery')->firstOrFail();
+                 $termID= $cms_term->id;
+                return cms_term_relation::where('trmrel_term_id', '=', $termID)->get();
+
+            break;
             case 'upload':
                 try
                 {
+
                     if(!empty($_FILES['image'])){
+                        $folder= $request['folder'];
                         $ext = pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
                         $image = rand().time().'.'.$ext;
-                        move_uploaded_file($_FILES["image"]["tmp_name"], 'uploads/'.$image);
-                         echo $image;
+
+
+
+                        $media_center = new cms_media_center;
+                        $media_center->mdiac_category = $folder;
+                        $media_center->mdiac_name = $_FILES['image']['name'];
+                        $media_center->mdiac_filename = $image;
+                        $media_center->mdiac_mime_type = $ext;
+                        $media_center->mdiac_size =  $_FILES['image']['size'];
+                        $media_center->mdiac_upload_by =  Auth::user()->id;
+                        $media_center->mdiac_permission = 0 ;
+                        $media_center->mdiac_options = "" ;
+                        $media_center->deleted_flag = 0 ;
+                        $media_center->archive_flag = 0 ;
+                        $media_center->save();
+
+                        $galleryId=$media_center->id;
+
+
+                        $path = public_path().'/storage/mediaCenter/'.$galleryId;
+                        mkdir($path);
+
+
+
+                        move_uploaded_file($_FILES["image"]["tmp_name"], $path.'/'.$image);
+                        echo $image;
+
+
+
+
                     }else{
                         echo "Image Is Empty";
                     }
 
 
-//                    $post= cms_post::find(1);
-//                    $post ->addMedia($_FILES['image']['name'])->toMediaCollection('test');
 
 
 //                    if(Input::hasFile('file'))
