@@ -111,7 +111,7 @@ function($scope, $http,Pagination)
 /*-----------*/
     $scope.form = [];
     $scope.files = [];
-
+    /*-----------*/
     $scope.submit = function() {
         $scope.form.image = $scope.files[0];
         $http({
@@ -137,7 +137,19 @@ function($scope, $http,Pagination)
 
 
     };
+    /*-----------*/
 
+    $scope.uploadedFile = function(element) {
+        $scope.currentFile = element.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            $scope.image_source = event.target.result;
+            $scope.$apply(function($scope) {
+                $scope.files = element.files;
+            });
+        }
+        reader.readAsDataURL(element.files[0]);
+    }
 
 
 

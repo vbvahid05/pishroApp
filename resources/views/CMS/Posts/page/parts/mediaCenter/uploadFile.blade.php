@@ -3,7 +3,7 @@
     https://www.youtube.com/watch?v=LRS-DrwdY_M
 
     <form ng-submit="submit()" name="form" role="form">
-        <input ng-model="form.image" type="file" class="form-control input-lg"   onchange="angular.element(this).scope().uploadedFile(this)" style="width:400px" >
+        <input multiple ng-model="form.image" type="file" class="form-control input-lg"   onchange="angular.element(this).scope().uploadedFile(this)" style="width:400px" >
         <input type="submit" id="submit" value="Submit" />
         <br/>
         <img ng-src="@{{image_source}}" style="width:300px;">
