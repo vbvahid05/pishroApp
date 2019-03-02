@@ -319,8 +319,8 @@ return [
 'warranty_start_date'=>'تاريخ شروع گارانتي',
 'warranty_duration'=>'مدت گارانتي',
 'warranty_delevery_date'=>'تاريخ تحويل',
-
-
+'warranty_update_and_send_to_stock'=> 'ثبت و ارسال به انبار',
+'warranty_save_and_send_to_stock'=>'ذخیره سازی و ارسال به انبار',
 //** SETTING */
 
 'userSetting'=>'کاربران',

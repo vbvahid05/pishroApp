@@ -128,11 +128,24 @@ app.filter('ifNotnullEchoLabel', function() {
     };
 });
 //-------------
+app.filter('DurationType', function() {
+    return function(type) {
+        if (type==30)
+            return "ماه";
+        if (type==365)
+            return "سال";
+    };
+});
+
+
+//-------------
 app.filter('pTypeCat', function() {
     return function(rypecatid) {
         return  PublicF_AppFilter_pTypeCat(rypecatid);
     };
 });
+
+
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$sce',
@@ -146,7 +159,7 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             var sritems = [];
             var invoice_detilas=[];
             totalEPL=0;
-            getList_StockRequest($scope.pageTypeIs);
+            getList_Warranty_Request($scope.pageTypeIs);
             $scope.masterArray=[];
 
 
@@ -155,7 +168,7 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
 //---------------###############################---------------
         //@@@ stock Request @@@
 //---------------###############################---------------
-        function getList_StockRequest(pageType)
+        function getList_Warranty_Request(pageType)
         {
 
 
@@ -164,6 +177,7 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                  {
                      listArray=response.data;
                      $scope.allRowsZ=listArray;
+                     $scope.Public_Page_Type=pageType;
                      console.log(response.data);
 
                      $http.post('/sell/stockRequest/service/warranty/GetSerialNumbers/1',Args).then(function xSuccess(response)
@@ -208,6 +222,7 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                     $scope.WarrantyPeriod ='';
                     $scope.WarrantyDuration ='';
                     $scope.SeriallistArray=[];
+                    $scope.Public_warrantyID='';
                 break;
                 case 'edit':
                     $scope.Public_warrantyID=id;
@@ -215,10 +230,10 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                     SelectDimmer('new');
                     $('#Dimmer_page').dimmer('show');
 
-                    var Args={warrantyID:id}
+                    var Args={warrantyID:id   }
                     $http.post('/sell/stockRequest/service/warranty/getSavedWarrantyDataByID',Args).then(function xSuccess(response)
                     {
-                        $scope.SeriallistArray=[];
+                       $scope.SeriallistArray=[];
                        $data= response.data;
                        console.log($data);
                        i=0;
@@ -226,12 +241,14 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                        function doThisAction()
                         {
                             var myArray = {
+                                    warrantyID :   $data[i]['warrantyID'] ,
                                     id:$data[i]['SN_ID'],
                                     snA:$data[i]['snA'] ,
                                     snB: $data[i]['snB'] ,
                                     prodctTitle:  $data[i]['prodctTitle'] ,
-                                    partNumber:    $data[i]['partnumber']
+                                    partNumber:    $data[i]['partnumber'] ,
                                 };
+                                console.log(myArray);
                                $scope.SeriallistArray.push(myArray);
                             i++;
                         }
@@ -250,10 +267,24 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                         $scope.WarrantyPeriod =$data[0]['WarrantyPeriod'].toString();
                         $scope.WarrantyDuration =$data[0]['WarrantyDuration'].toString();
 
+
+
                     }), function xError(response)
                     {
                     }
                 break;
+            }
+
+            switch ($scope.Public_Page_Type)
+            {
+                case 'addRequest':
+                    $scope.RequestMode=true;
+                    console.log('addRequest')
+                    break;
+                case 'stockOut':
+                    $scope.RequestMode=false;
+                    console.log('stockOut')
+                    break;
             }
         }
 
@@ -332,13 +363,28 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
      else  toast_alert('select a Serial Number' ,'warnign');
  }
 ///-------------------------------------------------
- $scope.removeFromList=function(id)
+ $scope.removeFromList=function(index,id)
  {
      /*confirm ؟ */
      access=false;var r = confirm(deleteMessage);if (r == true) {access=true;} else {access=false; }
      if (access)
      {
-         $scope.SeriallistArray.splice(id, 1);
+            if ($scope.Public_warrantyID)
+            {
+                var Args={warrantyID:$scope.Public_warrantyID,
+                    SerialNumberID:id }
+                $http.post('/sell/stockRequest/service/warranty/RemoveSerialFromList',Args).
+                then(function xSuccess(response)
+                {
+                    console.log(response.data);
+                    $scope.SeriallistArray.splice(index, 1);
+                })
+                    , function xError(response)
+                {
+                }
+            }
+            else
+                $scope.SeriallistArray.splice(index, 1);
      }
  }
 
@@ -362,20 +408,29 @@ $scope.save_Update_Warranty=function (action) {
         switch (action)
         {
             case 'save':
-                  $url='/sell/stockRequest/service/warranty/SaveWarrantyForm';
+                  $url='/sell/stockRequest/service/warranty/SaveWarrantyForm/0';
             break;
+
+            case 'saveAndSendToStock':
+                $url='/sell/stockRequest/service/warranty/SaveWarrantyForm/1';
+                break;
+
             case 'update':
-                 $url='/sell/stockRequest/service/warranty/UpdateWarrantyForm';
+                 $url='/sell/stockRequest/service/warranty/UpdateWarrantyForm/0';
                  masterArray.push($scope.Public_warrantyID);
             break;
+
+            case 'updateAndSendToStock':
+                $url='/sell/stockRequest/service/warranty/UpdateWarrantyForm/1';
+                masterArray.push($scope.Public_warrantyID);
+                break;
+
         }
 
         $http.post($url,masterArray).
         then(function xSuccess(response)
         {
-            console.log(response.data);
             if (response.data)
-                console.log(response.data);
                 toast_alert(Seved_Message,'success')
 
         }), function xError(response)
@@ -386,7 +441,55 @@ $scope.save_Update_Warranty=function (action) {
     // console.log(masterArray);
 }
 ///-------------------------------------------------
+        $scope.Add_alternative_serial=function(warrantie_id,faulty_serial)
+        {
+            var Args={
+                warrantyID:warrantie_id,
+                faulty_serialID:faulty_serial ,
+                alternative_serial :$("#alternative_serial"+faulty_serial).val()
+            }
 
+            $http.post('/sell/stockRequest/service/warranty/addAlternativeSerial',Args).
+            then(function xSuccess(response)
+            {
+                $respond=response.data;
+                console.log($respond[0]['error']);
+
+                if ($respond[0]['error'] =='Ok')
+                {
+                    $('#SNb'+faulty_serial).html($respond[0]['value'])  ;
+                    $('#Tikicon'+faulty_serial).removeClass('hide');
+                    $('#failedIcon'+faulty_serial).addClass('hide');
+                    $('#errorMessage'+faulty_serial).html('')  ;
+                }
+                else
+                {
+                    errorMessage="";
+                    switch ($respond[0]['code'])
+                    {
+                        case  '100' :
+                                errorMessage="این سریال وجود ندارد";
+                         break;
+                        case  '101' :
+                                errorMessage="سریال خارج شده";
+                         break;
+
+                        case  '102' :
+                                errorMessage="عدم مطابقت سریال با کالا";
+                         break;
+                    }
+                    $('#errorMessage'+faulty_serial).html(errorMessage)  ;
+                    $('#failedIcon'+faulty_serial).removeClass('hide');
+                    $('#Tikicon'+faulty_serial).addClass('hide');
+                }
+
+
+
+            })
+                , function xError(response)
+            {
+            }
+        }
 ///-------------------------------------------------
     $scope.close_warranty_dimmer=function()
     {
