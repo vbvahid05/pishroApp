@@ -39,31 +39,18 @@
                     <i class="search icon"></i>
                 </div>
             </th>
-
-
-            {{--<th colspan="2">--}}
-            {{--<input id="serchInput" class="vbInputDroplistSearch" type="text" id="query" ng-model="search.cstmr_family" ng-change="showDroplist()" ng-clickx="showDroplist()" ng-blur="hideDroplist()" />--}}
-            {{--<div class="vbDropList">--}}
-            {{--<div class="items" ng-repeat="seller in Custommers | filter:search.cstmr_family"   ng-click="SelectItemFromDropList(seller.cstmr_family)" >--}}
-            {{--@{{ seller.cstmr_name }} @{{ seller.cstmr_family }}--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</th>--}}
-
         </tr>
-
-
 
         <tr>
             <th><input type="checkbox" ng-model="confirmed" ng-change="checkall(2)" id="checkall2" /></th>
+            <th style="width:  150px;"  >{{ Lang::get('labels.warranty_id') }} </th>
             <th style="width:  150px;"  >{{ Lang::get('labels.stockRequest_ID') }} </th>
-            <th>{{ Lang::get('labels.custommer') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_type') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_RequestDate') }} </th>
-            <th>{{ Lang::get('labels.stockRequest_deliveryDate') }}</th>
-            <th>{{ Lang::get('labels.stockRequest_preFaktorNum') }} </th>
-            <th> <i class="fa fa-print" style="font-size: 20px;"></i></th>
-            <th>{{ Lang::get('labels.status') }} </th>
+            <th> {{ Lang::get('labels.custommer') }} </th>
+            <th> {{ Lang::get('labels.warranty_delevery_date') }} </th>
+            <th> {{ Lang::get('labels.warranty_start_date') }} </th></th>
+            <th></th>
+            <th></th>
+            <th><i class="fa fa-print" style="font-size: 20px;"></i></th>
         </tr>
         <tr ng-repeat="row in allRowsZ
                     | startFrom: pagination.page * pagination.perPage
@@ -71,54 +58,30 @@
                     | filter:search
                     | orderBy: orderList
                     "
-                    id="row@{{row.id}}">
+            id="row@{{row.id}}">
 
-              <td><input type="checkbox" class="checkbox" name="itemIdList" value="@{{ row.id }}"></td>
-                <td>
-                  @{{ row.id}}
-                  <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
-                  @can('TakeOutProducts_update', 1)
-                   <span class="edit">
-                      <span class="editBtn"  ng-click="EditSelected(row.id)" aria-label="{{Lang::get('labels.edit')}}" >
+            <td><input type="checkbox" class="checkbox" name="itemIdList" value="@{{ row.id }}"></td>
+            <td>
+                @{{ row.warranty_id}}
+                <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
+                    @can('TakeOutProducts_update', 1)
+                        <span class="edit">
+                      <span class="editBtn"  ng-click="newUpdateWarranty('edit',row.warranty_id)" aria-label="{{Lang::get('labels.edit')}}" >
                          {{ Lang::get('labels.stockRequest_Edit') }}
                        </span>
                     </span>
-                  @endcan
+                    @endcan
 
-                  </div>
-                  </td>
-
-                <td>@{{ row.cstmr_name}} @{{ row.cstmr_family}}  <br/> @{{ row.org_name}} </td>
-                <td>@{{ row.sel_sr_type  | stockRequestTYPE}}</td>
-                <td>@{{ row.sel_sr_registration_date | Jdate}}</td>
-                <td>@{{ row.sel_sr_delivery_date | Jdate}}</td>
-                <td>@{{ row.sel_sr_pre_contract_number}}</td>
-                <td> <a class="btn btn-success" href="/sell/stockRequest/reports/@{{row.id}}" >
-                  <i class="fa fa-print" ></i>
-                  {{Lang::get('labels.print')}}
-                </a></td>
-                {{--@{{ row.qtyStatus}}--}}
-                <td> <div > @{{ row.totalQTY  }} /  @{{row.AvailableQTY}}</div></td>
-               <br/>
-
-
-<!--
-               <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
-                 <span class="edit">
-                   <span class="editBtn"  ng-click="EditSelected(row.orderID)" aria-label="{{Lang::get('labels.edit')}}" > {{ Lang::get('labels.edit') }} </span> |
-                 </span>
-                 <span class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
-                 </span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
-
-               <div ng-show="inTrashlist" id="inTrashlist" class="row-actions">
-                 <span class="RestoreTrash"> <span  class="RestoreTrash"  ng-click="RestoreFromTrash(row.orderID)" >{{ Lang::get('labels.RestoreFromTrash') }} | </span></span>
-                 <span class="trash">        <span  class="submitdelete"  ng-click="DeleteFromDataBase(row.orderID)" >{{ Lang::get('labels.fulldelete') }}</span></span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
--->
-      </tr>
+                </div>
+            </td>
+            <td> @{{ row.stkRq_ID }}</td>
+            <td>@{{ row.cstmr_name}} @{{ row.cstmr_family}}  <br/> @{{ row.org_name}} </td>
+            <td>@{{ row.ssw_delivery_date | Jdate}}</td>
+            <td>@{{ row.ssw_warranty_start_date | Jdate}}</td>
+            <td></td>
+            <td> <div ng-if="row.ssw_request_flag == 1 " class="label label-warning">در انتظار تایید انبار</div> </td>
+            <td><div ng-if="row.ssw_request_flag == 2 " class="btn btn-info">Print</div></td>
+        </tr>
     </table>
   </div>
 

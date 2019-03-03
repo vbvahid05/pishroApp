@@ -68,6 +68,14 @@ function gregorian_to_jalali_byString($date)
     return $this->gregorian_to_jalali($cDate[0],$cDate[1],$days[0]);
 }
 
+//---------------------------------
+    function jalali_to_gregorian_byString($date)
+    {
+         $cDate=explode("/",$date);
+         $days=explode(" ",$cDate[2]);
+        return $this->convert_jalali_to_gregorian($cDate[0],$cDate[1],$days[0]);
+    }
+    //---------------------------------
 
 function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
     list($gy,$gm,$gd)=explode('_',($gy.'_'.$gm.'_'.$gd));/* <= Extra :اين سطر ، جزء تابع اصلي نيست */
