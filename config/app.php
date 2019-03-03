@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'mPDF' => Meneses\LaravelMpdf\Facades\LaravelMpdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        
     ],
 
 ];

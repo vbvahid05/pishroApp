@@ -9,9 +9,11 @@
                     </li>
                 </ul>
         </div>
-        <div class="col-md-10">
-                <div class="col-md-2" ng-repeat="files in MediaCenterFiles">
-                    <img src="/storage/mediaCenter/@{{ files.id }}/@{{ files.mdiac_filename }}" style="width: 100%;">
+        <div class=" mediaCenter-body col-md-10">
+                <div class="mediaCenter-image col-md-2 pull-right" ng-repeat="files in MediaCenterFiles" ng-click="selectMediaFileFromList(files.id)">
+                    <img ng-if="files.mdiac_mime_type == 'jpg' || files.mdiac_mime_type == 'png'" src="/storage/mediaCenter/@{{ files.id }}/thumb/@{{ files.mdiac_filename }}"  >
+                    <i   ng-if="files.mdiac_mime_type == 'zip' || files.mdiac_mime_type == 'rar'" class="archive-files fa fa-file-archive-o" style="font-size: 40px"></i>
+
                     <label>@{{ files.mdiac_name }}</label>
                 </div>
         </div>

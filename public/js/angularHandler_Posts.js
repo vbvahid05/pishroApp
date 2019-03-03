@@ -2,8 +2,6 @@
 
 var app = angular.module('Posts_App', ['simplePagination']);
 
-
-
 app.directive('fileInput', ['$timeout', '$parse', function ($timeout, $parse) {
     return {
 
@@ -158,7 +156,11 @@ function($scope, $http,Pagination)
         $scope.view_Mode='all';
         $scope.showAllMedia($scope.view_Mode,$scope.TargetFolderToView);
     }
-
+// __________________
+    $scope.selectMediaFileFromList=function(id)
+    {
+        alert(id)
+    }
 /*---UPLOAD----*/
     $scope.selectUploadFolder=function(folderID)
     {

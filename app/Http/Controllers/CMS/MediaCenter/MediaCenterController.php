@@ -76,40 +76,14 @@ class MediaCenterController extends Controller
                         echo $image;
 
 
-
+                        // File and new size
+                        $filename =$path.'/'.$image;
+                        $this->make_thumbnil($filename,$ext,$path,$image);
 
                     }else{
                         echo "Image Is Empty";
                     }
 
-
-
-
-//                    if(Input::hasFile('file'))
-//                    {
-//
-//                         $file = Input::file('file');
-//                         $file->move('uploads', $file->getClientOriginalName());
-//                        return 'Uploaded';
-//                    }
-//                    else
-//                        return 'faild';
-//
-
-
-//                    if(!empty($_FILES)) {
-//                        $path = 'uploads' . $_FILES['file']['name'];
-//                        if (move_uploaded_file($_FILES['file']['name'], $path)) {
-//                            return 'File Uploaded Successfully ;D';
-//                        } else
-//                            return 'faild ;(';
-//                    }
-
-//                         $file = Input::file('file');
-////                         $file->move('uploads', $file->getClientOriginalName());
-//                    $post= cms_post::find(1);
-//                    $post ->addMedia($file->getClientOriginalName())->toMediaCollection();
-//                    return 'File Uploaded Successfully ;D';
                 }
                 catch (\Exception $e)
                 {
@@ -123,33 +97,61 @@ class MediaCenterController extends Controller
     }
 
 
-    function resize_image($file, $w, $h, $crop=FALSE) {
-        list($width, $height) = getimagesize($file);
-        $r = $width / $height;
-        if ($crop) {
-            if ($width > $height) {
-                $width = ceil($width-($width*abs($r-$w/$h)));
-            } else {
-                $height = ceil($height-($height*abs($r-$w/$h)));
-            }
-            $newwidth = $w;
-            $newheight = $h;
-        } else {
-            if ($w/$h > $r) {
-                $newwidth = $h*$r;
-                $newheight = $h;
-            } else {
-                $newheight = $w/$r;
-                $newwidth = $w;
-            }
+    function  make_thumbnil($filename,$ext,$path,$image)
+    {
+        // Get new sizes
+        $percent = 0.1;
+        list($width, $height) = getimagesize($filename);
+        $newWidth = 259 ; //$width * $percent;
+        $newHeight =145;// $height * $percent;
+
+        switch ($ext)
+        {
+            case 'jpg':
+                // Content type
+                header('Content-Type: image/jpeg');
+                // Load
+                $thumb = imagecreatetruecolor($newWidth, $newHeight);
+                if ($ext=='jpg')
+                    $source = imagecreatefromjpeg($filename);
+                imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                // Output
+                $thumbPath=$path.'/thumb';
+                mkdir($thumbPath);
+                echo imagejpeg($thumb,$thumbPath.'/'.$image);
+            break;
+            case 'png':
+                $img = imagecreatefrompng($filename);
+                $newImage = imagecreatetruecolor($newWidth, $newHeight);
+                imagealphablending($newImage, false);
+                imagesavealpha($newImage,true);
+                $transparency = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                imagefilledrectangle($newImage, 0, 0, $newHeight, $newHeight, $transparency);
+                imagecopyresampled($newImage, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                // Output
+                $thumbPath=$path.'/thumb';
+                mkdir($thumbPath);
+                imagepng($newImage,$thumbPath.'/'.$image);
+            break;
+            case 'mp4':
+//https://stackoverflow.com/questions/2043007/generate-preview-image-from-video-file
+//https://documentation.concrete5.org/developers/packages/advanced-including-third-party-libraries-in-a-package
+//
+//$sec = 10;
+//$movie = 'test.mp4';
+//$thumbnail = 'thumbnail.png';
+//
+//$ffmpeg = FFMpeg\FFMpeg::create();
+//$video = $ffmpeg->open($movie);
+//$frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($sec));
+//$frame->save($thumbnail);
+//echo '<img src="'.$thumbnail.'">';
+
+                break;
+
+
         }
-        $src = imagecreatefromjpeg($file);
-        $dst = imagecreatetruecolor($newwidth, $newheight);
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-
-        return $dst;
     }
-
 
 
     function unzip($location,$new_location){
