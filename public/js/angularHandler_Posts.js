@@ -15,7 +15,18 @@ app.directive('fileInput', ['$timeout', '$parse', function ($timeout, $parse) {
             });
         }
     }
-}])
+}]);
+app.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
 
 
 
@@ -26,6 +37,7 @@ function($scope, $http,Pagination)
     function OnInit()
     {
         postType=$('#postType').val();
+        MediaCenterSelectedArray=[];
     }
     OnInit();
 
@@ -35,37 +47,18 @@ function($scope, $http,Pagination)
         switch (postType)
         {
             case 'posts':
-
-                let photo = document.getElementById("mediaLib").files[0];  // file from input
-                let req = new XMLHttpRequest();
-                let formData = new FormData();
-
-                formData.append("photo", photo);
-
-
-                postImage=$('#mediaLib').val();
-
-                // $("#mediaLib").val(this.files && this.files.length ?
-                //     this.files[0].name : this.value.replace(/^C:\\fakepath\\/i, ''));
-
-
-                // postImage=   document.getElementById("mediaLib").files[0];
-                console.log(photo);
-                var content = CKEDITOR.instances.post_content.getData();
-                        arg={
+                  var content = CKEDITOR.instances.post_content.getData();
+                  arg=
+                      {
                             postAction:$('#post_action').val(),
                             postID:$('#postID').val(),
                             postTitle:$('#post_Title').val(),
                             postCategury:$('#post_Categury').val(),
                             postContent: content,
                             tags:$('#post_tags').val(),
-                            postImage:   document.getElementById("mediaLib").files[0].name
-
+                            postImage:$scope.postThumb
                         }
-
-              //  postImage:$('#mediaLib').val()
-
-
+                        console.log(arg)
             break;
             case 'pages':
                 var content = CKEDITOR.instances.post_content.getData();
@@ -102,9 +95,14 @@ function($scope, $http,Pagination)
     }
 /*----Media Center-------------------------------------*/
 /*----Media Center-------------------------------------*/
-
-    $scope.showMediaCenter=function()
+ $scope.decrement=function()
+ {
+     $scope.itIsDeleteAction=true;
+ }
+    $scope.showMediaCenter=function(fileForTarget)
     {
+        $scope.fileForTarget=fileForTarget;       //use in GetMediaFileByID()
+                                                  //postThumb    postContentAtachments
         $scope.folderIsSelected=false;
         var Args={
             cms_terms:'filesGallery',
@@ -116,7 +114,7 @@ function($scope, $http,Pagination)
             {
                 SelectDimmer('mediaCenter');
                 $('#Dimmer_page').dimmer('show');
-                console.log(response.data)
+                //console.log(response.data)
                 $scope.MediaCenterFolders=response.data;
             }), function xError(response)
             {
@@ -136,9 +134,8 @@ function($scope, $http,Pagination)
          $http.post('/mediaLibrary/Actions/showMediaCenterFiles',Args).then(
              function xSuccess(response)
              {
-
-                 console.log(response.data)
                  $scope.MediaCenterFiles=response.data;
+                 $scope.waitForLoad=true;
              }), function xError(response)
          {
              toast_alert(response.data,'warning');
@@ -149,19 +146,102 @@ function($scope, $http,Pagination)
 // __________________
     $scope.selectToViewFolderData=function(folderID)
     {
+        $scope.current_Folder_ID=folderID;
         $('.uploadFolder').removeClass('active');
         $('#folderx'+folderID).addClass('active');
         $scope.TargetFolderToView=folderID;
         $scope.folderIsSelected=true;
         $scope.view_Mode='all';
+        $scope.waitForLoad=false;
         $scope.showAllMedia($scope.view_Mode,$scope.TargetFolderToView);
     }
 // __________________
     $scope.selectMediaFileFromList=function(id)
     {
-        alert(id)
+      if ( jQuery.inArray(id, MediaCenterSelectedArray)== -1)
+      {
+          MediaCenterSelectedArray.push(id);
+          $("#tikID"+id).addClass("selected");
+      }
+      else
+      {
+          MediaCenterSelectedArray = jQuery.grep(MediaCenterSelectedArray, function(value) {
+              return value != id;
+          });
+          $("#tikID"+id).removeClass("selected");
+      }
+        $scope.PublicMediaCenterResult=MediaCenterSelectedArray;
+        $scope.$numberOfSelectedItems=MediaCenterSelectedArray.length;
+        $scope.cancelSelectedItem=true;
     }
-/*---UPLOAD----*/
+    //----------------------------------------------------------
+    $scope.returnSelectedMediaCenterValue=function(action)
+    {
+        var Args={
+            fileIdArray:$scope.PublicMediaCenterResult, //sort by type Or AllFiles
+        }
+        $http.post('/mediaLibrary/Actions/GetMediaFileByID',Args).then(
+            function xSuccess(response)
+            {
+                switch (action)
+                {
+                    case 'delete':
+                        var Args={
+                            SelectedArray:MediaCenterSelectedArray, //sort by type Or AllFiles
+                        }
+                        $http.post('/mediaLibrary/Actions/DeleteMediaFileByID',Args).then(
+                            function xSuccess(response)
+                            {
+                                console.log(response.data)
+                                MediaCenterSelectedArray=[];
+                                $scope.selectToViewFolderData($scope.current_Folder_ID);
+                                $scope.cancelSelectedItem=false;
+                            }),function xError(response) {toast_alert(response.data,'warning');}
+                    break;
+                    case 'cancel':
+                        // MediaCenterSelectedArray=[];
+                        // $(".selectedFile").removeClass('selected');
+                        MediaCenterSelectedArray=[];
+                        $scope.selectToViewFolderData($scope.current_Folder_ID);
+                        $scope.cancelSelectedItem=false;
+                        break;
+                    default :
+                        GetMediaFileByID(response.data);
+                        $(".selectedFile").removeClass('selected');
+                    break;
+                }
+
+
+            }), function xError(response)
+        {
+            toast_alert(response.data,'warning');
+        }
+    }
+
+    //----------------------------------------------------------
+    function GetMediaFileByID(MediaFileByIdResultArray)
+    {
+        $scope.PublicMediaCenterResult=[];
+        MediaCenterSelectedArray=[];
+
+        switch ($scope.fileForTarget)
+        {
+            case 'postThumb':
+                lengt= MediaFileByIdResultArray.length;
+                $scope.postThumb=MediaFileByIdResultArray[lengt-1];
+                $scope.postThumbFromDB=true;
+                break;
+
+            case 'postContentAtachments':
+                var jsonConvertedData = JSON.stringify(MediaFileByIdResultArray);
+                $("#postContentAtachments").val(jsonConvertedData);
+                CKEDITOR_insert_file_to_content();
+                break;
+        }
+        $('#Dimmer_page').dimmer('hide');
+    }
+
+    /*---UPLOAD----*/
     $scope.selectUploadFolder=function(folderID)
     {
         $('.uploadFolder').removeClass('active');
@@ -177,9 +257,7 @@ function($scope, $http,Pagination)
     $scope.submit = function() {
 
          Totalcount =$scope.files.length;
-
             image = $scope.files[0];
-            console.log(image);
             $http({
                 method  : 'POST',
                 url     : '/mediaLibrary/Actions/upload',
@@ -197,10 +275,10 @@ function($scope, $http,Pagination)
             }).then
             (function pSuccess(response)
             {
-                $scope.UploadedFileList.push(response.data)
-                console.log(response.data);
-                $("#UploadBar0").addClass('done');
-                  uploadData(Totalcount ,0 );
+                  console.log(response.data)
+                  $scope.UploadedFileList.push(response.data)
+                 $("#UploadBar0").addClass('done');
+                   uploadData(Totalcount ,0 );
              });
 
     };
@@ -232,19 +310,21 @@ function($scope, $http,Pagination)
             }).then
             (function pSuccess(response)
             {
+                console.log(response.data)
                 $scope.UploadedFileList.push(response.data)
-                console.log(response.data);
                 $(".UploadBar").addClass('done');
                   uploadData(Totalcount ,currentItem );
              });
         }
         else
-            console.log('completed')
+            console.log($scope.UploadedFileList)
     }
 
     /*-----------*/
-
     $scope.uploadedFile = function(element) {
+        $scope.files=[];
+        $scope.UploadedFileList=[];
+
         $scope.currentFile = element.files[0];
         var reader = new FileReader();
         reader.onload = function(event) {
@@ -264,9 +344,6 @@ $scope.setPostCategory =function(id)
     $("#categuryList").val($baseVal);
     $(".catCheckBox").addClass('hidden');
 }
-
-
-
 
     function SelectDimmer(dimmer)
     {

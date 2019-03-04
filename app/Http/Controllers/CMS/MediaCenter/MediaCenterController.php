@@ -41,60 +41,110 @@ class MediaCenterController extends Controller
 
             break;
             case 'upload':
-                try
+
+                if(!empty($_FILES['image'])){
+                    $folder= $request['folder'];
+                    $ext = pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
+                    $image = rand().time().'.'.$ext;
+
+                    $media_center = new cms_media_center;
+                    $media_center->mdiac_category = $folder;
+                    $media_center->mdiac_name = $_FILES['image']['name'];
+                    $media_center->mdiac_filename = $image;
+                    $media_center->mdiac_mime_type = $ext;
+                    $media_center->mdiac_size =  $_FILES['image']['size'];
+                    $media_center->mdiac_upload_by =  Auth::user()->id;
+                    $media_center->mdiac_permission = 0 ;
+                    $media_center->mdiac_options = "" ;
+                    $media_center->deleted_flag = 0 ;
+                    $media_center->archive_flag = 0 ;
+                    $media_center->save();
+
+                    $galleryId=$media_center->id;
+
+
+                    $path = public_path().'/storage/mediaCenter/'.$galleryId;
+                    mkdir($path);
+
+                    move_uploaded_file($_FILES["image"]["tmp_name"], $path.'/'.$image)  ;
+
+                    $imageArray=  array('id'=>$galleryId ,'image'=>$image);
+
+
+                    // File and new size
+                    $filename =$path.'/'.$image;
+                    $this->make_thumbnil($filename,$ext,$path,$image);
+                    return  json_encode($imageArray);
+                }else{
+                    echo "Image Is Empty";
+                }
+
+//                try
+//                {
+//
+//
+//
+//                }
+//                catch (\Exception $e)
+//                {
+//                    return $e->getMessage();
+//                }
+            break;
+
+            case 'GetMediaFileByID':
+                $retArray=[];
+                 $fileIdArray=$request['fileIdArray'];
+                 for($i=0; $i<=count($fileIdArray)-1 ;$i++)
+                 {
+                     array_push($retArray, cms_media_center::find($fileIdArray[$i]));
+                 }
+                return $retArray;
+           break;
+
+            case 'DeleteMediaFileByID':
+                $fileIds=$request['SelectedArray'];
+                for($i=0;$i<=count($fileIds)-1;$i++)
                 {
+                    $dirname=  $fileIds[$i];
 
-                    if(!empty($_FILES['image'])){
-                        $folder= $request['folder'];
-                        $ext = pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
-                        $image = rand().time().'.'.$ext;
+                    try
+                    {
 
+                        $record = cms_media_center::find($dirname);
+                        if ($record->delete())
+                        {
+                            $this->delete_files('storage/mediaCenter/'.$dirname);
+                            echo $dirname.'record deleted ';
+                        }
+                        else
+                            echo 'failed to  delete ';
 
-
-                        $media_center = new cms_media_center;
-                        $media_center->mdiac_category = $folder;
-                        $media_center->mdiac_name = $_FILES['image']['name'];
-                        $media_center->mdiac_filename = $image;
-                        $media_center->mdiac_mime_type = $ext;
-                        $media_center->mdiac_size =  $_FILES['image']['size'];
-                        $media_center->mdiac_upload_by =  Auth::user()->id;
-                        $media_center->mdiac_permission = 0 ;
-                        $media_center->mdiac_options = "" ;
-                        $media_center->deleted_flag = 0 ;
-                        $media_center->archive_flag = 0 ;
-                        $media_center->save();
-
-                        $galleryId=$media_center->id;
-
-
-                        $path = public_path().'/storage/mediaCenter/'.$galleryId;
-                        mkdir($path);
-
-
-
-                        move_uploaded_file($_FILES["image"]["tmp_name"], $path.'/'.$image);
-                        echo $image;
-
-
-                        // File and new size
-                        $filename =$path.'/'.$image;
-                        $this->make_thumbnil($filename,$ext,$path,$image);
-
-                    }else{
-                        echo "Image Is Empty";
+                    }
+                    catch (\Exception $e)
+                    {
+                        echo $e->getMessage();
                     }
 
                 }
-                catch (\Exception $e)
-                {
-                    return $e->getMessage();
-                }
-
-
-    //                return $_FILES['file']['name'];
-            break;
+                break;
         }
     }
+
+
+        function delete_files($target)
+        {
+            if(is_dir($target)){
+            $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
+
+            foreach( $files as $file ){
+            $this->delete_files( $file );
+            }
+
+            rmdir( $target );
+            } elseif(is_file($target)) {
+            unlink( $target );
+            }
+        }
 
 
     function  make_thumbnil($filename,$ext,$path,$image)
@@ -102,8 +152,8 @@ class MediaCenterController extends Controller
         // Get new sizes
         $percent = 0.1;
         list($width, $height) = getimagesize($filename);
-        $newWidth = 259 ; //$width * $percent;
-        $newHeight =145;// $height * $percent;
+        $newWidth = 300 ; //$width * $percent;
+        $newHeight =180;// $height * $percent;
 
         switch ($ext)
         {
@@ -118,7 +168,7 @@ class MediaCenterController extends Controller
                 // Output
                 $thumbPath=$path.'/thumb';
                 mkdir($thumbPath);
-                echo imagejpeg($thumb,$thumbPath.'/'.$image);
+                imagejpeg($thumb,$thumbPath.'/'.$image);
             break;
             case 'png':
                 $img = imagecreatefrompng($filename);

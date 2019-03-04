@@ -2434,18 +2434,27 @@ canvas {
 
 /*________________Media Center*/
 
+.uploadFile.progress {
+    background: none !important;
+}
+.UploadBar {
+    position: absolute;
+    height: 10px !important;
+    right: 0;
+    bottom: 0;
+}
 .UploadBar.done {
     width: 100%;
 }
 .mediaCenterImages{
-    height: 188px;
-    width: 188px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    border: 1px solid lightgray;
+    height: 120px;
+    background-repeat: no-repeat !important;;
+    background-position: center !important;
+    background-size: auto !important;;
+    border: 1px solid lightgray !important;;
     margin-bottom: 10px;
 }
+
 .uploadFolder
 {
     cursor: pointer;
@@ -2456,13 +2465,35 @@ canvas {
 
 .mediaCenter-image {
     height: 120px;
-    margin-bottom: 5px;
+    margin-bottom: 40px;
     padding-top: 5px;
     cursor: pointer;
 }
 .mediaCenter-image:hover {
-    box-shadow: 0px 0px 15px -5px grey;
+    /*box-shadow: 0px 0px 15px -5px grey;*/
+
 }
+
+.selectedFile {
+    position: absolute;
+    top: 15px;
+    right: 40px;
+    font-size: 80px !important;
+    opacity: 0.0;
+}
+.selectedFile.selected {
+    opacity: 0.8;
+}
+.mediaCenter-image.selected {
+    /*box-shadow: 0px 0px 15px -5px grey;*/
+    border-top: 2px solid #2196F3;
+}
+.mediaCenter-image .image-file {
+    height: 100%;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
 .mediaCenter-image img {
     border-radius: 5px;
     width: 100%;
@@ -2477,5 +2508,43 @@ canvas {
 .mediaCenter-body {
     background: #f7f7f7a6;
     padding-top: 25px;
+}
+.MediaCenterActions {
+    position: fixed;
+    left: 0;
+    bottom: 6%;
+    background: #c7c7c7ba;
+    right: 0;
+    padding-left: 10%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.selectTofileBtn{
+    width: 250px !important;
+    color: #fff !important;
+    display: block !important;
+    margin: auto !important;
+    float: right !important ;}
+
+.uploadBtn
+{    position: absolute;
+    right: 15px;
+    top: 60px;
+    width: 250px !important;
+    border: 0;
+    height: 40px;
+    border-radius: 5px;
+    background: darkturquoise;}
+.grid.container {
+    margin-top: 5em;
+}
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 /*________________Media Center*/

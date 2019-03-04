@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CMS\Posts;
 
+use App\Model_admin\cms_media_center;
 use App\Model_admin\cms_post;
 use App\Model_admin\cms_post_meta;
 use App\Model_admin\cms_term;
@@ -77,7 +78,14 @@ class PostController extends Controller
             ->get();
     }
 //----------------------
-    public  function  editPage(Request $request,$postType,$action)
+
+    /**
+     * @param Request $request
+     * @param $postType
+     * @param $action
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public  function  editPage(Request $request, $postType, $action)
     {
 
         $local ='fa';
@@ -104,16 +112,27 @@ class PostController extends Controller
 //            //----------------------------------
             $categuryList =$this->GetAllCategory($local,$postType);
               //----------------------------------
-            $post= cms_post::find($postId);
-              //$media= $post->getMedia()->first()->getUrl();;
-             $media= $post->getMedia() ;
+            $pstImag='';
+            try
+            {
+                $postImage=  cms_post_meta::where('pst_meta_post_id', '=', $postId)
+                    ->where('pst_meta_key', '=', '_postImage')
+                    ->firstOrFail();
+                $pstImag= $postImage['pst_meta_value'];
 
-
+                $media_center = cms_media_center::find($pstImag);
+                $pstImag= array($pstImag,$media_center['mdiac_filename']);
+            }
+            catch (\Exception $e)
+            {}
+            //----------------------------------
             if (count($dataList)!=0 && $action=='edit') $hasValue=true; else $hasValue=false;
+            //----------------------------------
+
             return view('/CMS/Posts/page/page',
                 compact(
                     'action','local','postId','postType' ,'pageTitle' ,'pageIcon',
-                    'dataList','categuryList','hasValue','media'));
+                    'dataList','categuryList','hasValue','pstImag'));
        }
         else if ('new')
         {
@@ -122,10 +141,10 @@ class PostController extends Controller
             $pageIcon="fa fa-file-text-o";
             $categuryList =$this->GetAllCategory($local,$postType);
             $postId='';
-
+            $pstImag='';
             return view('/CMS/Posts/page/page',
                 compact(
-                    'action','local','postId','postType' ,'pageTitle' ,'pageIcon','hasValue','categuryList'
+                    'action','local','postId','postType' ,'pageTitle' ,'pageIcon','hasValue','categuryList','pstImag'
                 ));
          }
     }
@@ -142,6 +161,11 @@ class PostController extends Controller
          return $slog;
  }
 //----------------------------------
+
+
+
+
+
    public function updateMetaTable_Tags($postID,$tagsArray)
    {
             $masterArray=array();
@@ -196,7 +220,8 @@ class PostController extends Controller
            if ($count) //update
            {
                cms_post_meta::where('pst_meta_post_id', '=', $postID)
-                   ->update(array('pst_meta_value' => $tags));
+                              ->where('pst_meta_key', '=', '_tags')
+                             ->update(array('pst_meta_value' => $tags));
            }
            else        //new
            {
@@ -210,14 +235,31 @@ class PostController extends Controller
                $cms_post_meta->save();
            }
 
+   }
+//----------------------------------
+   public function updateMetaTable_postImage($postID,$ImageArray)
+   {
 
+        if (cms_post_meta::where('pst_meta_post_id', '=', $postID)
+                         ->where('pst_meta_key', '=', '_postImage')
+                         ->count())
+        {
+            //Update
+            cms_post_meta::where('pst_meta_post_id', '=', $postID)
+                          ->where('pst_meta_key', '=', '_postImage')
+                            ->update(array('pst_meta_value' => $ImageArray['id']));
 
-//
-//       $tableStatus = \DB::select("show table status from  ratis_cms where Name = 'cms_posts'");
-//       if (empty($tableStatus)) {
-//           throw new \Exception("Table not found");
-//       }
-//   return    $newId= $tableStatus[0]->Auto_increment;
+        }
+        else
+        {
+            $post_meta = new cms_post_meta;
+            $post_meta->pst_meta_post_id = $postID;
+            $post_meta->pst_meta_key = '_postImage';
+            $post_meta->pst_meta_value =$ImageArray['id'];;
+            $post_meta->deleted_flag =0;
+            $post_meta->archive_flag = 0;
+            $post_meta->save();
+        }
    }
 //----------------------------------
     public function CRUD(Request $request,$postType,$action)
@@ -234,7 +276,6 @@ class PostController extends Controller
                             case 'edit':
                                 {
                                     try{
-                                  return       $_FILES;
                                        $slug=$this->renderSlug( $request['postTitle']);
                                         cms_post::where('id', '=', $request['postID'])
                                             ->update(array(
@@ -245,14 +286,10 @@ class PostController extends Controller
                                             ));
 
                                            $this->updateMetaTable_Tags($request['postID'],$request['tags']);
-                                           //----------------------------Upload Image
-                                           $post= cms_post::find($request['postID']);
-                                           $post ->addMedia($request['postImage'])->toMediaCollection();
-                                           //$post ->addMediaFromUrl($url)->toMediaCollection();
-                                           $Imageid=$post->media[0]['id'];
-                                           $imageName= $post->media[0]['file_name'];
-                                            //----------------------------Upload Image
-                                             Storage::url($Imageid.'/'.$imageName);
+
+                                           if ($request['postImage'])
+                                                $this->updateMetaTable_postImage($request['postID'],$request['postImage']);
+
                                              return 1;
                                         }
                                         catch (\Exception $e)

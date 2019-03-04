@@ -359,5 +359,11 @@ return [
     'newPost'=>'افزودن جدید',
     'update'=>'بروزرسانی',
     'images'=>'تصاویر',
+    'select'=>'انتخاب و افزودن',
+    'postThumbImage'=>'قرار دادن به‌عنوان تصویر شاخص',
+
+
+//   Media Center
+   'addMultimediaToContent'=> ' افزودن پرونده چندرسانه‌ای',
 
 ];

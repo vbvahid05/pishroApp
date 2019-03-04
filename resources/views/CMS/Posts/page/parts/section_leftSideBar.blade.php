@@ -71,21 +71,19 @@
             </div>
         </div><!-- /.box-header -->
         <div class="box-body">
-            @foreach($media as $m)
-                <img class="img-responsive" src="/storage/{{$m->id}}/{{ $m->file_name }}" >
 
-            @endforeach
+            @if($pstImag)
+                <img class="img-responsive"  ng-show="!postThumbFromDB" src="/storage/mediaCenter/{{$pstImag[0]}}/thumb/{{ $pstImag[1] }}" >
+            @endif
+
             <div class="input-group mb-3">
-
-                <div class="custom-file">
-                    {{--@if($media)--}}
-
-                    {{--@endif--}}
-
-                    <img src="@{{imageUrl}}" style="width: 70%">
-                    {{--<input type="file" name="mediaLib" class="custom-file-input" id="mediaLib">--}}
-                    <div class="btn btn-info" ng-click="showMediaCenter()">upload Image</div>
+            <div class="custom-file">
+                <img class="img-responsive" src="/storage/mediaCenter/@{{ postThumb.id }}/thumb/@{{ postThumb.mdiac_filename }}" >
+                <br/>
+                <div class="btn btn-link  btn-sm" ng-click="showMediaCenter('postThumb')">
+                {{lang::get('labels.postThumbImage')}}
                 </div>
+            </div>
             </div>
         </div>
     </div>
