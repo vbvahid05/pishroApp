@@ -837,39 +837,40 @@ public  function get_SubChassisParts (request $request)
 
         if ($Result_status )return 1;
   }
-  public function checkserial (request $request)
-  {
-    $data = $request->all();
-    $serialType= $data['type'];
-    $product_ID=$data['product_ID'];
-    $serialValue =$data['serialValue'];
 
-     if ($serialType==1)
-       {
-          $val = \DB::table('stockroom_stock_putting_products AS stock')
-                  ->join ('stockroom_serialnumbers AS serialnumbers','serialnumbers.stkr_srial_putting_product_id', '=','stock.id')
-                  ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
-                  ->where('serialnumbers.stkr_srial_serial_numbers_a', '=',$serialValue)
-                  ->where('serialnumbers.stkr_srial_status', '=', 0)
-                  ->where('serialnumbers.deleted_flag', '=', 0)
-                  ->get();
-       }
-       /*
-     if ($serialType==2)
-       {
+
+    public function checkserial (request $request)
+    {
+        $data = $request->all();
+        $serialType= $data['type'];
+        $product_ID=$data['product_ID'];
+        $serialValue =$data['serialValue'];
+
+        if ($serialType==1)
+        {
+            return  $val = \DB::table('stockroom_stock_putting_products AS stock')
+                ->join ('stockroom_serialnumbers AS serialnumbers','serialnumbers.stkr_srial_putting_product_id', '=','stock.id')
+                ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
+                ->where('serialnumbers.stkr_srial_serial_numbers_a', '=',$serialValue)
+                ->where('serialnumbers.stkr_srial_status', '=', 0)
+                ->where('serialnumbers.deleted_flag', '=', 0)
+                ->count();
+        }
+
+        if ($serialType==2)
+        {
+
             $serialValueA =$data['serialValueA'];
-          $val = \DB::table('stockroom_stock_putting_products AS stock')
-                  ->join ('stockroom_serialnumbers AS serialnumbers','serialnumbers.stkr_srial_putting_product_id', '=','stock.id')
-                  ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
-                  ->where('serialnumbers.stkr_srial_serial_numbers_a', '=',$serialValueA)
-                  ->where('serialnumbers.stkr_srial_serial_numbers_b', '=',$serialValue)
-                  ->where('serialnumbers.stkr_srial_status', '=', 0)
-                  ->where('serialnumbers.deleted_flag', '=', 0)
-                  ->get();
-       }
-       */
-       return count($val);
-  }
+            return     $val = \DB::table('stockroom_stock_putting_products AS stock')
+                ->join ('stockroom_serialnumbers AS serialnumbers','serialnumbers.stkr_srial_putting_product_id', '=','stock.id')
+                // ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
+                ->where('serialnumbers.stkr_srial_serial_numbers_a', '=',$serialValueA)
+                ->where('serialnumbers.stkr_srial_serial_numbers_b', '=',$serialValue)
+                ->where('serialnumbers.stkr_srial_status', '=', 0)
+                ->where('serialnumbers.deleted_flag', '=', 0)
+                ->count();
+        }
+    }
 
 
     public static function  ChassisSerialNumbers( $ChassisID)
