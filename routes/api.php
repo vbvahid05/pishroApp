@@ -16,3 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('{local}/{slug}', 'SiteAPI\PostController@show');
+Route::get('{local}/category/{cat1?}/{cat2?}/{cat3?}/{slug?}', 'SiteAPI\PostController@index');
+
+
+
+Route::get('/all/{postType}', 'CMS\Posts\PostController@showAllPosts');
