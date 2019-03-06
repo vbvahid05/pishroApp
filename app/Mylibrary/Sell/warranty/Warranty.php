@@ -66,7 +66,7 @@ class Warranty
                             serialnumbers.stkr_srial_serial_numbers_b   AS  serial_numberB
                              
                                 '))
-                ->where('serialnumbers.stkr_srial_status', '=', 1)
+                ->where('serialnumbers.stkr_srial_status', '=', 1) // 1 : serial is sold
                 ->get();
           //  $serials=stockroom_serialnumber::all();
             $str_return='';

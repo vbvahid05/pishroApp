@@ -3130,6 +3130,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //-------------
         $scope.checkThisSerial=function (serial ,productID ,inputIndex)
         {
+
             serialA_value= $("#serialA"+productID+""+inputIndex).val();
             serialB_value= $("#serialB"+productID+""+inputIndex).val();
              c=0;

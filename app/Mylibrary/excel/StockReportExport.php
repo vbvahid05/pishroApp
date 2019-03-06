@@ -7,6 +7,8 @@
  */
 
 namespace App\Mylibrary\excel;
+use App\sell_stockrequest;
+use App\stockroom_product_statu;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -16,6 +18,23 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class StockReportExport implements fromArray,WithHeadings
 {
+
+
+    public function taahodiQTY($productsId)
+    {
+        $results=  \DB::table('sell_stockrequests_details AS stockrequests_details')
+            ->join('sell_stockrequests AS stockrequest', 'stockrequest.id', '=','stockrequests_details.ssr_d_stockrequerst_id')
+            ->where ('stockrequests_details.ssr_d_product_id','=',$productsId)
+            ->where ('stockrequest.sel_sr_type','=',1)
+            ->get();
+
+        $sumTahodiQTY=0;
+        foreach ( $results as $res)
+        {
+                 $sumTahodiQTY=$sumTahodiQTY+$res->ssr_d_qty;
+        }
+         return $sumTahodiQTY;
+    }
 
 
     public function reservedQTY( $productsId)
@@ -85,18 +104,36 @@ class StockReportExport implements fromArray,WithHeadings
 
 
                 $reservedQTY =$this->reservedQTY($r->productsId);//
+                $taahodiQTY= $this->taahodiQTY($r->productsId);
+
                 $reminedQTY=($AllSerialInQTY-($takeoutQTY+$reservedQTY));
                     if ($reminedQTY ==0) $reminedQTY='0';
                     if ($takeoutQTY ==0) $takeoutQTY='0';
                     if ($reservedQTY ==0) $reservedQTY='0';
+                     if ($taahodiQTY ==0) $taahodiQTY='0';
+
+
+//           Update     stockroom_product_status
+//                    stockroom_product_statu::
+//                    where('sps_product_id', '=', $r->productsId)
+//                   ->update(array(
+//                                 'sps_available' => $reminedQTY ,
+//                                  'sps_reserved' => $reservedQTY ,
+//                                  'sps_sold' => $takeoutQTY ,
+//                                  'sps_Taahodi' => $taahodiQTY ,
+//
+//                   ));
+
 
                 $row=array(
+                    "taahodi"=>$taahodiQTY,
                     "reminedQTY"=>$reminedQTY ,
                     "takeoutQTY"=>$takeoutQTY ,
                     "reservedQTY"=>$reservedQTY ,
                     "AllSerialInQTY"=>$AllSerialInQTY,
                     "prodct_title"=>$r->stkr_prodct_title,
                     "partnumber"=>$r->stkr_prodct_partnumber_commercial,
+                    "productsId"=>$r->productsId,
                     "#"=>$index++,
 
                );
@@ -112,13 +149,14 @@ class StockReportExport implements fromArray,WithHeadings
     public function headings(): array
     {
         return [
-
+            'تعهدی',
             'باقی مانده انبار',
             'جمع خروجی	',
             'تعداد رزور',
             'جمع کل ورودی',
             'شرح کالا',
             'پارتنامبر',
+            'کد کالا',
             '#',
 
         ];
