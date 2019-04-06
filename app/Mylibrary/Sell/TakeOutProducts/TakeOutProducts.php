@@ -295,6 +295,7 @@ class TakeOutProducts
             else  $color='style="background: #fff;"';
 
             if ($r->stkr_srial_status==1) $status='ناموجود';
+            else if ($r->stkr_srial_status==2) $status='گارانتی';
             else $status='';
             $ro=$ro.'<tr '. $color.' >';
             $ro=$ro .'<td> '.$i++ .'   </td>';

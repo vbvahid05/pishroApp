@@ -321,6 +321,12 @@ return [
 'warranty_delevery_date'=>'تاريخ تحويل',
 'warranty_update_and_send_to_stock'=> 'ثبت و ارسال به انبار',
 'warranty_save_and_send_to_stock'=>'ذخیره سازی و ارسال به انبار',
+'WarrantyPriod'=>' مدت گارانتی (ماه)',
+'WarrantyExpired'=>'اتمام گارانتی',
+'WarrantyExpiredDate'=>'تاریخ اتمام گارانتی',
+'warranty_commit_to_PDF'=>'تایید و صدور حواله گارانتی',
+'WarrantySN1'=>'سریال جایگزین اول ',
+'WarrantySN2'=>'سریال جایگزین دوم ',
 //** SETTING */
 
 'userSetting'=>'کاربران',

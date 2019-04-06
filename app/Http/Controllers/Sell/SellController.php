@@ -304,6 +304,23 @@ public function Invoice(request $request ,$function)
                         return $data->addAlternativeSerial($request);
                         break;
 
+                    case 'RemoveSerialFromList':
+                        $data= new Warranty();
+                        return $data->RemoveSerialFromList($request);
+                        break;
+
+                    case 'delete_alternative_serial':
+                        $data= new Warranty();
+                        return $data->delete_alternative_serial($request);
+                        break;
+
+                    case 'backToWarrantyRequest':
+                        $data= new Warranty();
+                        return $data->backToWarrantyRequest($request);
+                        break;
+
+
+
                 }
             break ;
 
@@ -399,6 +416,12 @@ public function Invoice(request $request ,$function)
             break;
         }
       //  return $req=$controller.$function;
+    }
+
+    public function getWarrantyPdf ($id)
+    {
+        $data= new Warranty();
+        return $data->getWarrantyPdf($id);
     }
 
     public function showsn()
@@ -693,6 +716,7 @@ public  function get_SubChassisParts (request $request)
        ->select( \DB::raw('
                  stockrequests.sel_sr_pre_contract_number AS contract_number,
                  stockrequests.sel_sr_delivery_date AS  delivery_date,
+                 stockrequests.sel_sr_warranty_priod AS  warranty_date,
                  stockrequests.sel_sr_registration_date AS  registration_date,                 
                  stockrequests.sel_sr_type AS stockRequestsType,
                  custmer.cstmr_name AS cstmrName,
@@ -704,7 +728,33 @@ public  function get_SubChassisParts (request $request)
         ->where('stockrequests.id', '=', $StockRequestID)
         ->where('stockrequests.deleted_flag', '=', 0)
         ->get();
-        return $val;
+
+
+          $warranty_date = date('Y-m-d', strtotime("+".$val[0]->warranty_date." months", strtotime($val[0]->delivery_date)));
+
+
+//          $date=date_create($val[0]->delivery_date);
+//          date_add($date,date_interval_create_from_date_string(($val[0]->warranty_date*30)." days"));
+//          $warranty_date=  date_format($date,"Y-m-d");
+
+
+          $Vval = array(
+                       "contract_number"=>$val[0]->contract_number,
+                       "delivery_date"=>$val[0]->delivery_date,
+                       "warranty_date"=>$warranty_date ,
+                       "WarrantyPriod"=>$val[0]->warranty_date ,
+                       "registration_date"=>$val[0]->registration_date,
+                       "stockRequestsType"=>$val[0]->stockRequestsType ,
+                       "cstmrName"=>$val[0]->cstmrName ,
+                       "cstmrFamily"=>$val[0]->cstmrFamily,
+                       "cstmrOrganization"=>$val[0]->cstmrOrganization,
+                       "cstmr_id"=>$val[0]->cstmr_id ,
+                       "cstmrPost"=>$val[0]->cstmrPost,
+          );
+          $ret=[];
+          array_push($ret,$Vval);
+
+        return $ret;
       }
 
     if ($qmode==1) // get StockRequest Data by id
@@ -746,7 +796,6 @@ public  function get_SubChassisParts (request $request)
                                  ')) */
                     ->where('stockrequests.id', '=', $StockRequestID)
                     ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
-
                    ->get();
         }
 

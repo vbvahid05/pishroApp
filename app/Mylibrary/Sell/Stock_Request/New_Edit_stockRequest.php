@@ -30,6 +30,7 @@ class New_Edit_stockRequest
         $val->sel_sr_pre_contract_number =$request->sr_preFaktorNum;
         $val->sel_sr_delivery_date =$request->sr_deliveryDate;
         $val->sel_sr_registration_date=date("Y/m/d");
+        $val->sel_sr_warranty_priod=$request->WarrantyPriod;
         $val->sel_sr_lock_status =0;
         $val->deleted_flag=0;
         $val->archive_flag=0;
@@ -399,7 +400,6 @@ class New_Edit_stockRequest
     public function DeleteProduct_From_StackRequest($request)
     {
 
-
         $State = "State::>";
         $argdata = $request->all();
         $index = $argdata['index'];
@@ -412,7 +412,7 @@ class New_Edit_stockRequest
 //            ->where('stockrequests_details.ssr_d_ParentChasis', '=', $StockReq_RowID)
 //            ->get();
 
-        $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
+          $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
 
         //Step 1: Delete Or Delete Tag  From  "sell_stockrequests_details" Table
         try
@@ -426,6 +426,7 @@ class New_Edit_stockRequest
             $SerialFlagIsFree = \DB::table('sell_takeoutproducts AS takeoutproducts')
                 ->where('takeoutproducts.sl_top_stockrequest_id', '=', $StockRequestID)
                 ->where('takeoutproducts.sl_top_productid', '=', $productID)
+//                ->where('takeoutproducts.sl_top_StockRequestRowID', '=', $StockReq_RowID)
                 ->count();
         }
         catch (\Exception $e)

@@ -34,12 +34,31 @@
                    @{{ custommerFamily }}
                    @{{ orgName }}
                <br/>
-               <i class="fa fa-calendar"></i>
-                   <strong>{{lang::get('labels.stockRequest_deliveryDate')}}: </strong>
-                   @{{ RegistrDate |Jdate}}
-                   &nbsp;&nbsp;
-                   <strong>{{lang::get('labels.stockRequest_RequestDate')}}:</strong>
-                   @{{ DeliveryDate | Jdate}}
+
+
+               <span ng-show="RegistrDate">
+                    <i class="fa fa-calendar"></i>
+                    <strong>{{lang::get('labels.stockRequest_RequestDate')}}:</strong>
+                    @{{ RegistrDate |Jdate}}
+               </span>
+
+               <span ng-show="DeliveryDate" >
+               <strong>{{lang::get('labels.stockRequest_deliveryDate')}}: </strong>
+                    @{{ DeliveryDate | Jdate}}
+               </span>    &nbsp;&nbsp;
+
+               <br/>
+
+               <span ng-show="Warranty_total_Period">
+                   {{lang::get('labels.warranty_duration')}}: <strong>  @{{ Warranty_total_Period }} </strong> ماه
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   {{lang::get('labels.WarrantyExpiredDate')}}:
+                   <strong class="total_Expired label"> @{{ Warranty_total_Expired_Date }} </strong>
+               </span>
+               <span ng-show="!Warranty_total_Period && stockrequestsID">
+                   <span class="label label-warning"> در حواله مدت گارانتی مشخص نشده است </span>
+               </span>
+
            </div>
           </div>
           <hr style="margin-top: 0;">
@@ -61,7 +80,6 @@
                           <td>@{{ prodctTitle }}</td>
                           <td>@{{ snA }}</td>
                           <td>@{{ snB }}</td>
-
                       </tr>
                   </table>
               </div>
@@ -78,47 +96,55 @@
 
                 <table class="">
                     <tr>
-                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_first') }}</label></td><td></td>
-                        <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_last') }} </label></td>
+                        <td></td>
+                        <td>#</td>
+                        <td></td>
+                        <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_first') }}</label></td>
+                        <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_last') }}</label></td>
+                        <td><label ng-show="!RequestMode">{{ lang::get('labels.WarrantySN1') }} </label></td>
+                        <td><label ng-show="!RequestMode">{{ lang::get('labels.WarrantySN2') }} </label></td>
                         <td> </td>
+                        <td></td>
                     </tr>
 
                     <tr ng-repeat="Sn in SeriallistArray track by $index" style="height: 25px;">
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                        </td>
-                        <td>
-                            <span class="label label-info ng-binding">@{{ $index+1 }}   </span>
-                        </td>
-                        <td>
-                            <span class="label label-default ng-binding" >@{{ Sn.prodctTitle }} </span>
+                        <td></td>
+                        <td><span class="label label-info ng-binding">@{{ $index+1 }}</span></td>
+                        <td><span class="label label-default ng-binding" >@{{ Sn.prodctTitle }} </span>
                             &nbsp;&nbsp;
                             <span class="label label-default ng-binding" > &nbsp;@{{ Sn.partNumber }} &nbsp; </span>
                         </td>
-                        <td>
-                            <span class="label label-primary ng-binding">@{{ Sn.snA }} </span>
-                        </td>
+                        <td><span class="label label-primary ng-binding">@{{ Sn.snA }} </span></td>
                         <td>
                             <span ng-show="Sn.snB" class="label label-success ng-binding">@{{ Sn.snB }} </span>
                         </td>
-                        <td>
-                            <span  class="">
-                            <i ng-show="RequestMode" class="fa fa-trash gray " ng-click="removeFromList($index,Sn.id)"></i>
-                            </span>
-                        </td>
-                        <td> &nbsp;</td>
                         <td >
-                            <input ng-show="!RequestMode" id="alternative_serial@{{ Sn.id }}"  ng-blur="Add_alternative_serial(Sn.warrantyID,Sn.id)" class="form-control" type="text" style="width: 250px !important;" >
+                            @{{ Sn.alternativeSerialSn }}
+                            <span ng-click="ShowAlternativeSerial_Input(Sn.id)" ng-show="Sn.alternativeSerialSn ==null" class="Cpointer"> درج سریال</span>
+                            <input  ng-show="!RequestMode && ShowAlternativeSerialFlage" id="alternative_serial@{{ Sn.id }}"
+                                   ng-keypress="saveOrUpdate_alternative_serial($event,Sn.warrantyID,Sn.id)"
+                                   class="form-control alternative_serial" type="text" style="width: 250px !important;"    value="@{{ Sn.alternativeSerialSn }}" >
+
+                            <label id="alternative_serial_label@{{ Sn.id }}" class="hide"></label>
+                        </td>
+                        <td>
+                            @{{  Sn.alternativeSerialSn_b }}
+                            {{--<label ng-show="!RequestMode "  >--}}
+                                {{--<h4 id="SNb@{{ Sn.id }}">  </h4>--}}
+                            {{--</label>--}}
                         </td>
 
-                        <td> &nbsp;</td>
-                        <td> <label ng-show="!RequestMode" > <h4 id="SNb@{{ Sn.id }}"></h4></label></td>
-                        <td style="padding-right: 20px;">
+                        <td>
+                            <label class="errorMessage" id="errorMessage@{{ Sn.id }}" style="width: 150px;" ></label>
                             <i class="serialIcon fa fa-check greenx hide" id="Tikicon@{{ Sn.id }}"></i>
                             <i class="serialIcon fa fa-close redx hide" id="failedIcon@{{ Sn.id }}"></i>
                         </td>
-                        <td> <label id="errorMessage@{{ Sn.id }}" style="width: 150px;" ></label></td>
+
+                        <td>
+                            <i ng-click="removeFromList($index,Sn.id)" ng-show="RequestMode && (Sn.alternativeSerialSn==0 ||  Sn.alternativeSerialSn==null)" class="fa fa-trash gray " ></i>
+                            <i ng-click="delete_alternative_serial(Sn.warrantie_id,Sn.alternativeSerialId ,Sn.id)" ng-show="ViewMode && stockOut && Sn.alternativeSerialId!=null"  class="fa fa-trash gray" aria-hidden="true" style="font-size:  18px;padding:  4px;"></i>
+                        </td>
+
                     </tr>
                 </table>
               </div>
@@ -139,19 +165,14 @@
 
                   <div class="two wide field">
                       <label>{{lang::get('labels.warranty_duration')}} </label>
-                  <select ng-show="RequestMode" id="WarrantyPeriod" ng-model="WarrantyPeriod" >
-                      <option  ng-repeat="n in [] | range:12"  value="@{{ $index+1 }}">
-                          @{{$index+1}}
-                      </option>
-                  </select>
+                      <input type="number"  ng-show="RequestMode" id="WarrantyPeriod" ng-model="WarrantyPeriod" style="width: 145px !important;height: 45px; " readonly>
                       <strong ng-show="!RequestMode"> @{{ WarrantyPeriod }}</strong>
                   </div>
 
                   <div class="two wide field">
                       <label> &nbsp; </label>
-                      <select ng-show="RequestMode" id="WarrantyDuration" ng-model="WarrantyDuration" >
+                      <select ng-show="RequestMode" id="WarrantyDuration" ng-model="WarrantyDuration"  readonly>
                           <option value="30">ماه</option>
-                          <option value="365">سال</option>
                       </select>
                       <strong ng-show="!RequestMode "> @{{ WarrantyDuration | DurationType}}</strong>
 
@@ -165,8 +186,13 @@
               <div  ng-show="!ViewMode" class="btn btn-success" ng-click="save_Update_Warranty('save')">{{lang::get('labels.save')}} </div>
               <div  ng-show="!ViewMode" class="btn btn-primary" ng-click="save_Update_Warranty('saveAndSendToStock')">{{lang::get('labels.warranty_save_and_send_to_stock')}} </div>
 
-              <div ng-show="ViewMode && RequestMode" class="btn btn-success" ng-click="save_Update_Warranty('update')"> {{lang::get('labels.update')}}</div>
-              <div ng-show="ViewMode" class="btn btn-primary" ng-click="save_Update_Warranty('updateAndSendToStock')"> {{lang::get('labels.warranty_update_and_send_to_stock')}}</div>
+              <div ng-show="ViewMode && addRequest" class="btn btn-success" ng-click="save_Update_Warranty('update')"> {{lang::get('labels.update')}}</div>
+              <div ng-show="ViewMode && addRequest" class="btn btn-primary" ng-click="save_Update_Warranty('updateAndSendToStock')"> {{lang::get('labels.warranty_update_and_send_to_stock')}}</div>
+
+              {{--<div ng-show="ViewMode && stockOut" class="btn btn-success" ng-click="save_Update_alternative_serial('update')"> {{lang::get('labels.update')}}</div>--}}
+              <div ng-show="ViewMode && stockOut " class="btn btn-info" ng-click="backToWarrantyRequest(SeriallistArray)"> {{lang::get('labels.warranty_commit_to_PDF')}}</div>
+
+
               <div class="btn btn-danger" ng-click="close_warranty_dimmer()">{{lang::get('labels.cancel')}} </div>
 
           </div>

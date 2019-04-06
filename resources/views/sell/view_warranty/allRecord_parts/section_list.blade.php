@@ -80,7 +80,7 @@
             <td>@{{ row.ssw_warranty_start_date | Jdate}}</td>
             <td></td>
             <td> <div ng-if="row.ssw_request_flag == 1 " class="label label-warning">در انتظار تایید انبار</div> </td>
-            <td><div ng-if="row.ssw_request_flag == 2 " class="btn btn-info">Print</div></td>
+            <td>  <a   ng-if="row.ssw_request_flag == 2"   class="btn btn-info" href="/sell/warranty/pdf/@{{row.warranty_id}}">Print</a></td>
         </tr>
     </table>
   </div>

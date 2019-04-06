@@ -106,11 +106,11 @@ $all_Custommers= Invoice::Get_all_Custommers();
       </div>
 
 
-      <div class="main">
-        <form class="ui form" name="StockRequestForm">
-             <div ng-show="newStockRequestForm" class="five fields resultProduct" style="height:  100px;">
+      <div class="main newStockRequestForm" >
+        <form class="ui form"  name="StockRequestForm">
+             <div ng-show="newStockRequestForm" class="five fields resultProduct " style="height:  100px;">
                  <div class="field">
-                   <Label>{{ Lang::get('labels.stockRequest_type') }}  </Label>
+                   <Label class="xLabel">{{ Lang::get('labels.stockRequest_type') }}  </Label>
                       <select ng-model="sr_type" name="sr_type" class="ui fluid dropdown" style="padding-right:  30px;" required>
                         <option value="0"><i class="fa fa-cubes"></i>{{ Lang::get('labels.stockRequest_type_certain') }}</option>
                         <option value="1">{{ Lang::get('labels.stockRequest_type_Accrual') }}</option>
@@ -118,48 +118,56 @@ $all_Custommers= Invoice::Get_all_Custommers();
                   </div>
                    <div class="field">
                        <div class="StockRequest_CustommerList">
-                           <Label>{{ Lang::get('labels.custommer') }} </Label>
+                           <Label class="xLabel">{{ Lang::get('labels.custommer') }} </Label>
                            <select class="selectpicker" data-live-search="true"  id="sr_custommer"  >
                                <?php echo $all_Custommers; ?>
                            </select>
                        </div>
                    </div>
                    <div class="field">
-                     <label style="width:  200px;"> {{ Lang::get('labels.stockRequest_preFaktorNum') }} </Label>
+                     <label class="xLabel" style="width:  200px;"> {{ Lang::get('labels.stockRequest_preFaktorNum') }} </Label>
                      <input ng-model="sr_preFaktorNum" type="text"   maxlength="16" placeholder="Card #" style="width: 100% !important;">
                   </div>
-                    <Label>  {{ Lang::get('labels.stockRequest_deliveryDate') }}
-
-                    </Label>
-                  <div class="three fields">
-                      <div class="field">
-                       <select  ng-model="zdays"  id="zdays" style="width: 70px;padding-right:  0;">
-                         <option ng-repeat="n in daysNum" value=@{{n.id}}>
+                   <div class="field">
+                        <Label>   {{ Lang::get('labels.stockRequest_deliveryDate') }}</Label>
+                        <a ng-click="set_today_date()" class="btn btn-link" style="font-size:10px;">{{lang::get('labels.today')}}</a>
+                        <div class="three fields">
+                            <div class="field">
+                            <select  ng-model="zdays"  id="zdays" style="width: 70px;padding-right:  0;">
+                            <option ng-repeat="n in daysNum" value=@{{n.id}}>
                             @{{n.id}}
-                        </option>
-                       </select>
+                            </option>
+                            </select>
+                            </div>
+                            <div class="field">
+                            <select ng-model="zMonths" id="zMonths" style="width: 70px;padding-right:  0;">
+                            <option ng-repeat="n in Months" value=@{{n.id}}>
+                            @{{n.id}}
+                            </option>
+                            </select>
+                            </div>
+                            <div class="field">
+                            <select  ng-model="zyears" id="zyears"  style="width: 70px;padding-right:  0;">
+                            <option ng-repeat="n in years" value=@{{n.id}}>
+                            @{{n.id}}
+                            </option>
+                            </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
-                       <select ng-model="zMonths" id="zMonths" style="width: 70px;padding-right:  0;">
-                         <option ng-repeat="n in Months" value=@{{n.id}}>
-                          @{{n.id}}
-                        </option>
-                       </select>
+                        <div class="two fields">
+                            <div class="field">
+                                <Label class="xLabel">{{ Lang::get('labels.WarrantyPriod') }}  </Label>
+                                <input ng-model="WarrantyPriod" type="number"   maxlength="3"   style="width: 100% !important;">
+                            </div>
+                            <div class="field">
+                                <br/>
+                                <button class="btn btn-success" ng-click="insertStockRequestToDB()" style="width:  100%;margin-top: 10px;">
+                                    {{ Lang::get('labels.save') }}  </button>
+                            </div>
+                       </div>
                     </div>
-                      <div class="field">
-                       <select  ng-model="zyears" id="zyears"  style="width: 70px;padding-right:  0;">
-                         <option ng-repeat="n in years" value=@{{n.id}}>
-                          @{{n.id}}
-                        </option>
-                       </select>
-                      </div>
-                      <a ng-click="set_today_date()" class="btn btn-link" style="font-size:10px;">{{lang::get('labels.today')}}</a>
-                  </div>
-
-                  <div class="field">
-                    <Label>  &nbsp;</Label>
-                    <button class="btn btn-success" ng-click="insertStockRequestToDB()" style="width:  100%;">  {{ Lang::get('labels.save') }}  </button>
-                  </div>
              </div> <!-- four fields -->
              <!-- View Stock Request Form -->
              <div ng-show ="ViewStockRequestForm" class="five fields resultProduct  greenblue " style="height: auto;padding-top: 0;" >
@@ -172,6 +180,8 @@ $all_Custommers= Invoice::Get_all_Custommers();
                         <th><label>{{ Lang::get('labels.stockRequest_preFaktorNum') }} </Label></th>
                         <th><label>{{ Lang::get('labels.stockRequest_RequestDate') }}</label></th>
                         <th><label>{{ Lang::get('labels.stockRequest_deliveryDate') }}</label></th>
+                        <th><label>{{ Lang::get('labels.WarrantyPriod') }}</label></th>
+                        <th><label>{{ Lang::get('labels.WarrantyExpired') }}</label></th>
                     </tr>
                     <tr>
                         <td style="padding-right: 15px;font-weight: bold;">@{{echo_StockRequestID}}</td>
@@ -244,7 +254,8 @@ $all_Custommers= Invoice::Get_all_Custommers();
                                 </tr>
                             </table>
                         </td>
-
+                        <td> <span > @{{ WarrantyPriod }} </span></td>
+                    <td> <span > @{{ warranyDate }}</span></td>
                     </tr>
                 </table>
              </div> <!-- foum fields -->

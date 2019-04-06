@@ -16,14 +16,14 @@
             });
         </script>
         {{--      DatePicker      --}}
-        <div   class="ui segment mainInvoice" style="position: absolute !important;
-                                        top: 50%;
-                                        left: 50%;
-                                        min-height: 600px;
-                                        width: 1200!important;
-                                        border-top: 4px solid #db2828;
-                                        margin-left: -600px;
-                                        margin-top: -400px;">
+        <div   class="ui segment mainInvoice" style="  position: fixed;
+                                                     top: 50%;
+                                                     left: 5%;
+                                                     right: 5%;
+                                                     min-height: 600px;
+                                                     width: 1200!important;
+                                                     border-top: 4px solid #db2828;
+                                                     margin-top: -400px;">
             <h3 class="dimmer-title">@{{ FormTitle }}</h3>
             <hr/>
             <div style="width: 100%;height: 20px;margin-top: -15px;">

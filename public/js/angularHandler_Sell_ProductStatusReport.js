@@ -2223,10 +2223,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             (function xSuccess(response)
             {
                 $resp=response.data[0];
-                 $scope.sr_cstmr_id=  $resp.cstmr_id
+                 $scope.sr_cstmr_id=  $resp.cstmr_id;
                 $scope.sr_custommer=$resp.cstmrName+' '+$resp.cstmrFamily;
                 $scope.sr_type=$resp.stockRequestsType.toString();
                 $scope.sr_preFaktorNum=$resp.contract_number;
+                //console.log($resp.warranty_date);
+                $scope.warranyDate=Date_Convert_gregorianToJalali($resp.warranty_date);
+                $scope.WarrantyPriod=$resp.WarrantyPriod ;
 
                 $('.selectpicker').selectpicker('val', $resp.cstmr_id.toString());
 
@@ -2568,9 +2571,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     sr_type:$scope.sr_type,
                     sr_custommer_id:$('#sr_custommer').val(),
                     sr_preFaktorNum:$scope.sr_preFaktorNum,
-                    sr_deliveryDate:conf_date
+                    sr_deliveryDate:conf_date,
+                    WarrantyPriod : $scope.WarrantyPriod
                 }
-                console.log(Args);
+
 
                 $http.post('/services/sell/addStockRequestToDB',Args).then(function xSuccess(response)
                 {

@@ -266,6 +266,8 @@ Route::get('sell/TakeOutProducts', function () {return view('sell/view_TakeOutPr
     \Illuminate\Support\Facades\Route::get ('sell/invoice/print/{id}' ,'Sell\SellController@InvoicePrint');
     \Illuminate\Support\Facades\Route::get ('sell/invoice/pdf/{id}' ,'Sell\SellController@InvoiceToPDF');
 
+    Route::get('sell/warranty/pdf/{id}', 'Sell\SellController@getWarrantyPdf');
+    //Route::get('sell/warranty/pdf/{id}', function () {var_dump('test') ; });
 /*Setting*/
 Route::get('setting/users', function () {return view('setting/users/ManageRoles');});
 Route::post('setting/{controller}/{function}/{value?}','setting\SettingController@manageRequest');

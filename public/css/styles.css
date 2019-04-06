@@ -2198,6 +2198,9 @@ i.fa.fa-key.changepass {
 .StockRequest_CustommerList .btn-group.bootstrap-select {
     margin: 0;
 }
+.newStockRequestForm .xLabel {
+    margin-bottom: 10px !important;
+}
 
 .CustommerOrg a {
     text-align: right;

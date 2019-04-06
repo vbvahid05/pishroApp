@@ -100,8 +100,12 @@ class All_Status_Repost
                 ->where('products.deleted_flag', '=', 0)
                 ->get();
             //-----------------------
-            $sum=$stVal1+$stVal2+$stVal3+$stVal4+$stVal5;
-            $AvailableStock=($avail+$sum)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+             // $sum=$stVal1+$stVal2+$stVal3+$stVal4+$stVal5;
+            //$AvailableStock=($avail+$sum)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+
+            $sum=($stVal1+$stVal2+$stVal3+$stVal4+$stVal5)-($avail+$sold+$reserved);
+            $AvailableStock=($avail+$sum+$reserved)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+
             $array = array(
                 "productID"    => $vm->id,
                 "partnumber"  => $vm->stkr_prodct_partnumber_commercial,
@@ -112,8 +116,8 @@ class All_Status_Repost
                 "status1" =>  $stVal1 ,//در حال مذاکره
                 "status2" =>  $stVal2 , //تایید سفارش
                 "status3" =>  $stVal3 , //منتظر بررسی در مبدا
-                "status4" =>  $stVal4 , //گمرکات داخل کشور
-                "status5" =>  $stVal5 , //ترخیص شده
+                "status4" =>  $stVal4-($avail+$sold+$reserved) , //ترخیص شده
+                "status5" =>  $stVal5 ,//گمرکات داخل کشور
 
                 "status2_1_avail"    =>  $avail  ,
                 "status2_2_sold"     =>  $sold ,
@@ -122,7 +126,7 @@ class All_Status_Repost
                 "status2_5_warranty" =>  $warranty,
                 "status2_6_sps_Taahodi" =>  $sps_Taahodi,
                 "AvailableStock" => $AvailableStock,
-                "sum"     =>  $sum //جمع کل ورودی
+                "sum"     =>$sum //جمع کل ورودی
 
             );
             if ($mode==0)

@@ -1175,16 +1175,14 @@ public function add_subProduct_in_Invoice   ($request)
         $officeAddress=\Lang::get('labels.officeAddress'); $webSiteURL=\Lang::get('labels.webSiteURL'); $Tel=\Lang::get('labels.Tel');
         $invoiceSeller=\Lang::get('labels.invoiceSeller');  $invoiceSalesExpert=\Lang::get('labels.invoiceSalesExpert');$invoiceVerifiedBy=\Lang::get('labels.invoiceVerifiedBy');
 
-    $footer='                 
-                                
-                 <table style="width: 100% ;   border: 1px solid gray;"  >
-                    <tr >
-                        <td class="invoice_Creator_Cells" style="vertical-align:top ;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSalesExpert.' : '.$CreatedBy.'</td>
-                        <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceVerifiedBy.':'.$verified_By.'</td>
-                        <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSeller.':</td>
-                    </tr>                      
-                </table>                                                                     
-                <img style="margin-top: 10px " src="img/footer.png">';
+     $footer='<table style="width: 100% ;   border: 1px solid gray;"  >
+                <tr >
+                    <td class="invoice_Creator_Cells" style="vertical-align:top ;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSalesExpert.' : '.$CreatedBy.'</td>
+                    <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceVerifiedBy.':'.$verified_By.'</td>
+                    <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSeller.':</td>
+                </tr>                      
+               </table>                                                                     
+               <img style="margin-top: 10px " src="img/footer.png">';
         $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
             1,  9,   'P');
         //        $mpdf->SetFont('garuda');
