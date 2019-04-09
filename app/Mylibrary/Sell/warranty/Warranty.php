@@ -20,82 +20,83 @@ use mPDF;
 
 class Warranty
 {
-        public function  getWarrantyList($request)
-        {
-           $mode= $request['mode'];
-            switch ($mode)
-            {
-                case 'addRequest':
-                    $val = \DB::table('sell_stockrequests_warranties AS warranties')
-                        ->join('sell_stockrequests AS stockrequests'   ,   'stockrequests.id' , '=' ,'warranties.ssw_stockReqID')
-                        ->join('custommers'   ,   'custommers.id' , '=' ,'stockrequests.sel_sr_custommer_id')
-                        ->join('custommerorganizations AS ORG'   ,   'ORG.id' , '=' ,'custommers.cstmr_organization')
-                        ->select('*' ,\DB::raw('warranties.id AS warranty_id ,
+    public function getWarrantyList($request)
+    {
+        $mode = $request['mode'];
+        $ListMode =$request['ListMode'];
+
+        switch ($mode) {
+            case 'addRequest':
+                $val = \DB::table('sell_stockrequests_warranties AS warranties')
+                    ->join('sell_stockrequests AS stockrequests', 'stockrequests.id', '=', 'warranties.ssw_stockReqID')
+                    ->join('custommers', 'custommers.id', '=', 'stockrequests.sel_sr_custommer_id')
+                    ->join('custommerorganizations AS ORG', 'ORG.id', '=', 'custommers.cstmr_organization')
+                    ->select('*', \DB::raw('warranties.id AS warranty_id ,
                                         stockrequests.id AS stkRq_ID 
                 
                 '))
-                        ->orderby('warranty_id','')
-                        ->get();
+                    ->where('warranties.deleted_flag', '=', $ListMode)//
+                    ->orderby('warranty_id', '')
+                    ->get();
                 break;
-                case 'stockOut':
-                    $val = \DB::table('sell_stockrequests_warranties AS warranties')
-                        ->join('sell_stockrequests AS stockrequests'   ,   'stockrequests.id' , '=' ,'warranties.ssw_stockReqID')
-                        ->join('custommers'   ,   'custommers.id' , '=' ,'stockrequests.sel_sr_custommer_id')
-                        ->join('custommerorganizations AS ORG'   ,   'ORG.id' , '=' ,'custommers.cstmr_organization')
-                        ->select('*' ,\DB::raw('warranties.id AS warranty_id ,
+            case 'stockOut':
+                $val = \DB::table('sell_stockrequests_warranties AS warranties')
+                    ->join('sell_stockrequests AS stockrequests', 'stockrequests.id', '=', 'warranties.ssw_stockReqID')
+                    ->join('custommers', 'custommers.id', '=', 'stockrequests.sel_sr_custommer_id')
+                    ->join('custommerorganizations AS ORG', 'ORG.id', '=', 'custommers.cstmr_organization')
+                    ->select('*', \DB::raw('warranties.id AS warranty_id ,
                                         stockrequests.id AS stkRq_ID 
                 
                 '))
-                        ->where('warranties.ssw_request_flag', '=', 1) // 1 : send Request
-                        ->orderby('warranty_id','')
-                        ->get();
+                    ->where('warranties.ssw_request_flag', '=', 1)// 1 : send Request
+                    ->where('warranties.deleted_flag', '=', $ListMode)//
+                    ->orderby('warranty_id', '')
+                    ->get();
                 break;
-            }
-
-
-
-            return $val;
-
         }
 
-        public static function  GetSerialNumbers()
-        {
-            $serials=  \DB::table('stockroom_serialnumbers AS serialnumbers')
+
+        return $val;
+
+    }
+
+    public static function GetSerialNumbers()
+    {
+        $serials = \DB::table('stockroom_serialnumbers AS serialnumbers')
 //                ->join('stockroom_stock_putting_products AS putting_products'   ,   'putting_products.id' , '=' ,'serialnumbers.stkr_srial_putting_product_id')
 //                ->join('stockroom_products AS products'   ,   'products.id' , '=' ,'putting_products.stkr_stk_putng_prdct_product_id')
-                ->select( \DB::raw('
+            ->select(\DB::raw('
                             serialnumbers.id   AS  sn_id, 
                             serialnumbers.stkr_srial_serial_numbers_a   AS  serial_numberA,
                             serialnumbers.stkr_srial_serial_numbers_b   AS  serial_numberB
                              
                                 '))
-                ->where('serialnumbers.stkr_srial_status', '=', 1) // 1 : serial is sold
-                ->get();
-          //  $serials=stockroom_serialnumber::all();
-            $str_return='';
-            foreach ( $serials AS  $rr  )
-            {
-                $serB='';
-                if ($rr->serial_numberB) $serB='  |   '.$rr->serial_numberB ;
-                $str_return=$str_return.'<option value="'.$rr->sn_id.'">'.$rr->serial_numberA .$serB.'</option>';
-            }
-            return $str_return;
+            ->where('serialnumbers.stkr_srial_status', '=', 1)// 1 : serial is sold
+            ->get();
+        //  $serials=stockroom_serialnumber::all();
+        $str_return = '';
+        foreach ($serials AS $rr) {
+            $serB = '';
+            if ($rr->serial_numberB) $serB = '  |   ' . $rr->serial_numberB;
+            $str_return = $str_return . '<option value="' . $rr->sn_id . '">' . $rr->serial_numberA . $serB . '</option>';
         }
-//-----------------------------------
-    function  getInfoAroundSerialNumber($request)
-    {
-        $SerialNumberID= $request['SerialNumberID'];
-        $val=
-            \DB::table('stockroom_serialnumbers AS serialnumbers')
-            ->join('sell_takeoutproducts             AS takeoutproducts'    ,   'takeoutproducts.sl_top_product_serialnumber_id' , '=' ,'serialnumbers.id')
-            ->join('stockroom_products               AS products'           ,   'products.id'           , '=' ,'takeoutproducts.sl_top_productid')
-            ->join('stockroom_products_brands        AS brands'             ,   'brands.id'             , '=' ,'products.stkr_prodct_brand')
-            ->join('stockroom_products_types         AS types'              ,   'types.id'              , '=' ,'products.stkr_prodct_type')
-            ->join('sell_stockrequests               AS stockrequests'      ,   'stockrequests.id'      , '=' ,'takeoutproducts.sl_top_stockrequest_id')
-            ->join('custommers                       AS custommer'          ,   'custommer.id'          , '=' ,'stockrequests.sel_sr_custommer_id')
-            ->join('custommerorganizations           AS ORG'                ,   'ORG.id'                , '=' ,'custommer.cstmr_organization')
+        return $str_return;
+    }
 
-                ->select( \DB::raw('
+//-----------------------------------
+    function getInfoAroundSerialNumber($request)
+    {
+        $SerialNumberID = $request['SerialNumberID'];
+        $val =
+            \DB::table('stockroom_serialnumbers AS serialnumbers')
+                ->join('sell_takeoutproducts             AS takeoutproducts', 'takeoutproducts.sl_top_product_serialnumber_id', '=', 'serialnumbers.id')
+                ->join('stockroom_products               AS products', 'products.id', '=', 'takeoutproducts.sl_top_productid')
+                ->join('stockroom_products_brands        AS brands', 'brands.id', '=', 'products.stkr_prodct_brand')
+                ->join('stockroom_products_types         AS types', 'types.id', '=', 'products.stkr_prodct_type')
+                ->join('sell_stockrequests               AS stockrequests', 'stockrequests.id', '=', 'takeoutproducts.sl_top_stockrequest_id')
+                ->join('custommers                       AS custommer', 'custommer.id', '=', 'stockrequests.sel_sr_custommer_id')
+                ->join('custommerorganizations           AS ORG', 'ORG.id', '=', 'custommer.cstmr_organization')
+                ->select(\DB::raw('
                               serialnumbers.id                              AS SN_ID,
                               serialnumbers.stkr_srial_serial_numbers_a     AS  snA,
                               serialnumbers.stkr_srial_serial_numbers_b     AS  snB,
@@ -112,165 +113,159 @@ class Warranty
                               stockrequests.sel_sr_warranty_priod AS stockrequests_warranty_priod
 
                             '))
-            ->where('serialnumbers.id', '=', $SerialNumberID)
-           // ->select('*')
-            ->get();
+                ->where('serialnumbers.id', '=', $SerialNumberID)
+                // ->select('*')
+                ->get();
 
-            $warranty_date = date('Y-m-d', strtotime("+".$val[0]->stockrequests_warranty_priod." months", strtotime($val[0]->stockreqDelivery_date)));
-            $Vval = array(
-                "SN_ID"=>$val[0]->SN_ID,
-                "snA"=>$val[0]->snA,
-                "snB"=>$val[0]->snB  ,
-                "partnumber"=>$val[0]->partnumber ,
-                "prodctTitle"=>$val[0]->prodctTitle,
+        $warranty_date = date('Y-m-d', strtotime("+" . $val[0]->stockrequests_warranty_priod . " months", strtotime($val[0]->stockreqDelivery_date)));
+        $Vval = array(
+            "SN_ID" => $val[0]->SN_ID,
+            "snA" => $val[0]->snA,
+            "snB" => $val[0]->snB,
+            "partnumber" => $val[0]->partnumber,
+            "prodctTitle" => $val[0]->prodctTitle,
 
-                "Brand"=>$val[0]->Brand,
-                "Type"=>$val[0]->Type  ,
-                "custommerName"=>$val[0]->custommerName ,
-                "custommerFamily"=>$val[0]->custommerFamily,
+            "Brand" => $val[0]->Brand,
+            "Type" => $val[0]->Type,
+            "custommerName" => $val[0]->custommerName,
+            "custommerFamily" => $val[0]->custommerFamily,
 
-                "orgName"=>$val[0]->orgName,
-                "stockrequestsID"=>$val[0]->stockrequestsID  ,
-                "stockreqRegistr_date"=>$val[0]->stockreqRegistr_date ,
-                "stockreqDelivery_date"=>$val[0]->stockreqDelivery_date,
-                "Warranty_total_Expired_Date"=>$warranty_date ,
-                "stockrequests_warranty_priod"=>$val[0]->stockrequests_warranty_priod ,
-                "todayDate"=>date("Y-m-d")
-            );
-            $ret=[];
-            array_push($ret,$Vval);
-            return  $ret;
+            "orgName" => $val[0]->orgName,
+            "stockrequestsID" => $val[0]->stockrequestsID,
+            "stockreqRegistr_date" => $val[0]->stockreqRegistr_date,
+            "stockreqDelivery_date" => $val[0]->stockreqDelivery_date,
+            "Warranty_total_Expired_Date" => $warranty_date,
+            "stockrequests_warranty_priod" => $val[0]->stockrequests_warranty_priod,
+            "todayDate" => date("Y-m-d")
+        );
+        $ret = [];
+        array_push($ret, $Vval);
+        return $ret;
 
     }
+
 //-----------------------------------
-    function  SaveWarrantyForm ($request,$RequestStatus)
+    function SaveWarrantyForm($request, $RequestStatus)
     {
-        $warrantyInfo=$request[0];
-        $warrantySerailList=$request[1];
-        $pb=new PublicClass();
+        $warrantyInfo = $request[0];
+        $warrantySerailList = $request[1];
+        $pb = new PublicClass();
         $pb->jalali_to_gregorian_byString($warrantyInfo['start_date']);
 
-        $warrantyTable=new sell_stockrequests_warrantie;
-        $warrantyTable->ssw_stockReqID=$warrantyInfo['stockrequestsID'];
-        $warrantyTable->ssw_warranty_start_date=$pb->jalali_to_gregorian_byString($warrantyInfo['start_date']);
-        $warrantyTable->ssw_duration_of_warranty=$warrantyInfo['WarrantyPeriod'];
-        $warrantyTable->ssw_duration_unit=$warrantyInfo['WarrantyDuration'];
-        $warrantyTable->ssw_delivery_date= $pb->jalali_to_gregorian_byString($warrantyInfo['delevery_date']);
-        $warrantyTable->ssw_pdf_setting='';
-        $warrantyTable->ssw_request_flag=$RequestStatus;
-        $warrantyTable->created_by=Auth::user()->id;
-        $warrantyTable->updated_by=Auth::user()->id;
-        $warrantyTable->read_status_flag=0;
-        $warrantyTable->deleted_flag=0;
-        $warrantyTable->archive_flag=0;
+        $warrantyTable = new sell_stockrequests_warrantie;
+        $warrantyTable->ssw_stockReqID = $warrantyInfo['stockrequestsID'];
+        $warrantyTable->ssw_warranty_start_date = $pb->jalali_to_gregorian_byString($warrantyInfo['start_date']);
+        $warrantyTable->ssw_duration_of_warranty = $warrantyInfo['WarrantyPeriod'];
+        $warrantyTable->ssw_duration_unit = $warrantyInfo['WarrantyDuration'];
+        $warrantyTable->ssw_delivery_date = $pb->jalali_to_gregorian_byString($warrantyInfo['delevery_date']);
+        $warrantyTable->ssw_pdf_setting = '';
+        $warrantyTable->ssw_request_flag = $RequestStatus;
+        $warrantyTable->created_by = Auth::user()->id;
+        $warrantyTable->updated_by = Auth::user()->id;
+        $warrantyTable->read_status_flag = 0;
+        $warrantyTable->deleted_flag = 0;
+        $warrantyTable->archive_flag = 0;
         $warrantyTable->save();
 
-        $st="";
-        $warrantyID= $warrantyTable->id;
-        foreach ($warrantySerailList AS $wList)
-        {
-            try
-            {
-                $warrantyTable_detail=new sell_stockrequests_warranties_detail;
-                $warrantyTable_detail->sswd_warrantie_id=$warrantyID;
-                $warrantyTable_detail->sswd_faulty_serial=$wList['id'];
-                $warrantyTable_detail->sswd_alternative_serial=0;
-                $warrantyTable_detail->created_by=Auth::user()->id;
-                $warrantyTable_detail->updated_by=Auth::user()->id;
-                $warrantyTable_detail->read_status_flag=0;
-                $warrantyTable_detail->deleted_flag=0;
-                $warrantyTable_detail->archive_flag=0;
+        $st = "";
+        $warrantyID = $warrantyTable->id;
+        foreach ($warrantySerailList AS $wList) {
+            try {
+                $warrantyTable_detail = new sell_stockrequests_warranties_detail;
+                $warrantyTable_detail->sswd_warrantie_id = $warrantyID;
+                $warrantyTable_detail->sswd_faulty_serial = $wList['id'];
+                $warrantyTable_detail->sswd_alternative_serial = 0;
+                $warrantyTable_detail->created_by = Auth::user()->id;
+                $warrantyTable_detail->updated_by = Auth::user()->id;
+                $warrantyTable_detail->read_status_flag = 0;
+                $warrantyTable_detail->deleted_flag = 0;
+                $warrantyTable_detail->archive_flag = 0;
                 $warrantyTable_detail->save();
-            }
-            catch (\Exception $e)
-            {
-                echo  $e->getMessage();
+            } catch (\Exception $e) {
+                echo $e->getMessage();
             }
         }
-        return '('.$warrantyID.')'.$st;
+        return '(' . $warrantyID . ')' . $st;
     }
+
 //------------------------------------------------------
 
-    public function UpdateWarrantyForm($request,$RequestStatus)
+    public function UpdateWarrantyForm($request, $RequestStatus)
     {
-       try
-       {
-           $allSerials= $request[1];
-           $WarrantyId=$request[2];
+        try {
+            $allSerials = $request[1];
+            $WarrantyId = $request[2];
 
-           $WarrantyDuration=$request[0]['WarrantyDuration'];
-           $WarrantyPeriod  =$request[0]['WarrantyPeriod'];
-           $delevery_date   =$request[0]['delevery_date'];
-           $warranty_start_date      =$request[0]['start_date'];
-           $stockrequestsID =$request[0]['stockrequestsID'];
+            $WarrantyDuration = $request[0]['WarrantyDuration'];
+            $WarrantyPeriod = $request[0]['WarrantyPeriod'];
+            $delevery_date = $request[0]['delevery_date'];
+            $warranty_start_date = $request[0]['start_date'];
+            $stockrequestsID = $request[0]['stockrequestsID'];
 
-           $pb=new PublicClass();
-           $affectedRows = sell_stockrequests_warrantie
-               ::where('id', '=', $WarrantyId)
-               ->update(array(
-                   'ssw_warranty_start_date' => $pb->jalali_to_gregorian_byString($warranty_start_date)  ,
-                   'ssw_delivery_date' =>$pb->jalali_to_gregorian_byString($delevery_date)  ,
-                   'ssw_duration_of_warranty' => $WarrantyPeriod ,
-                   'ssw_duration_unit' => $WarrantyDuration ,
-                   'ssw_request_flag' => $RequestStatus ,
-               ));
+            $pb = new PublicClass();
+            $affectedRows = sell_stockrequests_warrantie
+                ::where('id', '=', $WarrantyId)
+                ->update(array(
+                    'ssw_warranty_start_date' => $pb->jalali_to_gregorian_byString($warranty_start_date),
+                    'ssw_delivery_date' => $pb->jalali_to_gregorian_byString($delevery_date),
+                    'ssw_duration_of_warranty' => $WarrantyPeriod,
+                    'ssw_duration_unit' => $WarrantyDuration,
+                    'ssw_request_flag' => $RequestStatus,
+                ));
 
 
-           foreach ($allSerials AS $sn)
-           {
+            foreach ($allSerials AS $sn) {
 
-               $count = sell_stockrequests_warranties_detail
-                   ::where('sswd_warrantie_id', '=', $WarrantyId)
-                   ->where ('sswd_faulty_serial','=',$sn['id'])
-                   ->count();
+                $count = sell_stockrequests_warranties_detail
+                    ::where('sswd_warrantie_id', '=', $WarrantyId)
+                    ->where('sswd_faulty_serial', '=', $sn['id'])
+                    ->count();
 
-               if ($count==0)
-               {
-                   $warranties_detail = new sell_stockrequests_warranties_detail;
-                   $warranties_detail->sswd_warrantie_id=$WarrantyId;
-                   $warranties_detail->sswd_faulty_serial=$sn['id'];
-                   $warranties_detail->created_by=Auth::user()->id;
-                   $warranties_detail->updated_by=Auth::user()->id;
-                   $warranties_detail->read_status_flag=0;
-                   $warranties_detail->deleted_flag=0;
-                   $warranties_detail->archive_flag=0;
-                   $warranties_detail->save();
-               }
-           }
-         return 1;
-       }
-       catch (\Exception $e)
-       {
-           $e->getMessage();
-       }
+                if ($count == 0) {
+                    $warranties_detail = new sell_stockrequests_warranties_detail;
+                    $warranties_detail->sswd_warrantie_id = $WarrantyId;
+                    $warranties_detail->sswd_faulty_serial = $sn['id'];
+                    $warranties_detail->created_by = Auth::user()->id;
+                    $warranties_detail->updated_by = Auth::user()->id;
+                    $warranties_detail->read_status_flag = 0;
+                    $warranties_detail->deleted_flag = 0;
+                    $warranties_detail->archive_flag = 0;
+                    $warranties_detail->save();
+                }
+            }
+            return 1;
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
 
     }
-//------------------------------------------------------
-public function RemoveSerialFromList($request)
-{
-    $warrantyID= $request['warrantyID'];
-    $SerialNumberID=$request['SerialNumberID'];
 
-    $warranties_detail = sell_stockrequests_warranties_detail::
-             where('sswd_warrantie_id', '=', $warrantyID)
+//------------------------------------------------------
+    public function RemoveSerialFromList($request)
+    {
+        $warrantyID = $request['warrantyID'];
+        $SerialNumberID = $request['SerialNumberID'];
+
+        $warranties_detail = sell_stockrequests_warranties_detail::
+        where('sswd_warrantie_id', '=', $warrantyID)
             ->where('sswd_faulty_serial', '=', $SerialNumberID)
             ->delete();
 
-}
+    }
+
 //------------------------------------------------------
 
 
-public function getSavedWarrantyDataByID($request)
+    public function getSavedWarrantyDataByID($request)
     {
-        $warrantyID=$request['warrantyID'];
-         $val=
+        $warrantyID = $request['warrantyID'];
+        $val =
             \DB::table('sell_stockrequests_warranties AS warranty')
-                ->join('sell_stockrequests            AS stockrequests'    ,   'stockrequests.id' , '=' ,'warranty.ssw_stockReqID')
-                ->join('custommers                       AS custommer'          ,   'custommer.id'          , '=' ,'stockrequests.sel_sr_custommer_id')
-                ->join('custommerorganizations           AS ORG'                ,   'ORG.id'                , '=' ,'custommer.cstmr_organization')
-
-              // ->select('*')
-               ->select( \DB::raw('
+                ->join('sell_stockrequests            AS stockrequests', 'stockrequests.id', '=', 'warranty.ssw_stockReqID')
+                ->join('custommers                       AS custommer', 'custommer.id', '=', 'stockrequests.sel_sr_custommer_id')
+                ->join('custommerorganizations           AS ORG', 'ORG.id', '=', 'custommer.cstmr_organization')
+                // ->select('*')
+                ->select(\DB::raw('
 
                               custommer.cstmr_name AS custommerName,
                               custommer.cstmr_family AS custommerFamily,
@@ -289,54 +284,49 @@ public function getSavedWarrantyDataByID($request)
                               warranty.ssw_request_flag AS request_flag
                            '))
                 ->where('warranty.id', '=', $warrantyID)
-
                 ->get();
 
-       try
-       {
+        try {
 
-           $warranty_date = date('Y-m-d', strtotime("+".$val[0]->stockrequests_warranty_priod." months", strtotime($val[0]->stockreqDelivery_date)));
-           $Vval = array(
+            $warranty_date = date('Y-m-d', strtotime("+" . $val[0]->stockrequests_warranty_priod . " months", strtotime($val[0]->stockreqDelivery_date)));
+            $Vval = array(
 
-               "custommerName"=>$val[0]->custommerName,
-               "custommerFamily"=>$val[0]->custommerFamily,
-               "orgName"=>$val[0]->orgName ,
+                "custommerName" => $val[0]->custommerName,
+                "custommerFamily" => $val[0]->custommerFamily,
+                "orgName" => $val[0]->orgName,
 
-               "stockrequestsID"=>$val[0]->stockrequestsID,
-               "stockreqRegistr_date"=>$val[0]->stockreqRegistr_date,
-               "stockreqDelivery_date"=>$val[0]->stockreqDelivery_date,
-               "stockrequests_warranty_priod"=>$val[0]->stockrequests_warranty_priod ,
-               "stockrequests_warranty_ExpiredDate"=>$warranty_date ,
-               "warrantyID"=>$val[0]->warrantyID,
+                "stockrequestsID" => $val[0]->stockrequestsID,
+                "stockreqRegistr_date" => $val[0]->stockreqRegistr_date,
+                "stockreqDelivery_date" => $val[0]->stockreqDelivery_date,
+                "stockrequests_warranty_priod" => $val[0]->stockrequests_warranty_priod,
+                "stockrequests_warranty_ExpiredDate" => $warranty_date,
+                "warrantyID" => $val[0]->warrantyID,
 
-               "warranty_start_date"=>$val[0]->warranty_start_date,
-               "warranty_delivery_date"=>$val[0]->warranty_delivery_date,
-               "WarrantyPeriod"=>$val[0]->WarrantyPeriod,
-               "WarrantyDuration"=>$val[0]->WarrantyDuration,
-               "todayDate"=>date("Y-m-d"),
-               "request_flag"=>$val[0]->request_flag ,
-           );
-           $ret=[];
-           array_push($ret,$Vval);
+                "warranty_start_date" => $val[0]->warranty_start_date,
+                "warranty_delivery_date" => $val[0]->warranty_delivery_date,
+                "WarrantyPeriod" => $val[0]->WarrantyPeriod,
+                "WarrantyDuration" => $val[0]->WarrantyDuration,
+                "todayDate" => date("Y-m-d"),
+                "request_flag" => $val[0]->request_flag,
+            );
+            $ret = [];
+            array_push($ret, $Vval);
 
 
-           //-0-----------------
+            //-0-----------------
 
-           //-------------------
+            //-------------------
 
-           $serials= \DB::table('sell_stockrequests_warranties AS warranty')
-               ->join('sell_stockrequests_warranties_details    AS warranties_details'  , 'warranties_details.sswd_warrantie_id'  , '=' ,'warranty.id')
-
-               ->join('stockroom_serialnumbers           AS serialnumbers'                ,   'serialnumbers.id'                , '=' ,'warranties_details.sswd_faulty_serial')
-               ->join('stockroom_stock_putting_products    AS putting_prod'                ,   'serialnumbers.stkr_srial_putting_product_id'                , '=' ,'putting_prod.id')
-
-               ->join('stockroom_products               AS products'           ,   'products.id'           , '=' ,'putting_prod.stkr_stk_putng_prdct_product_id')
-               ->join('stockroom_products_brands        AS brands'             ,   'brands.id'             , '=' ,'products.stkr_prodct_brand')
-               ->join('stockroom_products_types         AS types'              ,   'types.id'              , '=' ,'products.stkr_prodct_type')
-
-               ->where('warranties_details.sswd_warrantie_id', '=', $warrantyID)
+            $serials = \DB::table('sell_stockrequests_warranties AS warranty')
+                ->join('sell_stockrequests_warranties_details    AS warranties_details', 'warranties_details.sswd_warrantie_id', '=', 'warranty.id')
+                ->join('stockroom_serialnumbers           AS serialnumbers', 'serialnumbers.id', '=', 'warranties_details.sswd_faulty_serial')
+                ->join('stockroom_stock_putting_products    AS putting_prod', 'serialnumbers.stkr_srial_putting_product_id', '=', 'putting_prod.id')
+                ->join('stockroom_products               AS products', 'products.id', '=', 'putting_prod.stkr_stk_putng_prdct_product_id')
+                ->join('stockroom_products_brands        AS brands', 'brands.id', '=', 'products.stkr_prodct_brand')
+                ->join('stockroom_products_types         AS types', 'types.id', '=', 'products.stkr_prodct_type')
+                ->where('warranties_details.sswd_warrantie_id', '=', $warrantyID)
 //            ->select('*')
-               ->select( \DB::raw('
+                ->select(\DB::raw('
 
                               serialnumbers.id                              AS SN_ID,
                               serialnumbers.stkr_srial_serial_numbers_a     AS  snA,
@@ -347,148 +337,135 @@ public function getSavedWarrantyDataByID($request)
                               brands.stkr_prodct_brand_title   AS  Brand,
                               types.stkr_prodct_type_title AS  Type                              
                               '))
+                ->get();
+            array_push($ret, $serials);
 
-               ->get();
-           array_push($ret,$serials);
-
-           $sn= \DB::table('sell_stockrequests_warranties_details AS warranties_details')
-               ->join('stockroom_serialnumbers     AS serialnumbers'  , 'serialnumbers.id'  , '=' ,'warranties_details.sswd_alternative_serial')
-               ->where('warranties_details.sswd_warrantie_id', '=', $warrantyID)
-               ->select( \DB::raw('serialnumbers.stkr_srial_serial_numbers_a AS alternative_serial_sn ,
+            $sn = \DB::table('sell_stockrequests_warranties_details AS warranties_details')
+                ->join('stockroom_serialnumbers     AS serialnumbers', 'serialnumbers.id', '=', 'warranties_details.sswd_alternative_serial')
+                ->where('warranties_details.sswd_warrantie_id', '=', $warrantyID)
+                ->select(\DB::raw('serialnumbers.stkr_srial_serial_numbers_a AS alternative_serial_sn ,
                                    serialnumbers.stkr_srial_serial_numbers_b AS alternative_serial_sn_b ,
                                    serialnumbers.id AS alternative_serial_id ,
                                    warranties_details.sswd_warrantie_id AS warrantie_id
                                    
                '))
-               ->get();
+                ->get();
 
-           array_push($ret,$sn);
+            array_push($ret, $sn);
 
-           return  $ret;
+            return $ret;
 
-       }
-       catch (\Exception $e)
-       {
-           $e->getMessage();
-       }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
 
 
     }
+
 //------------------------------------------------------
     public function addAlternativeSerial($request)
     {
 
-         $errorArra=array();
-         $warrantyID=$request['warrantyID'];
-         $faulty_serial_ID=$request['faulty_serialID'];
-         $alternative_serial_String=$request['alternative_serial'];
+        $errorArra = array();
+        $warrantyID = $request['warrantyID'];
+        $faulty_serial_ID = $request['faulty_serialID'];
+        $alternative_serial_String = $request['alternative_serial'];
 
-         //--- what's faulty serial  >>>> get Product ID
-          $takeoutproduct = sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)->firstOrFail();
-          $faulty_productid= $takeoutproduct->sl_top_productid;
-
-
-
-       $checkSerial=stockroom_serialnumber::where('stkr_srial_serial_numbers_a', '=', $alternative_serial_String)->get();
-
-       if (count($checkSerial))
-       {
-          if (!$checkSerial[0]['stkr_srial_status'])
-          {
-
-              $putting_product_id= $checkSerial[0]->stkr_srial_putting_product_id;
-              $putting_product=stockroom_stock_putting_product::where('id', '=', $putting_product_id)->get();
-              $product_id=$putting_product[0]->stkr_stk_putng_prdct_product_id;
-               if ($product_id ==$faulty_productid)
-               {
+        //--- what's faulty serial  >>>> get Product ID
+        $takeoutproduct = sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)->firstOrFail();
+        $faulty_productid = $takeoutproduct->sl_top_productid;
 
 
-                   //add Alternative ...................................................................................
-                   $AlternativeSerial_id= $checkSerial[0]['id'];
-                   sell_stockrequests_warranties_detail::where ('sswd_warrantie_id','=',$warrantyID)
-                                                       ->where ('sswd_faulty_serial','=',$faulty_serial_ID)
-                                                       ->update(array('sswd_alternative_serial'=>$AlternativeSerial_id));
+        $checkSerial = stockroom_serialnumber::where('stkr_srial_serial_numbers_a', '=', $alternative_serial_String)->get();
 
-                   //Serial Number Status ...................................................................................
-                   stockroom_serialnumber::where('id', '=', $faulty_serial_ID)
-                                                           ->update(array('stkr_srial_status' => 2)); //AS warranty
-                   stockroom_serialnumber::where('id', '=', $AlternativeSerial_id)
-                                                           ->update(array('stkr_srial_status' => 1)); //AS warranty
+        if (count($checkSerial)) {
+            if (!$checkSerial[0]['stkr_srial_status']) {
 
-                   //update takeoutproducts ............................................................................
-                 $takeoutproduct=sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)
-                                                    ->firstOrFail();
-                 $stockrequest_id= $takeoutproduct->sl_top_stockrequest_id;
+                $putting_product_id = $checkSerial[0]->stkr_srial_putting_product_id;
+                $putting_product = stockroom_stock_putting_product::where('id', '=', $putting_product_id)->get();
+                $product_id = $putting_product[0]->stkr_stk_putng_prdct_product_id;
+                if ($product_id == $faulty_productid) {
 
-                   sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)
-                    ->update(array('deleted_flag' => 1)); //AS warranty
 
-                   $takeoutproductX =new sell_takeoutproduct;
-                   $takeoutproductX->sl_top_stockrequest_id          =$stockrequest_id;
-                   $takeoutproductX->sl_top_product_serialnumber_id  =$AlternativeSerial_id;
-                   $takeoutproductX->sl_top_productid                =$takeoutproduct->sl_top_productid;
-                   $takeoutproductX->sl_top_StockRequestRowID        =$takeoutproduct->sl_top_StockRequestRowID;
-                   $takeoutproductX->deleted_flag =0;
-                   $takeoutproductX->archive_flag =0;
-                   $takeoutproductX->save();
+                    //add Alternative ...................................................................................
+                    $AlternativeSerial_id = $checkSerial[0]['id'];
+                    sell_stockrequests_warranties_detail::where('sswd_warrantie_id', '=', $warrantyID)
+                        ->where('sswd_faulty_serial', '=', $faulty_serial_ID)
+                        ->update(array('sswd_alternative_serial' => $AlternativeSerial_id));
 
-                  //Product Status ......................................................................
-                   $product_statu=stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
-                       ->firstOrFail();
+                    //Serial Number Status ...................................................................................
+                    stockroom_serialnumber::where('id', '=', $faulty_serial_ID)
+                        ->update(array('stkr_srial_status' => 2)); //AS warranty
+                    stockroom_serialnumber::where('id', '=', $AlternativeSerial_id)
+                        ->update(array('stkr_srial_status' => 1)); //AS warranty
 
-                   $sps_available=$product_statu->sps_available;
-                   $sps_warranty=$product_statu->sps_warranty;
+                    //update takeoutproducts ............................................................................
+                    $takeoutproduct = sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)
+                        ->firstOrFail();
+                    $stockrequest_id = $takeoutproduct->sl_top_stockrequest_id;
 
-                   stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
-                                            ->update(array('sps_available' => $sps_available-1 ,
-                                                           'sps_warranty' =>   $sps_warranty+1
-                                                ));
-                   //---------------------
+                    sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)
+                        ->update(array('deleted_flag' => 1)); //AS warranty
 
-                   $msg= array("code"=>"110","error"=>"Ok","value"=>$checkSerial[0]['stkr_srial_serial_numbers_b'] ,"serialID"=>$checkSerial[0]['id']);
-                   array_push($errorArra ,$msg);
+                    $takeoutproductX = new sell_takeoutproduct;
+                    $takeoutproductX->sl_top_stockrequest_id = $stockrequest_id;
+                    $takeoutproductX->sl_top_product_serialnumber_id = $AlternativeSerial_id;
+                    $takeoutproductX->sl_top_productid = $takeoutproduct->sl_top_productid;
+                    $takeoutproductX->sl_top_StockRequestRowID = $takeoutproduct->sl_top_StockRequestRowID;
+                    $takeoutproductX->deleted_flag = 0;
+                    $takeoutproductX->archive_flag = 0;
+                    $takeoutproductX->save();
 
-                   
+                    //Product Status ......................................................................
+                    $product_statu = stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
+                        ->firstOrFail();
+
+                    $sps_available = $product_statu->sps_available;
+                    $sps_warranty = $product_statu->sps_warranty;
+
+                    stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
+                        ->update(array('sps_available' => $sps_available - 1,
+                            'sps_warranty' => $sps_warranty + 1
+                        ));
+                    //---------------------
+
+                    $msg = array("code" => "110", "error" => "Ok", "value" => $checkSerial[0]['stkr_srial_serial_numbers_b'], "serialID" => $checkSerial[0]['id']);
+                    array_push($errorArra, $msg);
+
+
 //                    return    array_push($errorArra ,'OK' ,$checkSerial[0]['stkr_srial_serial_numbers_b']);
-               }
-               else
-               {
-                   $msg= array("code"=>"102","error"=>"ProductIsNotValid");
-                   array_push($errorArra ,$msg);
-               }
-          }
-          else
-          {
-              $msg= array("code"=>"101","error"=>"SerialNotValid");
-              array_push($errorArra ,$msg);
-          }
-       }
-       else
-       {
-           $msg= array("code"=>"100","error"=>"serialMissMach");
-           array_push($errorArra ,$msg);
+                } else {
+                    $msg = array("code" => "102", "error" => "ProductIsNotValid");
+                    array_push($errorArra, $msg);
+                }
+            } else {
+                $msg = array("code" => "101", "error" => "SerialNotValid");
+                array_push($errorArra, $msg);
+            }
+        } else {
+            $msg = array("code" => "100", "error" => "serialMissMach");
+            array_push($errorArra, $msg);
 
-       }
+        }
         return $errorArra;
 
     }
 
 //-----------------------------------------
-    public function delete_alternative_serial ($request)
+    public function delete_alternative_serial($request)
     {
 
-         $warrantyID= $request['warrantyID'];
-         $faulty_serialID= $request['faulty_serialID'];
-         $alternative_serialID= $request['alternative_serial'];
+        $warrantyID = $request['warrantyID'];
+        $faulty_serialID = $request['faulty_serialID'];
+        $alternative_serialID = $request['alternative_serial'];
 
-        if ($warrantyID ==null || $faulty_serialID==null || $alternative_serialID==null)
+        if ($warrantyID == null || $faulty_serialID == null || $alternative_serialID == null)
             return 'failed';
-        else
-        {
+        else {
 
-            sell_stockrequests_warranties_detail::where ('sswd_warrantie_id','=',$warrantyID)
-                ->where ('sswd_faulty_serial','=',$faulty_serialID)
-                ->update(array('sswd_alternative_serial'=>null));
+            sell_stockrequests_warranties_detail::where('sswd_warrantie_id', '=', $warrantyID)
+                ->where('sswd_faulty_serial', '=', $faulty_serialID)
+                ->update(array('sswd_alternative_serial' => null));
 
 //        //Serial Number Status ...................................................................................
 
@@ -501,10 +478,10 @@ public function getSavedWarrantyDataByID($request)
                 ->update(array('stkr_srial_status' => 0)); //AS warranty)
 
 ////        //update takeoutproducts ............................................................................
-            $takeoutproduct=sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serialID)
+            $takeoutproduct = sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serialID)
                 ->firstOrFail();
 //
-            $stockrequest_id= $takeoutproduct->sl_top_stockrequest_id;
+            $stockrequest_id = $takeoutproduct->sl_top_stockrequest_id;
             sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serialID)
                 ->update(array('deleted_flag' => 0)); //AS warranty
 //
@@ -513,18 +490,54 @@ public function getSavedWarrantyDataByID($request)
                 ->delete();
 //
 ////        //Product Status ......................................................................
-            $product_statu=stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
+            $product_statu = stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
                 ->firstOrFail();
-            $sps_available=$product_statu->sps_available;
-            $sps_warranty=$product_statu->sps_warranty;
+            $sps_available = $product_statu->sps_available;
+            $sps_warranty = $product_statu->sps_warranty;
 //
             stockroom_product_statu::where('sps_product_id', '=', $takeoutproduct->sl_top_productid)
-                ->update(array('sps_available' => $sps_available+1 ,
-                    'sps_warranty' =>   $sps_warranty-1
+                ->update(array('sps_available' => $sps_available + 1,
+                    'sps_warranty' => $sps_warranty - 1
                 ));
         }
     }
 
+//---------------------------------------------------
+    public function changeWarrantyDeleteFlag($request)
+    {
+        $warrantyID=$request['warrantyID'];
+        $flag=$request['flag'];
+        if ($flag)
+        {
+            $count= sell_stockrequests_warranties_detail::where('sswd_warrantie_id' ,'=' ,$warrantyID)
+                ->where('deleted_flag' ,'=' ,0)
+                ->count();
+            if ($count==0)
+            {
+                sell_stockrequests_warrantie::where ('id' ,'=' ,$warrantyID)
+                    ->update(array('deleted_flag' => $flag));
+                return 'deleted';
+            }
+            else
+            {
+                return '1001::FDI';
+            }
+        }
+        else
+        {
+            sell_stockrequests_warrantie::where ('id' ,'=' ,$warrantyID)
+                ->update(array('deleted_flag' => $flag));
+            return 'Restored';
+        }
+
+    }
+//---------------------------------------------------
+   public function  WarrantyFullDelete($request)
+   {
+       $warrantyID=$request['warrantyID'];
+       sell_stockrequests_warrantie::destroy($warrantyID);
+       return 'deleted';
+   }
 //---------------------------------------------------
     public function backToWarrantyRequest ($request)
     {
@@ -554,6 +567,8 @@ public function getSavedWarrantyDataByID($request)
         $year= $Jdate[0];
         return 'EP'.substr($year, 2, 2).'-'.$warrantyStockReqID;
     }
+
+
 //---------------------------------------------------
     public function getWarrantyPdf($data)
     {

@@ -1383,4 +1383,14 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
                 return $e->getMessage();
             }
     }
+//----------------------------------------------------------------------------------
+    public function UpdateWarrantyDiuration($req )
+    {
+        if (sell_stockrequest::where('id', '=', (int)$req['StockRequestID'])
+                        ->update(array('sel_sr_warranty_priod' => (int)$req['WarrantyDiurationValue'])))
+            return 'Updated';
+        else
+            return 'failed';
+    }
+
 }

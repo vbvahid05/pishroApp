@@ -2209,7 +2209,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.showCustommerList=false;
             $scope.showDliverDate=false;
             $scope.showRegistrdays=false;
-
+            $scope.ShowWarrantyDiuration=false;
 
             getList_PartNumbers(0);
 
@@ -3855,8 +3855,26 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         }
 
 //*********************************
+    $scope.editWarrantyDiuration=function (value)
+    {
+       $scope.WarrantyPriod_val =value;
+       $scope.ShowWarrantyDiuration=true;
+    }
+//*********************************
+    $scope.UpdateWarrantyDiuration=function (StockRequestID ) {
+            var arg={
+                StockRequestID :StockRequestID ,
+                WarrantyDiurationValue:$scope.WarrantyPriod_val
+            }
+        $http.post('/services_sell/Stockrequest/UpdateWarrantyDiuration',arg).then
+        (function xSuccess(response) {
+            console.log(response.data);
+            $scope.ShowWarrantyDiuration=false;
+            $scope.EditSelected(StockRequestID);
+        }), function xError(response)
+        {}
 
-
+    }
 
 
     }]);

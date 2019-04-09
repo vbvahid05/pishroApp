@@ -159,7 +159,8 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             var sritems = [];
             var invoice_detilas=[];
             totalEPL=0;
-            getList_Warranty_Request($scope.pageTypeIs);
+            ListMode=0;
+            getList_Warranty_Request($scope.pageTypeIs ,ListMode);
             $scope.masterArray=[];
 
 
@@ -168,11 +169,10 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
 //---------------###############################---------------
         //@@@ stock Request @@@
 //---------------###############################---------------
-        function getList_Warranty_Request(pageType)
+        function getList_Warranty_Request(pageType ,ListMode)
         {
 
-
-            var Args={mode:pageType}
+            var Args={mode:pageType ,ListMode:ListMode}
             $http.post('/sell/stockRequest/service/warranty/getWarrantyList/1',Args).then(function xSuccess(response)
                  {
                      listArray=response.data;
@@ -203,6 +203,14 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                 {
                 }
         }
+///-------------------------------------------------
+    $scope.showAll=function(val)
+    {
+        getList_Warranty_Request($scope.pageTypeIs ,val);
+        $scope.showListStatus=val;
+        $('.DatalistSelector').removeClass('active');
+        (val)? $("#ShowTrashed").addClass('active'): $("#ShowAll").addClass('active');
+    }
 ///-------------------------------------------------
         $scope.newUpdateWarranty=function ($action,id) {
             $('.errorMessage').html('');
@@ -325,6 +333,69 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                     {
                     }
                 break;
+        //-----------------
+                case 'deleteFlag':
+                    access=false;var r = confirm(deleteMessage);if (r == true) {access=true;} else {access=false; }
+                    if (access)
+                    {
+                        var Args={warrantyID:id ,
+                            flag:1
+                        }
+                        $http.post('/sell/stockRequest/service/warranty/changeWarrantyDeleteFlag',Args).
+                        then(function xSuccess(response)
+                        {
+                            getList_Warranty_Request($scope.pageTypeIs ,ListMode);
+                            if (response.data=='1001::FDI')
+                                toast_alert(delete_SerialInChassis,'warning');
+                            else if(response.data=='deleted')
+                                toast_alert(deleted_Message,'success');
+                            console.log(response.data);
+                        }), function xError(response)
+                        {
+
+                        }
+                    }
+
+                break;
+             //-----------------
+                case 'restoreFromTrash':
+                    access=false;var r = confirm(Q_Restor_Message);if (r == true) {access=true;} else {access=false; }
+                   if(access)
+                   {
+                       var Args={warrantyID:id ,
+                           flag:0
+                       }
+                       $http.post('/sell/stockRequest/service/warranty/changeWarrantyDeleteFlag',Args).
+                       then(function xSuccess(response)
+                       {
+                           getList_Warranty_Request($scope.pageTypeIs ,1);
+                           if(response.data=='Restored')
+                               toast_alert(row_Restored_message,'info');
+
+                           console.log(response.data);
+                       }), function xError(response)
+                       {}
+                   }
+
+                break;
+             //-----------------
+                case 'fullDelete' :
+                    access=false;var r = confirm(deleteMessage);if (r == true) {access=true;} else {access=false; }
+                    if (access)
+                    {
+                        var Args={warrantyID:id}
+                        $http.post('/sell/stockRequest/service/warranty/WarrantyFullDelete',Args).
+                        then(function xSuccess(response)
+                        {
+                            if(response.data=='deleted')
+                            {
+                                toast_alert(deleted_Message,'danger');
+                                getList_Warranty_Request($scope.pageTypeIs ,1);
+                            }
+                            console.log(response.data);
+                        }), function xError(response) {}
+                    }
+                    break;
             }
 
             switch ($scope.Public_Page_Type)
@@ -334,14 +405,11 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                     $scope.stockOut=false;
 
                     $scope.RequestMode=true;
-                    console.log('addRequest')
                     break;
                 case 'stockOut':
                     $scope.stockOut=true;
                     $scope.addRequest=false;
-
                     $scope.RequestMode=false;
-                    console.log('stockOut')
                     break;
             }
         }
@@ -432,9 +500,11 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
              function doAction()
              {
              if ($scope.SeriallistArray[i].id == $scope.serialId) { result++;  }i++;}
-             if (result<1 && $DefultstockrequestID == $scope.stockrequestsID)
-             {  addToArray();  }
+             // if (result<1 && $DefultstockrequestID == $scope.stockrequestsID)
+             // {  addToArray();  }
          }
+
+
          if ($DefultstockrequestID != $scope.stockrequestsID)
          {
              toast_alert('stockrequest is Changed','danger');
@@ -514,7 +584,7 @@ $scope.save_Update_Warranty=function (action) {
             if (response.data)
             {
                 toast_alert(Seved_Message,'success');
-                getList_Warranty_Request($scope.pageTypeIs);
+                getList_Warranty_Request($scope.pageTypeIs,ListMode);
                 $scope.close_warranty_dimmer();
 
             }
@@ -586,13 +656,15 @@ $scope.save_Update_Warranty=function (action) {
 ///-------------------------------------------------
  $scope.backToWarrantyRequest =function(arry)
  {
+     $scope.newUpdateWarranty('edit',$scope.Public_warrantyID);
      i=0;
      errorMessage="";
+     massage_itisEmpty="سریال نامبر جایگزین را وارد نمایید";
      arry.forEach(doAction);
      function doAction()
      {
          if (arry[i]['alternativeSerialSn'] ==null)
-             errorMessage=errorMessage+arry[i]['partNumber']+"<br/>";
+             errorMessage=errorMessage+ massage_itisEmpty+"<br/>";
          i++
 
      }
@@ -606,7 +678,7 @@ $scope.save_Update_Warranty=function (action) {
         $http.post('/sell/stockRequest/service/warranty/backToWarrantyRequest',Args).
         then(function xSuccess(response)
         {
-            getList_Warranty_Request($scope.pageTypeIs);
+            getList_Warranty_Request($scope.pageTypeIs,ListMode);
             toast_alert('انجام شد' ,'info');
             $scope.close_warranty_dimmer();
             console.log(response.data);

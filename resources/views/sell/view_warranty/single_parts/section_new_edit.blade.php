@@ -94,13 +94,16 @@
               <div class="row">
                   <div ng-show="RequestMode" ng-show="defultStockRId" style="text-align: right;padding-right: 20px;" > شماره حواله :  @{{ defultStockRId }}</div>
 
-                <table class="">
+                <table style="margin-right: 20px;">
                     <tr>
                         <td></td>
                         <td>#</td>
                         <td></td>
+                        <td colspan="2" ng-show="RequestMode">{{ lang::get('labels.WarrantyFailedSN') }}</td>
+                        <td colspan="2" ng-show="RequestMode">{{ lang::get('labels.WarrantySNS') }}</td>
                         <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_first') }}</label></td>
                         <td><label ng-show="!RequestMode">{{ lang::get('labels.serialNumber_last') }}</label></td>
+
                         <td><label ng-show="!RequestMode">{{ lang::get('labels.WarrantySN1') }} </label></td>
                         <td><label ng-show="!RequestMode">{{ lang::get('labels.WarrantySN2') }} </label></td>
                         <td> </td>
@@ -114,21 +117,34 @@
                             &nbsp;&nbsp;
                             <span class="label label-default ng-binding" > &nbsp;@{{ Sn.partNumber }} &nbsp; </span>
                         </td>
-                        <td><span class="label label-primary ng-binding">@{{ Sn.snA }} </span></td>
-                        <td>
-                            <span ng-show="Sn.snB" class="label label-success ng-binding">@{{ Sn.snB }} </span>
+                        <td><span class="label label-danger ng-binding">@{{ Sn.snA }} </span></td>
+                        <td style="padding-left: 10px;">
+                            <span ng-show="Sn.snB" class="label label-warning ng-binding">@{{ Sn.snB }} </span>
                         </td>
-                        <td >
-                            @{{ Sn.alternativeSerialSn }}
-                            <span ng-click="ShowAlternativeSerial_Input(Sn.id)" ng-show="Sn.alternativeSerialSn ==null" class="Cpointer"> درج سریال</span>
+                        <td style="border-right: 3px dashed gray;padding-right: 10px;">
+                           <span  ng-show="Sn.alternativeSerialSn"  class="label label-success" >   @{{ Sn.alternativeSerialSn }} </span>
+                            <span ng-click="ShowAlternativeSerial_Input(Sn.id)" ng-show="Sn.alternativeSerialSn ==null && !RequestMode && !ShowAlternativeSerialFlage" class="Cpointer btn btn-default">
+                                درج سریال
+                            </span>
                             <input  ng-show="!RequestMode && ShowAlternativeSerialFlage" id="alternative_serial@{{ Sn.id }}"
                                    ng-keypress="saveOrUpdate_alternative_serial($event,Sn.warrantyID,Sn.id)"
                                    class="form-control alternative_serial" type="text" style="width: 250px !important;"    value="@{{ Sn.alternativeSerialSn }}" >
 
-                            <label id="alternative_serial_label@{{ Sn.id }}" class="hide"></label>
+                            <label id="alternative_serial_label@{{ Sn.id }}" class="hide "></label>
+
+
+                            <span ng-show="!Sn.alternativeSerialSn && !ViewMode" ng-click="save_Update_Warranty('saveAndSendToStock')" class="edit_link">
+                                        {{ lang::get('labels.Warranty_updateAndSendToStock') }}
+                            </span>
+                            <span ng-show="!Sn.alternativeSerialSn && ViewMode && addRequest" ng-click="save_Update_Warranty('updateAndSendToStock')" class="edit_link">
+                                        {{ lang::get('labels.Warranty_updateAndSendToStock') }}
+                            </span>
+
+
+
                         </td>
                         <td>
-                            @{{  Sn.alternativeSerialSn_b }}
+                          <span ng-show="Sn.alternativeSerialSn_b" class="label label-primary">  @{{  Sn.alternativeSerialSn_b }} </span>
                             {{--<label ng-show="!RequestMode "  >--}}
                                 {{--<h4 id="SNb@{{ Sn.id }}">  </h4>--}}
                             {{--</label>--}}
@@ -141,8 +157,11 @@
                         </td>
 
                         <td>
+
+                            @can('warranty_delete', 1)
                             <i ng-click="removeFromList($index,Sn.id)" ng-show="RequestMode && (Sn.alternativeSerialSn==0 ||  Sn.alternativeSerialSn==null)" class="fa fa-trash gray " ></i>
                             <i ng-click="delete_alternative_serial(Sn.warrantie_id,Sn.alternativeSerialId ,Sn.id)" ng-show="ViewMode && stockOut && Sn.alternativeSerialId!=null"  class="fa fa-trash gray" aria-hidden="true" style="font-size:  18px;padding:  4px;"></i>
+                            @endcan
                         </td>
 
                     </tr>
@@ -175,7 +194,6 @@
                           <option value="30">ماه</option>
                       </select>
                       <strong ng-show="!RequestMode "> @{{ WarrantyDuration | DurationType}}</strong>
-
                   </div>
 
               </div>
@@ -191,8 +209,6 @@
 
               {{--<div ng-show="ViewMode && stockOut" class="btn btn-success" ng-click="save_Update_alternative_serial('update')"> {{lang::get('labels.update')}}</div>--}}
               <div ng-show="ViewMode && stockOut " class="btn btn-info" ng-click="backToWarrantyRequest(SeriallistArray)"> {{lang::get('labels.warranty_commit_to_PDF')}}</div>
-
-
               <div class="btn btn-danger" ng-click="close_warranty_dimmer()">{{lang::get('labels.cancel')}} </div>
 
           </div>

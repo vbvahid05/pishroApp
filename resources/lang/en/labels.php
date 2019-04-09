@@ -88,6 +88,7 @@ return [
 'print'=>'چاپ',
 'pdf'=>'PDF',
 'add'=>'اضافه به لیست',
+'add-simple'=>'درج',
 'default'=>'پیش فرض',
 'duplicated'=>'این کالا در لیست وجود دارد ',
 
@@ -325,8 +326,11 @@ return [
 'WarrantyExpired'=>'اتمام گارانتی',
 'WarrantyExpiredDate'=>'تاریخ اتمام گارانتی',
 'warranty_commit_to_PDF'=>'تایید و صدور حواله گارانتی',
+'WarrantyFailedSN' =>'سریال معیوب',
+'WarrantySNS'=>'سریال جایگزین',
 'WarrantySN1'=>'سریال جایگزین اول ',
 'WarrantySN2'=>'سریال جایگزین دوم ',
+'Warranty_updateAndSendToStock'=>'    ارسال درخواست به انبار',
 //** SETTING */
 
 'userSetting'=>'کاربران',

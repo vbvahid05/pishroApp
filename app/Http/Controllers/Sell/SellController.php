@@ -319,7 +319,15 @@ public function Invoice(request $request ,$function)
                         return $data->backToWarrantyRequest($request);
                         break;
 
+                    case 'changeWarrantyDeleteFlag':
+                        $data= new Warranty();
+                        return $data->changeWarrantyDeleteFlag($request);
+                    break;
 
+                    case 'WarrantyFullDelete':
+                        $data= new Warranty();
+                        return $data->WarrantyFullDelete($request);
+                        break;
 
                 }
             break ;
@@ -380,6 +388,13 @@ public function Invoice(request $request ,$function)
                         $data= new New_Edit_stockRequest();
                         return $data->getPdfSettingValue($request);
                         break;
+
+                    case 'UpdateWarrantyDiuration' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->UpdateWarrantyDiuration($request);
+                        break;
+
+
                 }
             break;
             case 'TakeOutProducts':

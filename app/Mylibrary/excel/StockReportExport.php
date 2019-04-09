@@ -37,6 +37,22 @@ class StockReportExport implements fromArray,WithHeadings
     }
 
 
+    public function WarrantyQTY($productsId)
+    {
+       return $results=  \DB::table('stockroom_stock_putting_products AS putting_products')
+            ->join('stockroom_serialnumbers AS serialnumbers', 'serialnumbers.stkr_srial_putting_product_id', '=','putting_products.id')
+            ->where ('putting_products.stkr_stk_putng_prdct_product_id','=',$productsId)
+            ->where ('serialnumbers.stkr_srial_status','=',2)
+            ->count();
+
+//        $sumTahodiQTY=0;
+//        foreach ( $results as $res)
+//        {
+//            $sumTahodiQTY=$sumTahodiQTY+$res->ssr_d_qty;
+//        }
+//        return $sumTahodiQTY;
+    }
+
     public function reservedQTY( $productsId)
     {
         $result=  \DB::table('sell_stockrequests AS stockrequests')
@@ -56,6 +72,7 @@ class StockReportExport implements fromArray,WithHeadings
         $result2=  \DB::table('sell_stockrequests AS stockrequests')
             ->join('sell_takeoutproducts AS takeoutproducts', 'takeoutproducts.sl_top_stockrequest_id', '=','stockrequests.id')
             ->where ('takeoutproducts.sl_top_productid','=',$productsId)
+            ->where ('takeoutproducts.deleted_flag','=',0)
             ->where ('stockrequests.sel_sr_type','=',0) // ghatii
             ->select('*')
             ->count();
@@ -92,7 +109,7 @@ class StockReportExport implements fromArray,WithHeadings
                     ->join('stockroom_stock_putting_products AS putting_products', 'putting_products.id', '=','serialnumbers.stkr_srial_putting_product_id')
                     ->join('stockroom_products AS products', 'products.id', '=','putting_products.stkr_stk_putng_prdct_product_id')
                     ->where ( 'products.stkr_prodct_partnumber_commercial','=',$r->stkr_prodct_partnumber_commercial )
-                    ->select('*' )
+                    ->select('*')
                     ->count();
 
 
@@ -103,36 +120,43 @@ class StockReportExport implements fromArray,WithHeadings
                     ->count();
 
 
+
                 $reservedQTY =$this->reservedQTY($r->productsId);//
                 $taahodiQTY= $this->taahodiQTY($r->productsId);
+                $WarrantyQTY =$this->WarrantyQTY($r->productsId);
 
                 $reminedQTY=($AllSerialInQTY-($takeoutQTY+$reservedQTY));
                     if ($reminedQTY ==0) $reminedQTY='0';
                     if ($takeoutQTY ==0) $takeoutQTY='0';
                     if ($reservedQTY ==0) $reservedQTY='0';
-                     if ($taahodiQTY ==0) $taahodiQTY='0';
+                    if ($taahodiQTY ==0) $taahodiQTY='0';
+                    if ($WarrantyQTY ==0) $WarrantyQTY='0';
 
 
-//           Update     stockroom_product_status
-//                    stockroom_product_statu::
-//                    where('sps_product_id', '=', $r->productsId)
-//                   ->update(array(
-//                                 'sps_available' => $reminedQTY ,
-//                                  'sps_reserved' => $reservedQTY ,
-//                                  'sps_sold' => $takeoutQTY ,
-//                                  'sps_Taahodi' => $taahodiQTY ,
-//
-//                   ));
 
+//--------------           Update     stockroom_product_status
+
+                    stockroom_product_statu::
+                    where('sps_product_id', '=', $r->productsId)
+                   ->update(array(
+                                 'sps_available' => $reminedQTY ,
+                                  'sps_reserved' => $reservedQTY ,
+                                  'sps_sold' => $takeoutQTY-$WarrantyQTY ,
+                                  'sps_Taahodi' => $taahodiQTY ,
+                                  'sps_warranty' => $WarrantyQTY ,
+                   ));
+//--------------------------------
 
                 $row=array(
+                    "warranty"=>$WarrantyQTY,
                     "taahodi"=>$taahodiQTY,
                     "reminedQTY"=>$reminedQTY ,
-                    "takeoutQTY"=>$takeoutQTY ,
+                    "takeoutQTY"=>$takeoutQTY-$WarrantyQTY ,
                     "reservedQTY"=>$reservedQTY ,
                     "AllSerialInQTY"=>$AllSerialInQTY,
                     "prodct_title"=>$r->stkr_prodct_title,
                     "partnumber"=>$r->stkr_prodct_partnumber_commercial,
+                    "TadbirCode" =>$r->stkr_tadbir_stock_id,
                     "productsId"=>$r->productsId,
                     "#"=>$index++,
 
@@ -149,6 +173,7 @@ class StockReportExport implements fromArray,WithHeadings
     public function headings(): array
     {
         return [
+            'گارانتی',
             'تعهدی',
             'باقی مانده انبار',
             'جمع خروجی	',
@@ -156,6 +181,7 @@ class StockReportExport implements fromArray,WithHeadings
             'جمع کل ورودی',
             'شرح کالا',
             'پارتنامبر',
+            'کد تدبیر کالا',
             'کد کالا',
             '#',
 

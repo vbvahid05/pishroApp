@@ -2,7 +2,7 @@
 <div class="TableContainer">
     <table class="publicTable table table-hover " >
 
-        <tr class="filterBoxRow">
+        <tr ng-show="false" class="filterBoxRow">
             <th  style="width: 1% !important;">
                 <a href="/sell/TakeOutProducts" class="btn btn-default">
                     <i class="fa fa-refresh" aria-hidden="true"></i> حذف فیلترها
@@ -50,7 +50,7 @@
             <th> {{ Lang::get('labels.warranty_start_date') }} </th></th>
             <th></th>
             <th></th>
-            <th><i class="fa fa-print" style="font-size: 20px;"></i></th>
+            <th><i class="fa fa-file-pdf-o" style="font-size: 20px;"></i></th>
         </tr>
         <tr ng-repeat="row in allRowsZ
                     | startFrom: pagination.page * pagination.perPage
@@ -64,14 +64,22 @@
             <td>
                 @{{ row.warranty_id}}
                 <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
-                    @can('TakeOutProducts_update', 1)
-                        <span class="edit">
+                    @can('warranty_update', 1)
+                    <span class="edit">
                       <span class="editBtn"  ng-click="newUpdateWarranty('edit',row.warranty_id)" aria-label="{{Lang::get('labels.edit')}}" >
                          {{ Lang::get('labels.stockRequest_Edit') }}
                        </span>
                     </span>
                     @endcan
+                    @if($pageType =='addRequest')
+                      @can('warranty_delete', 1)
+                        <span ng-show="!showListStatus" class="submitdelete"  ng-click="newUpdateWarranty('deleteFlag',row.warranty_id)">      {{ Lang::get('labels.delete') }}        </span>
+                        <span ng-show="showListStatus"  class="RestoreTrash"  ng-click="newUpdateWarranty('restoreFromTrash',row.warranty_id)">{{lang::get('labels.RestoreFromTrash')}}</span>
+                        <span ng-show="showListStatus"  class="submitdelete"  ng-click="newUpdateWarranty('fullDelete',row.warranty_id)">      {{lang::get('labels.fulldelete')}}</span>
+                     @endcan
 
+
+                    @endif
                 </div>
             </td>
             <td> @{{ row.stkRq_ID }}</td>
@@ -80,7 +88,11 @@
             <td>@{{ row.ssw_warranty_start_date | Jdate}}</td>
             <td></td>
             <td> <div ng-if="row.ssw_request_flag == 1 " class="label label-warning">در انتظار تایید انبار</div> </td>
-            <td>  <a   ng-if="row.ssw_request_flag == 2"   class="btn btn-info" href="/sell/warranty/pdf/@{{row.warranty_id}}">Print</a></td>
+            <td>
+                <a   ng-if="row.ssw_request_flag == 2"  href="/sell/warranty/pdf/@{{row.warranty_id}}">
+                    <i class="fa fa-file-pdf-o  pdf_btn"></i>
+                </a>
+            </td>
         </tr>
     </table>
   </div>

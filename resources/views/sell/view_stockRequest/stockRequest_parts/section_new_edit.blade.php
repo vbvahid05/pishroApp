@@ -254,8 +254,18 @@ $all_Custommers= Invoice::Get_all_Custommers();
                                 </tr>
                             </table>
                         </td>
-                        <td> <span > @{{ WarrantyPriod }} </span></td>
-                    <td> <span > @{{ warranyDate }}</span></td>
+                        <td>
+                            <span ng-show="!WarrantyPriod && !ShowWarrantyDiuration" ng-click="editWarrantyDiuration(WarrantyPriod)" class="edit_link ">
+                                <i class="fa fa-plus-circle" style="font-size:25px;color:#0087ff"></i>
+                                {{lang::get('labels.add-simple')}}
+                            </span>
+                            <span ng-show="!ShowWarrantyDiuration" ng-click="editWarrantyDiuration(WarrantyPriod)" class="edit_link "> @{{ WarrantyPriod }} </span>
+                            <span ng-show="ShowWarrantyDiuration">
+                                <input ng-model="WarrantyPriod_val" value="@{{ WarrantyPriod }}"  style="width: 105px !important;padding-right: 0;padding-left: 0;padding-top: 1px;padding-bottom: 1px;margin-top: 2px;">
+                                 <i ng-click="UpdateWarrantyDiuration(echo_StockRequestID)" class="fa fa-check saveCheckSmall" ></i>
+                            </span>
+                        </td>
+                    <td> <span ng-show="WarrantyPriod">  @{{ warranyDate }}</span></td>
                     </tr>
                 </table>
              </div> <!-- foum fields -->

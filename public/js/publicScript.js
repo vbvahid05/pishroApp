@@ -216,7 +216,6 @@ function toast_alert(message,status)
           }
          locations=stringval;
           $('#'+locations).addClass('activeSubMenu');
-
           switch (locations)
           {
 
@@ -231,6 +230,7 @@ function toast_alert(message,status)
             case 'PuttingProducts':
             case 'AllOrders':
             case 'TakeOutProducts' :
+            case 'stockOut' :
                   var  menu_Id = "#stockroom";
             break;
 
@@ -238,6 +238,7 @@ function toast_alert(message,status)
             case 'ProductStatusReport':
             case 'stockRequest':
             case 'invoice':
+            case 'addRequest':
                   var  menu_Id = "#sell";
             break;
 

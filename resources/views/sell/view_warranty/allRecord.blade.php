@@ -23,7 +23,7 @@
 
 
 
-  @can('TakeOutProducts_read', 1)
+  @can('warranty_read', 1)
     @section('section_toolbars') @show
     <!-- Notifications-->
       <div id="publicNotificationMessage" class="publicNotificationMessage"></div>
@@ -34,7 +34,7 @@
       <input id="pageType" type="hidden" value="{{ $pageType }}">
       @section('section_list') @show
   @endcan
-  @cannot('TakeOutProducts_read', 1)
+  @cannot('warranty_read', 1)
       <div class="alert alert-danger"><i class="fa fa-ban" aria-hidden="true"></i>{{Lang::get('labels.Access_denied')}}</div>
   @endcannot
 

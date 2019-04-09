@@ -5,7 +5,11 @@
 
      
 <!--  trash view -->
-<div class="btn btn-default" ng-click="newUpdateWarranty('new')"> صدور حواله گارانتی </div>
+    @if($pageType =='addRequest')
+        @can('warranty_create', 1)
+            <div class="btn btn-default" ng-click="newUpdateWarranty('new')"> صدور حواله گارانتی </div>
+        @endcan
+    @endif
 <div ng-show="BtnRestoreProducts"  class="btn btn-default"  ng-click="RestoreGroupFromTrash()"  >
     <i class="fa fa-undo" aria-hidden="true"></i>
     {{ Lang::get('labels.RestoreFromTrash') }}

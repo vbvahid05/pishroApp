@@ -77,7 +77,6 @@ class All_Status_Repost
                 ($productStatus[0]->sps_borrowed  != null ? $borrowed=$productStatus[0]->sps_borrowed  : $borrowed=0);
                 ($productStatus[0]->sps_warranty  != null ? $warranty=$productStatus[0]->sps_warranty  : $warranty=0);
                 ($productStatus[0]->sps_Taahodi  != null ? $sps_Taahodi=$productStatus[0]->sps_Taahodi  : $sps_Taahodi=0);
-
             }
             else
             {
@@ -116,7 +115,7 @@ class All_Status_Repost
                 "status1" =>  $stVal1 ,//در حال مذاکره
                 "status2" =>  $stVal2 , //تایید سفارش
                 "status3" =>  $stVal3 , //منتظر بررسی در مبدا
-                "status4" =>  $stVal4-($avail+$sold+$reserved) , //ترخیص شده
+                "status4" =>  $stVal4-($avail+$sold+$reserved+$warranty) , //ترخیص شده
                 "status5" =>  $stVal5 ,//گمرکات داخل کشور
 
                 "status2_1_avail"    =>  $avail  ,
@@ -126,7 +125,7 @@ class All_Status_Repost
                 "status2_5_warranty" =>  $warranty,
                 "status2_6_sps_Taahodi" =>  $sps_Taahodi,
                 "AvailableStock" => $AvailableStock,
-                "sum"     =>$sum //جمع کل ورودی
+                "sum"     =>$sum-$warranty //جمع کل ورودی
 
             );
             if ($mode==0)
