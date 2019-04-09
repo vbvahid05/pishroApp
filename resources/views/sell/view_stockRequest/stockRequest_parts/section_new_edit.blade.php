@@ -319,7 +319,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
                                <div class="field">
                                    <label>{{ Lang::get('labels.Product_type') }}</label>
                                    <select id="TypeID"  ng-model="TypeID" ng-change="getRelatedProducts_ByType(2)"  class="TypeID ui search selection  dropdown search-select" name="OrderStatus"  >
-                                       <option ng-repeat="type in types" value="@{{type.id}}"  >
+                                       <option ng-repeat="type in product_Type" value="@{{type.id}}"  >
                                          @{{type.name }}
                                        </option>
                                    </select>

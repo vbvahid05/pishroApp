@@ -1018,13 +1018,14 @@ public  function get_SubChassisParts (request $request)
       {
         $data = $request->all();
         $brandName= $data['brandName'];
-        $TypeName=$data['TypeName'];
+        $TypeId=$data['TypeName'];
+
          $val = \DB::table('stockroom_products')
               ->join('stockroom_products_brands AS brd', 'stockroom_products.stkr_prodct_brand', '=','brd.id')
               ->join('stockroom_products_types', 'stockroom_products.stkr_prodct_type', '=','stockroom_products_types.id')
               ->where('stockroom_products.deleted_flag', '=', 0)
               ->where('brd.stkr_prodct_brand_title', '=', $brandName)
-              ->where('stockroom_products_types.stkr_prodct_type_title', '=', $TypeName)
+              ->where('stockroom_products_types.id', '=', $TypeId)
               //->select('*')
               ->select('*', \DB::raw('stockroom_products.id AS productID '))
               ->orderBy('stockroom_products.id', 'desc')

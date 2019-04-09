@@ -634,11 +634,11 @@ class Warranty
         {
             $i++;
             $FaultySerial=$FaultySerial.'<tr class=\'serialRow\'>';
-            $FaultySerial=$FaultySerial.'<td style="text-align: center">'.$i.'</td>';
-            $FaultySerial=$FaultySerial.'<td style="direction: ltr;text-align: left">'.$s->Brand .$s->Type .$s->prodctTitle. '</td>';
-            $FaultySerial=$FaultySerial.'<td style="direction: ltr; text-align: center">'.$s->snA.'<br/>'.$s->snB.'</td>';
-            $FaultySerial=$FaultySerial.'<td style="text-align: center">'.$s->partnumber.'</td>';
-            $FaultySerial=$FaultySerial.'<td style="text-align: center">1</td>';
+            $FaultySerial=$FaultySerial.'<td class="farsiNumber" style="text-align: center">'.$i.'</td>';
+            $FaultySerial=$FaultySerial.'<td class="fontSizeSM" style="direction: ltr;text-align: left"><span class="fontSizeSM">'.$s->Brand .$s->Type .$s->prodctTitle. '</span></td>';
+            $FaultySerial=$FaultySerial.'<td class="fontSizeSM" style="direction: ltr; text-align: center"><span class="fontSizeSM">'.$s->snA.'<br/>'.$s->snB.'</span></td>';
+            $FaultySerial=$FaultySerial.'<td class="fontSizeSM" style="text-align: center"><span class="fontSizeSM">'.$s->partnumber.'</span></td>';
+            $FaultySerial=$FaultySerial.'<td class="farsiNumber" style="text-align: center">1</td>';
             $FaultySerial=$FaultySerial.'</tr>';
         }
 //-----------------------------------------
@@ -648,11 +648,11 @@ class Warranty
         {
             $i++;
             $AlterNativeSerials=$AlterNativeSerials.'<tr class=\'serialRow\'>';
-            $AlterNativeSerials=$AlterNativeSerials.'<td style="text-align: center">'.$i.'</td>';
-            $AlterNativeSerials=$AlterNativeSerials.'<td style="direction: ltr;text-align: left">'.$s->Brand .$s->Type .$s->prodctTitle. '</td>';
-            $AlterNativeSerials=$AlterNativeSerials.'<td style="direction: ltr; text-align: center">'.$this->get_alternativeSerialNumber($s->alternative_serial_ID).'</td>';
-            $AlterNativeSerials=$AlterNativeSerials.'<td style="text-align: center">'.$s->partnumber.'</td>';
-            $AlterNativeSerials=$AlterNativeSerials.'<td style="text-align: center">1</td>';
+            $AlterNativeSerials=$AlterNativeSerials.'<td class="farsiNumber" style="text-align: center">'.$i.'</td>';
+            $AlterNativeSerials=$AlterNativeSerials.'<td class="fontSizeSM" style="direction: ltr;text-align: left"><span class="fontSizeSM">'.$s->Brand .$s->Type .$s->prodctTitle. '</span></td>';
+            $AlterNativeSerials=$AlterNativeSerials.'<td class="fontSizeSM" style="direction: ltr; text-align: center"><span class="fontSizeSM">'.$this->get_alternativeSerialNumber($s->alternative_serial_ID).'<span></span></td>';
+            $AlterNativeSerials=$AlterNativeSerials.'<td class="fontSizeSM" style="text-align: center"> <span class="fontSizeSM">'. $s->partnumber.'</span></td>';
+            $AlterNativeSerials=$AlterNativeSerials.'<td class="farsiNumber" style="text-align: center">1</td>';
             $AlterNativeSerials=$AlterNativeSerials.'</tr>';
         }
 //-----------------------------------------
@@ -663,11 +663,19 @@ class Warranty
         //LANG
 
         //Header
+        $dates= 'تاریخ : ' .'<span class="farsiNumber">'. $warrantyDelivery_date[0] .'/'. $warrantyDelivery_date[1] .'/'. $warrantyDelivery_date[2] .'</span>';
+
+        if (strlen($warrantyID)==1) $warrantyID='00'.$warrantyID;
+        if (strlen($warrantyID)==2) $warrantyID='0'.$warrantyID;
+        $warranty_year=substr($warrantyDelivery_date[0],2,2);
+        $warranty_Number= 'EPG-'.$warranty_year.'-'.($warrantyID) ;
+
         $header='<img src="img/sr_print_logo.png"  >
-                 <div class="HeaderStyle  farsiFont" >
-                     تاریخ :
+                 <div class="HeaderStyle  farsiFont" >                      
+                    '.$dates.'
                      <br>
-                     شماره 
+                     شماره:
+                     '.$warranty_Number.'
                      <br>
                      پیوست : ندارد
                      <br>                                  
@@ -692,19 +700,19 @@ class Warranty
                         <td>
                         تاريخ صورتجلسه :    
                         </td>
-                        <td>$stockRqstRegistration_date[2] / $stockRqstRegistration_date[1] / $stockRqstRegistration_date[0]</td>                        
+                        <td class=\"farsiNumber\">$stockRqstRegistration_date[2] / $stockRqstRegistration_date[1] / $stockRqstRegistration_date[0]</td>                        
                     </tr>
                     
                      <tr>
                         <td>
                            تاريخ شروع گارانتي :
                         </td>
-                        <td>$stockRqstDelivery_date[2] / $stockRqstDelivery_date[1] / $stockRqstDelivery_date[0]</td>
+                        <td class=\"farsiNumber\">$stockRqstDelivery_date[2] / $stockRqstDelivery_date[1] / $stockRqstDelivery_date[0]</td>
                         <td>
                         مدت گارانتي :    
                         </td>
                         <td>
-                        $duration_of_warranty
+                       <span class=\"farsiNumber\"> $duration_of_warranty</span>
                         ماه
                         </td>                        
                     </tr>
@@ -713,11 +721,11 @@ class Warranty
                         <td>
                           شماره صورتجلسه تحويل گارانتي :
                         </td>
-                        <td>$warrantyID</td>
+                        <td>$warranty_Number</td>
                         <td>
-                        تاريخ تحويل :   
+                        تاريخ تحويل گارانتی:    
                         </td>
-                        <td>$warrantyDelivery_date[2] / $warrantyDelivery_date[1] / $warrantyDelivery_date[0]</td>                        
+                        <td class=\"farsiNumber\">$warrantyDelivery_date[2] / $warrantyDelivery_date[1] / $warrantyDelivery_date[0]</td>                        
                     </tr>
                     
                     <tr>
@@ -798,12 +806,15 @@ class Warranty
                 {
                     font-family: Koodak !important;
                 } 
+             .fontSizeSM{
+                 padding-left:5px  !important;padding-right:5px!important;font-size:12px;
+             }   
               .HeaderStyle
               {
                 text-align: right;
                 padding-left: 60px;
                 margin-top: 10px;                
-                width: 100px;
+                width: 130px;
                 float: left;
               }  
               table 
@@ -864,7 +875,7 @@ EOT;
         } catch (\MpdfException $e) {
             return $e->getMessage();
         }
-        $file_name='www';
+        $file_name='PishroWarranty_';
         $file_name =$file_name.$data.'.pdf';
         try {
              $mpdf->Output($file_name, 'D');

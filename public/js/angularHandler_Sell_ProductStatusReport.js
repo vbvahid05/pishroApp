@@ -212,11 +212,14 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $(".TypeID").addClass("loading");
             $( ".TypeID  .text.ng-binding" ).empty();
             $( ".product_prtNum  .text.ng-binding" ).empty();
-            BrandName=$scope.search.prodct_Brand;
+            //alert($scope.brandsID);
+           // BrandName=$scope.search.prodct_Brand;
+            BrandName=$scope.brandsID;
             var arg={qmode:"GetTyps",brandName:BrandName};
             $http.post('/services/sell/getBrandSTypeSTitles',arg).then
             (function xSuccess(response) {
                 typesData=response.data;
+                console.log(response.data)
                 $scope.product_Type=typesData;
                 $(".TypeID").removeClass("loading");
             }),function xError(response)
@@ -233,12 +236,14 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 brandName:$scope.brandsID,
                 TypeName:$scope.TypeID,
             }
+            console.log(Args);
             $http.post('/services/SellController/getProductName',Args).then
             (function xSuccess(response){
                 $(".product_prtNum ").removeClass("loading");
                 console.log(response.data);
                 data=response.data;
                 $scope.products=response.data;
+
             }), function xError(response)
             {
                 //toast_alert(response.data,'danger');
@@ -2719,9 +2724,20 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 {
 
                     productData=response.data;
-                    $scope.echo_Brand=$scope.brandsID;
-                    $scope.echo_Type=$scope.TypeID;
-                    $scope.echo_ProductTitle= productData[0].stkr_prodct_title;
+                    if (productData.length)
+                    {
+                        $scope.echo_Brand=$scope.brandsID;
+                        $scope.echo_Type=$scope.TypeID;
+                        console.log(productData);
+                        $scope.echo_ProductTitle= productData[0].stkr_prodct_title;
+                    }
+                    else
+                    {
+                        $scope.echo_Brand='کالایی انتخاب نشده است ';
+                        $scope.echo_Type='';
+                        $scope.echo_ProductTitle=' ';
+                    }
+
 
                 }), function xError(response)
                 {

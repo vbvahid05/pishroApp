@@ -168,7 +168,7 @@ class All_Status_Repost
     {
         try
         {
-            $types=\DB::table('stockroom_products_types AS types')
+          return  $types=\DB::table('stockroom_products_types AS types')
                 ->join('stockroom_products_brands AS brands','brands.id','=','types.stkr_prodct_type_In_brands')
                 ->where('brands.stkr_prodct_brand_title', '=', $brand_name)
                 ->select(\DB::raw('types.id AS id , types.stkr_prodct_type_title AS name '))
