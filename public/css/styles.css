@@ -2312,3 +2312,17 @@ i.fa.fa-key.changepass {
     padding: 0px !important;
 }
 
+.pointerGreen {
+    cursor: pointer;
+    font-size: 20px !important;
+}
+.pointerGreen:hover {
+    color: green;
+}
+.pointerRed {
+    cursor: pointer;
+    font-size: 20px !important;
+}
+.pointerRed:hover {
+    color: red;
+}

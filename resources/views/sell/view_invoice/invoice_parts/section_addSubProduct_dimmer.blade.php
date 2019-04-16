@@ -118,9 +118,12 @@ $All_PartNumbers =Invoice::All_PartNumbers();
                 <div  class="subProductContainer">
                     <i ng-show="waitForLoading" class="waitForLoading fa fa-spinner fa-spin" style="left: 50%;top: 40%;border-radius: 100px;"> </i>
                     <div ng-repeat="SP in subProduct" class="row serialsInDB col-md-12">
-                        <div class="col-md-1 pull-right">
-                            <i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc"></i>
-                            <i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc"></i>
+                        <div  class="col-md-1 pull-right">
+                            <span ng-show="SP.sid_position || SP.sid_position==0">
+                                <i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc pointerGreen"></i>
+                                @{{ SP.sid_position }}
+                                <i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc pointerRed"></i>
+                            </span>
                         </div>
                         <div class="col-md-2 pull-right">
                             @{{ SP.stkr_prodct_partnumber_commercial }}

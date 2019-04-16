@@ -350,6 +350,8 @@ class Invoice
                                                 invoice_detail.sid_qty           AS  qty,
                                                 products.stkr_prodct_price       AS  EPL_price                                                                                                
                                                 '))
+                         ->orderBy('sid_position', 'ASC')
+                         ->orderBy('invoice_detail.id', 'ASC')
                          ->get();
             $ArrayCount=$ArrayCount+count($invoiceSubProductDate);
 
@@ -857,6 +859,23 @@ public function add_subProduct_in_Invoice   ($request)
                                 ->where('sid_parent', '=',$parentProduct_id )
                                 ->count();
 
+
+
+       try{
+         $check=sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID )
+        ->where('sid_parent', '=',$parentProduct_id )
+        ->orderBy('sid_position','DESC')
+        ->firstOrFail();
+        $last=$check['sid_position'];
+       }catch (\Exception $exception){
+           $last =0; $count=0;
+       }
+        if ( ($last == $count) || $count==0 )
+            $count++;
+        else if ($count < $last)
+            $count=$last+1;
+
+
     $stockrequest = new  sell_invoice_detail;
     $stockrequest->sid_invoice_id = $invoiceID;
     $stockrequest->sid_product_id = $SubproductID;
@@ -872,7 +891,6 @@ public function add_subProduct_in_Invoice   ($request)
 
     public function get_subProduct_list_invoice   ($request)
     {
-
         $data=$request->all();
         $invoiceID=$data['invoiceID'];
         $parentProduct_id= $data['parentProduct_id'];
@@ -884,6 +902,8 @@ public function add_subProduct_in_Invoice   ($request)
             ->where('invoice_details.sid_invoice_id', '=', $invoiceID)
             ->where('invoice_details.sid_parent', '=', $parentProduct_id)
             ->orderBy('sid_position', 'ASC')
+            ->orderBy('invoice_details.id', 'ASC')
+
             ->get();
 
     }
@@ -1085,44 +1105,70 @@ public function add_subProduct_in_Invoice   ($request)
 //           ->orderBy('sell_invoice_details.sid_product_id', 'desc')
             ->get();
     }
+
+      private function find_Position ($invoiceID ,$position ,$action){
+            $items = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+            ->where('sid_parent', '!=', null)
+             ->orderBy('sid_position' ,'ASC')
+            ->get();
+
+          for($i=0; $i<=count($items) ;$i++)
+          {
+              if ($items[$i]['sid_position']== $position) {
+                  if ($action =='up')
+                    return $items[$i-1]['sid_position'];
+                  else
+                      return $items[$i+1]['sid_position'];
+              }
+          }
+    }
 //--------------------
    public function changePosition ($req)
    {
         $doing =$req['doing'];
         $position = $req['position'];
-       $currentRecord = sell_invoice_detail::where('sid_position', '=',$position)->firstOrFail();
-       $currentRecordID=$currentRecord->id;
+        $invoiceID= $req['invoiceID'];
+        $currentRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                  ->where('sid_position', '=',$position)
+                                                  ->firstOrFail();
+        $currentRecordID=$currentRecord['id'];
         switch ($doing){
             case 'up' :
                //find Last record ID
-               $lastPosition= $position-1;
                try{
-                   $lastRecord = sell_invoice_detail::where('sid_position', '=',$lastPosition)->firstOrFail();
-                   $lastRecordID=$lastRecord->id;
+                     $lastPosition= $this->find_Position($invoiceID ,$position ,'up');
+                     $lastRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                      ->where('sid_position', '=',$lastPosition)->firstOrFail();
+                 echo   $lastRecordID=$lastRecord['id'];
+
+                    sell_invoice_detail::where('id', '=', $currentRecordID)
+                       ->update(array('sid_position' => $lastPosition));
+
+                    sell_invoice_detail::where('id', '=', $lastRecordID)
+                       ->update(array('sid_position' => $position));
+                  // return 1;
                }
                catch (\Exception $exception) { return $exception->getCode(); }
-
                // change position
-                sell_invoice_detail::where('id', '=', $currentRecordID)
-                    ->update(array('sid_position' => $lastPosition));
 
-                sell_invoice_detail::where('id', '=', $lastRecordID)
-                    ->update(array('sid_position' => $position));
 
             break;
             case 'down' :
-                $NextPosition= $position+1;
                 try{
-                    $NextRecord = sell_invoice_detail::where('sid_position', '=',$NextPosition)->firstOrFail();
+
+                    $NextPosition= $this->find_Position($invoiceID ,$position ,'down');
+                    $NextRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                     ->where('sid_position', '=',$NextPosition)->firstOrFail();
                     $NextRecordID=$NextRecord->id;
+                    sell_invoice_detail::where('id', '=', $currentRecordID)
+                        ->update(array('sid_position' => $NextPosition));
+                    sell_invoice_detail::where('id', '=', $NextRecordID)
+                        ->update(array('sid_position' => $position));
+                    return 1;
                 }
                 catch (\Exception $exception) { return $exception->getCode(); }
                 // change position
-                sell_invoice_detail::where('id', '=', $currentRecordID)
-                    ->update(array('sid_position' => $NextPosition));
-                sell_invoice_detail::where('id', '=', $NextRecordID)
-                    ->update(array('sid_position' => $position));
-                return 1;
+
             break;
         }
    }

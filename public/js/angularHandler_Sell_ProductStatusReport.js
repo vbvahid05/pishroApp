@@ -1966,12 +1966,15 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 Action:'changePosition',
                 doing: doing,
                 recordID : recordID,
+                invoiceID:$scope.invoiceID,
                 position:value
             };
             $http.post('/services/sell/changePosition',Args).then(
                 function xSuccess(response)
                 {
+                    console.log(response.data);
                     get_subProduct_Data($scope.invoiceID,$scope.parentProduct_id);
+
                 }),
                 function xError(response)
                 {
