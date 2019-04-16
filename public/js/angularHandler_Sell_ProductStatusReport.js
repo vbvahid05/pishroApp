@@ -890,30 +890,46 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         });
 
 
+
+        $("#selectProductByPartNum_SubProductB").change(function () {
+
+            selectAproduct();
+        })
+
         $("#selectProductByPartNum_SubProduct").change(function() {
 
-                if ($scope.mode==1)
-                    productIDx=$scope.ProductID;
-                else
-                    productIDx=$("#selectProductByPartNum_SubProduct").val();
-
-                var args= {
-                    Action:"select_product_by_partNum",
-                    Product_id:productIDx
-                };
-                $http.post('/services/sell/select_product_by_partNum',args).then
-                (function xSuccess(response) {
-                    $scope.product_details=true;
-                    Rdata=response.data[0];
-                    $scope.echo_Brand_B=Rdata['brand'];
-                    $scope.echo_Type_B=Rdata['type'];
-                    $scope.echo_ProductTitle_B=Rdata['prodct_title'];
-                    $scope.echo_EPLPrice_B=Rdata['price'];
-                    //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
-                    // reset();
-                }), function xError(response)
-                {}
+            selectAproduct();
         });
+
+        function selectAproduct () {
+
+            if ($scope.mode==1)
+                productIDx=$("#selectProductByPartNum_SubProductB").val();
+            else
+                productIDx=$("#selectProductByPartNum_SubProduct").val();
+
+
+            var args= {
+                Action:"select_product_by_partNum",
+                Product_id:productIDx
+            };
+
+            console.log(args);
+
+            $http.post('/services/sell/select_product_by_partNum',args).then
+            (function xSuccess(response) {
+                $scope.product_details=true;
+                Rdata=response.data[0];
+                $scope.echo_Brand_B=Rdata['brand'];
+                $scope.echo_Type_B=Rdata['type'];
+                $scope.echo_ProductTitle_B=Rdata['prodct_title'];
+                $scope.echo_EPLPrice_B=Rdata['price'];
+                //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
+                // reset();
+                console.log(response.date);
+            }), function xError(response)
+            {}
+        }
 
         //-0-------------------------------
 
@@ -1116,11 +1132,9 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 SubproductID:productIDx,
                 Qty:$scope.Subproduct_QTY ,
             };
-
-            console.log(args);
-
             $http.post('/services/sell/addSubProductTo_Invoice',args).then
             (function xSuccess(response) {
+                console.log(response.date);
                 get_subProduct_Data($scope.invoiceID,$scope.parentProduct_id);
                 $scope.product_details=false;
             }), function xError(response)
@@ -1945,7 +1959,27 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.Show_Selected_invoice(invoiceID);
         }
 
+        //-------------------
 
+        $scope.changePosition=function (doing ,recordID,value) {
+            var Args= {
+                Action:'changePosition',
+                doing: doing,
+                recordID : recordID,
+                position:value
+            };
+            $http.post('/services/sell/changePosition',Args).then(
+                function xSuccess(response)
+                {
+                    get_subProduct_Data($scope.invoiceID,$scope.parentProduct_id);
+                }),
+                function xError(response)
+                {
+                    toast_alert(response.data,'warning');
+                }
+
+
+        }
 //---------------###############################---------------
         //@@@ stock Request @@@
 //---------------###############################---------------

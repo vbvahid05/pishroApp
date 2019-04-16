@@ -853,12 +853,17 @@ public function add_subProduct_in_Invoice   ($request)
     $SubproductID= $data['SubproductID'];
     $Qty= $data['Qty'];
     //----------------------
+    $count = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID )
+                                ->where('sid_parent', '=',$parentProduct_id )
+                                ->count();
+
     $stockrequest = new  sell_invoice_detail;
     $stockrequest->sid_invoice_id = $invoiceID;
     $stockrequest->sid_product_id = $SubproductID;
     $stockrequest->sid_qty = $Qty;
     $stockrequest->sid_Unit_price=0;
     $stockrequest->sid_parent=$parentProduct_id;
+    $stockrequest->sid_position=$count;
     $stockrequest->deleted_flag=0;
     $stockrequest->archive_flag=0;
     $stockrequest->save();
@@ -878,6 +883,7 @@ public function add_subProduct_in_Invoice   ($request)
 
             ->where('invoice_details.sid_invoice_id', '=', $invoiceID)
             ->where('invoice_details.sid_parent', '=', $parentProduct_id)
+            ->orderBy('sid_position', 'ASC')
             ->get();
 
     }
@@ -1079,7 +1085,47 @@ public function add_subProduct_in_Invoice   ($request)
 //           ->orderBy('sell_invoice_details.sid_product_id', 'desc')
             ->get();
     }
+//--------------------
+   public function changePosition ($req)
+   {
+        $doing =$req['doing'];
+        $position = $req['position'];
+       $currentRecord = sell_invoice_detail::where('sid_position', '=',$position)->firstOrFail();
+       $currentRecordID=$currentRecord->id;
+        switch ($doing){
+            case 'up' :
+               //find Last record ID
+               $lastPosition= $position-1;
+               try{
+                   $lastRecord = sell_invoice_detail::where('sid_position', '=',$lastPosition)->firstOrFail();
+                   $lastRecordID=$lastRecord->id;
+               }
+               catch (\Exception $exception) { return $exception->getCode(); }
 
+               // change position
+                sell_invoice_detail::where('id', '=', $currentRecordID)
+                    ->update(array('sid_position' => $lastPosition));
+
+                sell_invoice_detail::where('id', '=', $lastRecordID)
+                    ->update(array('sid_position' => $position));
+
+            break;
+            case 'down' :
+                $NextPosition= $position+1;
+                try{
+                    $NextRecord = sell_invoice_detail::where('sid_position', '=',$NextPosition)->firstOrFail();
+                    $NextRecordID=$NextRecord->id;
+                }
+                catch (\Exception $exception) { return $exception->getCode(); }
+                // change position
+                sell_invoice_detail::where('id', '=', $currentRecordID)
+                    ->update(array('sid_position' => $NextPosition));
+                sell_invoice_detail::where('id', '=', $NextRecordID)
+                    ->update(array('sid_position' => $position));
+                return 1;
+            break;
+        }
+   }
 //--------------------
     public  function  getPDFStings($req)
     {

@@ -228,6 +228,11 @@ public function Invoice(request $request ,$function)
             $SearchInvoice= new Invoice();
             return $SearchInvoice->SearchInvoice($request);
             break;
+
+        case 'changePosition':
+             $changePosition= new Invoice();
+            return $changePosition->changePosition($request);
+            break;
     }
 
 }

@@ -77,7 +77,7 @@ $All_PartNumbers =Invoice::All_PartNumbers();
                                     </select>
                                 </div>
                                 <div class="col-md-3 pull-right">
-                                    <select id="ProductID" ng-model="ProductID" ng-change="selectProductByPartNum_SubProduct()"  class="ProductID brandsID ui search selection dropdown search-select" name="OrderStatus"  >
+                                    <select id="selectProductByPartNum_SubProductB"  ng-model="ProductID"  class="ProductID brandsID ui search selection dropdown search-select" name="OrderStatus"  >
                                         <option ng-repeat="Product in Products" value="@{{Product.id}}"  >
                                             @{{Product.prodct_title}}
                                         </option>
@@ -106,17 +106,25 @@ $All_PartNumbers =Invoice::All_PartNumbers();
                 </div>
                 <!------ ------>
                     <div  class="row  col-md-12" style="background: #f4f4f4;height: 25px;padding-top: 5px;">
+                        <div class="col-md-1 pull-right"> </div>
                         <div class="col-md-2 pull-right">PartNumber</div>
                         <div class="col-md-5 pull-right">product Title</div>
                         <div class="col-md-1 pull-right"> qty </div>
                         <div class="col-md-2 pull-right">EPL Price</div>
-                        <div class="col-md-1 pull-right"></div>
+                        <div class="col-md-1 pull-right"> </div>
+
                     </div>
 
                 <div  class="subProductContainer">
                     <i ng-show="waitForLoading" class="waitForLoading fa fa-spinner fa-spin" style="left: 50%;top: 40%;border-radius: 100px;"> </i>
                     <div ng-repeat="SP in subProduct" class="row serialsInDB col-md-12">
-                        <div class="col-md-2 pull-right">@{{ SP.stkr_prodct_partnumber_commercial }}</div>
+                        <div class="col-md-1 pull-right">
+                            <i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc"></i>
+                            <i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc"></i>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            @{{ SP.stkr_prodct_partnumber_commercial }}
+                        </div>
                         <div class="col-md-5 pull-right">@{{ SP.stkr_prodct_title }}</div>
                         <div class="col-md-1 pull-right">
                             <span id="QtyValueLabel@{{ SP.id }}" class="QtyValueLabel" ng-click="showUpdateInput(SP.id)">
@@ -128,6 +136,7 @@ $All_PartNumbers =Invoice::All_PartNumbers();
                             </span>
                         </div>
                         <div class="col-md-2 pull-right">@{{ SP.stkr_prodct_price }}</div>
+
                         <div class="col-md-1 pull-right">
                             <i class="fa fa-trash gray " aria-hidden="true" ng-click="delete_subProduct_inVoice(SP.invoice_detailsID)"></i>
                          </div>
