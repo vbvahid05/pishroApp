@@ -1,6 +1,6 @@
 
 
-var app = angular.module('Sell_ProductStatusReport_App', ['simplePagination']);
+var app = angular.module('Sell_ProductStatusReport_App', ['simplePagination' ,'psi.sortable']  );
 
 app.directive('onFinishRender', ['$timeout', '$parse', function ($timeout, $parse) {
     return {
@@ -1189,6 +1189,19 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
+
+//--------------------------------------
+        $scope.updateSortableList=function() {
+            var args= {
+                Action:"updateSortableList",
+                data:$scope.subProduct,
+            };
+            $http.post('/services/sell/updateSortableList',args).then
+            (function xSuccess(response) {
+               console.log(response.data);
+            }), function xError(response)
+            {}
+        }
 //--------------------------------------
         $scope.closeSubProductDimmer =function()
         {
@@ -1852,8 +1865,8 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     {
                         toast_alert('Qty Updated','success');
                         $scope.addSubproduct(invoice_ID,parentProduct_id)
-                        // $("#QtyValueLabel"+pid).removeClass('hide');
-                        // $("#QtyValueInput"+pid).addClass('hide');
+                        $("#QtyValueLabel"+pid).removeClass('hide');
+                        $("#QtyValueInput"+pid).addClass('hide');
                     }
                 }),
                 function xError(response)
@@ -2340,6 +2353,9 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.changeQTY=function(productID,OldQTY,StockRequestID,sr_type,index)
         {
             alert('The Codes are Commented ');
+          //  var newQTY = prompt(insetNewQTY_message, OldQTY);
+
+
             //
             //  var newQTY = prompt(insetNewQTY_message, OldQTY);
             //  if (newQTY < OldQTY && newQTY != null)
@@ -2597,6 +2613,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //---------------
         $scope.insertStockRequestToDB=function()
         {
+
             date= jalali_to_gregorian(parseInt($scope.zyears),parseInt($scope.zMonths),parseInt($scope.zdays));
             conf_date=date[0]+"-"+date[1]+"-"+date[2];
             $scope.sr_deliveryDate=conf_date;
@@ -2620,6 +2637,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
                 $http.post('/services/sell/addStockRequestToDB',Args).then(function xSuccess(response)
                 {
+                   console.log(response.data);
                     $scope.echo_StockRequestID=response.data;
                     stockRequestProducts=[]; //reset SubProducts Array List
                     getList_StockRequest(0); //Refresh StockRequest List ...

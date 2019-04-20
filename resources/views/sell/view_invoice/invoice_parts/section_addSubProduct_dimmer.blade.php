@@ -115,36 +115,66 @@ $All_PartNumbers =Invoice::All_PartNumbers();
 
                     </div>
 
-                <div  class="subProductContainer">
-                    <i ng-show="waitForLoading" class="waitForLoading fa fa-spinner fa-spin" style="left: 50%;top: 40%;border-radius: 100px;"> </i>
-                    <div ng-repeat="SP in subProduct" class="row serialsInDB col-md-12">
-                        <div  class="col-md-1 pull-right">
-                            <span ng-show="SP.sid_position || SP.sid_position==0">
-                                <i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc pointerGreen"></i>
-                                @{{ SP.sid_position }}
-                                <i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc pointerRed"></i>
-                            </span>
-                        </div>
-                        <div class="col-md-2 pull-right">
-                            @{{ SP.stkr_prodct_partnumber_commercial }}
-                        </div>
-                        <div class="col-md-5 pull-right">@{{ SP.stkr_prodct_title }}</div>
-                        <div class="col-md-1 pull-right">
-                            <span id="QtyValueLabel@{{ SP.id }}" class="QtyValueLabel" ng-click="showUpdateInput(SP.id)">
+                <div class="row  col-md-12" ng-mouseleave="updateSortableList()">
+                    <ul psi-sortable=""  ng-model="subProduct" style="list-style: none">
+                        <li ng-repeat="SP in subProduct track by $index" class="row moveable">
+                            <div class="col-md-1 pull-right">
+                                <span ng-show="SP.sid_position || SP.sid_position==0">
+                                    <i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc pointerGreen"></i>
+
+                                    <i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc pointerRed"></i>
+                                </span>
+                            </div>
+                            <div class="col-md-2 pull-right">  @{{ SP.stkr_prodct_partnumber_commercial }} </div>
+                            <div class="col-md-5 pull-right"> @{{ SP.stkr_prodct_title }} </div>
+                            <div class="col-md-1 pull-right">
+                                <span id="QtyValueLabel@{{ SP.id }}" class="QtyValueLabel" ng-click="showUpdateInput(SP.id)">
                                 @{{ SP.sid_qty }}
-                            </span>
-                            <span id="QtyValueInput@{{ SP.id }}" class="EditQtyValue hide">
+                                </span>
+                                <span id="QtyValueInput@{{ SP.id }}" class="EditQtyValue hide">
                                 <input   id="QtyValue@{{ SP.id }}" type="number"   value="@{{ SP.sid_qty }}" class="form-control  ">
                                 <i class="fa fa-check saveCheckSmall" aria-hidden="true" ng-click="updateNewSubProductQty(SP.id,invoiceID,parentProduct_id)"></i>
                             </span>
-                        </div>
-                        <div class="col-md-2 pull-right">@{{ SP.stkr_prodct_price }}</div>
+                            </div>
+                            <div class="col-md-2 pull-right"> @{{ SP.stkr_prodct_price }} </div>
+                            <div class="col-md-1 pull-right"> <i class="fa fa-trash gray " aria-hidden="true" ng-click="delete_subProduct_inVoice(SP.invoice_detailsID)"></i> </div>
 
-                        <div class="col-md-1 pull-right">
-                            <i class="fa fa-trash gray " aria-hidden="true" ng-click="delete_subProduct_inVoice(SP.invoice_detailsID)"></i>
-                         </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
+
+
+
+                {{--<div  class="subProductContainer">--}}
+                    {{--<i ng-show="waitForLoading" class="waitForLoading fa fa-spinner fa-spin" style="left: 50%;top: 40%;border-radius: 100px;"> </i>--}}
+                    {{--<div ng-repeat="SP in subProduct" class="row serialsInDB col-md-12">--}}
+                        {{--<div  class="col-md-1 pull-right">--}}
+                            {{--<span ng-show="SP.sid_position || SP.sid_position==0">--}}
+                                {{--<i ng-click="changePosition('up',SP.id ,SP.sid_position)" class="fa fa-sort-asc pointerGreen"></i>--}}
+                                {{--@{{ SP.sid_position }}--}}
+                                {{--<i ng-click="changePosition('down',SP.id ,SP.sid_position)"  class="fa fa-sort-desc pointerRed"></i>--}}
+                            {{--</span>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-2 pull-right">--}}
+                            {{--@{{ SP.stkr_prodct_partnumber_commercial }}--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-5 pull-right">@{{ SP.stkr_prodct_title }}</div>--}}
+                        {{--<div class="col-md-1 pull-right">--}}
+                            {{--<span id="QtyValueLabel@{{ SP.id }}" class="QtyValueLabel" ng-click="showUpdateInput(SP.id)">--}}
+                                {{--@{{ SP.sid_qty }}--}}
+                            {{--</span>--}}
+                            {{--<span id="QtyValueInput@{{ SP.id }}" class="EditQtyValue hide">--}}
+                                {{--<input   id="QtyValue@{{ SP.id }}" type="number"   value="@{{ SP.sid_qty }}" class="form-control  ">--}}
+                                {{--<i class="fa fa-check saveCheckSmall" aria-hidden="true" ng-click="updateNewSubProductQty(SP.id,invoiceID,parentProduct_id)"></i>--}}
+                            {{--</span>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-2 pull-right">@{{ SP.stkr_prodct_price }}</div>--}}
+
+                        {{--<div class="col-md-1 pull-right">--}}
+                            {{--<i class="fa fa-trash gray " aria-hidden="true" ng-click="delete_subProduct_inVoice(SP.invoice_detailsID)"></i>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
                 </div>
             <div class="col-md-12">

@@ -24,27 +24,41 @@ class New_Edit_stockRequest
 
     public function Add_to_DB($request)
     {
-        $val= new sell_stockrequest ($request->all());
-        $val->sel_sr_type	=$request->sr_type;
-        $val->sel_sr_custommer_id=$request->sr_custommer_id;
-        $val->sel_sr_pre_contract_number =$request->sr_preFaktorNum;
-        $val->sel_sr_delivery_date =$request->sr_deliveryDate;
-        $val->sel_sr_registration_date=date("Y/m/d");
-        $val->sel_sr_warranty_priod=$request->WarrantyPriod;
-        $val->sel_sr_lock_status =0;
-        $val->deleted_flag=0;
-        $val->archive_flag=0;
-        if ($val->save())
-        {
-            $LastID = \DB::table('sell_stockrequests')
-                ->orderBy('sell_stockrequests.id', 'desc')
-                ->select('id', \DB::raw('sell_stockrequests.id AS stockrequestsID '))
-                ->limit(1)
-                ->get();
-            return  $stockrequestsID= $LastID[0]->id;
+       $now= date("Y-m-d H:i:s");
 
+        //ignore Daubell  push new
+       $count = sell_stockrequest::where('sel_sr_type', '=', $request->sr_type)
+                                  ->where('sel_sr_custommer_id', '=', $request->sr_custommer_id )
+                                  ->where('sel_sr_pre_contract_number', '=', $request->sr_preFaktorNum )
+                                  ->where('sel_sr_delivery_date', '=', $request->sr_deliveryDate )
+//                                  ->where('sel_sr_registration_date', '=', date("Y/m/d") )
+                                  ->where('sel_sr_warranty_priod', '=', $request->WarrantyPriod )
+                                  ->where('sel_sr_lock_status', '=', 0 )
+                                  ->where('created_at', '=',$now )
+                                ->count();
+        //......................................
+        if ($count==0){
+            $val= new sell_stockrequest ($request->all());
+            $val->sel_sr_type	=$request->sr_type;
+            $val->sel_sr_custommer_id=$request->sr_custommer_id;
+            $val->sel_sr_pre_contract_number =$request->sr_preFaktorNum;
+            $val->sel_sr_delivery_date =$request->sr_deliveryDate;
+            $val->sel_sr_registration_date=date("Y/m/d");
+            $val->sel_sr_warranty_priod=$request->WarrantyPriod;
+            $val->sel_sr_lock_status =0;
+            $val->deleted_flag=0;
+            $val->archive_flag=0;
+            if ($val->save())
+            {
+                $LastID = \DB::table('sell_stockrequests')
+                    ->orderBy('sell_stockrequests.id', 'desc')
+                    ->select('id', \DB::raw('sell_stockrequests.id AS stockrequestsID '))
+                    ->limit(1)
+                    ->get();
+                return  $stockrequestsID= $LastID[0]->id;
+
+            }
         }
-
     }
 
 
@@ -55,7 +69,6 @@ class New_Edit_stockRequest
             $nextStep=false;
             $data = $request->all();
             $StockRequestType = $data['StockRequestType'];  //Ghatii=0  TaaHodi =1
-
 
             $val= new sell_stockrequests_detail ();
             $val->ssr_d_stockrequerst_id= $data["StockRequestID"];

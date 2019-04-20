@@ -198,6 +198,12 @@ public function Invoice(request $request ,$function)
             return $allInvoiceDate->get_subProduct_list_invoice($request);
             break;
 
+        case 'updateSortableList' :
+
+            $updateSortableList= new Invoice();
+            return $updateSortableList->updateSortableList($request);
+        break;
+
         case 'delete_subProduct_from_list_invoice':
 
             $allInvoiceDate= new Invoice();

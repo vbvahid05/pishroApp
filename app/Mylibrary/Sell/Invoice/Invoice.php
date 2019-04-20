@@ -908,6 +908,20 @@ public function add_subProduct_in_Invoice   ($request)
 
     }
 //-------------------------------
+    public  function  updateSortableList ($req)
+    {
+        $data=$req['data'];
+        $i=0;
+        foreach ($data as $r)
+        {
+            $i++;
+            sell_invoice_detail::where('sid_invoice_id', '=', $r['sid_invoice_id'])
+                                ->where('sid_product_id', '=',$r['id'])
+                                ->update(array('sid_position' => $i));
+        }
+        return 'OK';
+    }
+//-------------------------------
     public function delete_subProduct_from_list_invoice($request)
     {
         $data=$request->all();

@@ -2326,3 +2326,13 @@ i.fa.fa-key.changepass {
 .pointerRed:hover {
     color: red;
 }
+.moveable
+{
+    cursor: move;
+}
+.ng-scope .step {
+    height: 145px !important;
+}
+i.fa.fa-trash.gray {
+    cursor: pointer !important;
+}
