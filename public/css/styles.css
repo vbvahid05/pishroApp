@@ -2336,3 +2336,32 @@ i.fa.fa-key.changepass {
 i.fa.fa-trash.gray {
     cursor: pointer !important;
 }
+
+.Wcusstommers .btn-group.bootstrap-select {
+    margin: 0;
+    width: 100% !important;
+}
+.InvoicePartNumbers .btn-group.bootstrap-select {
+    margin: 0;
+}
+
+.field .btn-group.bootstrap-select {
+    margin: 0;
+    width: 82.5% !important;
+    margin-bottom: 10px !important;
+}
+
+.header_lable {
+    text-align: center;
+    margin: auto !important;
+    margin-top: 10px !important;
+    display: block;
+    width: 100px;
+    height: 25px;
+
+}
+.field.header_lable label {
+    color: #000 !important;
+    font-weight: bold !important;
+}
+

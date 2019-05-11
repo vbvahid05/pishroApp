@@ -115,7 +115,7 @@ $All_PartNumbers =Invoice::All_PartNumbers();
 
                     </div>
 
-                <div class="row  col-md-12" ng-mouseleave="updateSortableList()">
+                <div class="row  col-md-12" >
                     <ul psi-sortable=""  ng-model="subProduct" style="list-style: none">
                         <li ng-repeat="SP in subProduct track by $index" class="row moveable">
                             <div class="col-md-1 pull-right">

@@ -270,10 +270,10 @@ $all_Custommers= Invoice::Get_all_Custommers();
                 </table>
              </div> <!-- foum fields -->
              <!-- Select A  Product  -->
+            {{--@@--}}
              <div ng-show="selectProductBar" class="selectProduct two fields" >
                <!-- -->
                <div class="field">
-
                    <div id="ui-button-puttingtoStock" class="ui buttons">
                      <button id="mode0" class="ui positive button" ng-click="fiald_mode(0)">{{ Lang::get('labels.add_by_partNumber') }}</button>
                      <div class="or"></div>
@@ -285,7 +285,6 @@ $all_Custommers= Invoice::Get_all_Custommers();
                          <!-- Option Mode 0  -->
                          <div class="field" ng-show="mode0_fiald"> <!--Show mode 0-->
 
-
                              {{--<select focus-me="focusInput" id="product_partnumbers" ng-model="product_partnumbers" ng-change="selectProduct(0)"  class="partnumbers_id ui search selection dropdown search-select" name="OrderStatus"  >--}}
                                {{--<option ng-repeat="LOPN in ListOfPartNumbers" value="@{{LOPN.productID}}" >--}}
                                  {{--@{{LOPN.Partnumber}}--}}
@@ -293,17 +292,11 @@ $all_Custommers= Invoice::Get_all_Custommers();
                              {{--</select>--}}
                             <div class="All_PartNumbersInSubProduct">
                                 <label>{{ Lang::get('labels.partNumber') }}</label>
-
                                 {{--ng-model="product_partnumbers" ng-change="selectProduct(0)"--}}
-
                                 <select class="selectpicker" data-live-search="true" focus-me="focusInput" id="product_partnumbers_SR"   name="OrderStatus" >
                                  <?php echo $All_PartNumbers ?>
                              </select>
-
                             </div>
-
-
-
                          </div>
                         <!-- Option Mode 1  -->
                         <div class="field">
@@ -338,9 +331,9 @@ $all_Custommers= Invoice::Get_all_Custommers();
                <!-- -->
 
              </div>
-               <!-- -->
+            {{--@@  --}}
+            <!-- -->
              <div ng-show="resultProduct" class="OrderStatus  two fields" style="height:  60px;">
-
                <div class="field" style="width:  45%;">
                 <span > @{{echo_ProductTitle}} </span>
                 <label>  @{{echo_Brand}}  @{{echo_Type}}  @{{echo_typeCat | pTypeCat}}</label>
@@ -362,9 +355,14 @@ $all_Custommers= Invoice::Get_all_Custommers();
                      </button>
                  </div>
               </div>
-         </form>
+             </div>
+            <!-- -->
+        </form>
       </div>
 <!-- -->
+
+
+
        <div class="tabelContainer" ng-show="tabelContainer">
            <div class="btn refreshBtn" ng-click="ReloadData(echo_StockRequestID)">
                <i class="fa fa-refresh"></i>
@@ -382,13 +380,24 @@ $all_Custommers= Invoice::Get_all_Custommers();
          <!-- -->
          <div ng-show="Loading_waitForDB" class="Loading_waitForDB Loading_waitForDB_Small" style="margin-right: -15px;height: 50%!important;"></div>
          <!--- -->
-         <div ng-repeat="SRPA in stockRequestProductsArray" class="divTableRowB col-md-12 ng-scope" id="DivRow@{{$index}}">
-           <div class="col-md-1 pull-right"  > @{{$index+1}} </div>
+
+
+        {{--<div class="col-md-12">--}}
+           {{--<ul psi-sortable="" ng-model="stockRequestProductsArray" >--}}
+               {{--<li ng-repeat="SRPA in stockRequestProductsArray track by $index" class="row">--}}
+                   {{--<div class="col-md-1 pull-right"> @{{$index+1}}  </div>--}}
+                   {{--<div class="col-md-2 pull-right"> @{{ SRPA.SubRow }}   @{{SRPA.product_partnumbers}}   </div>--}}
+               {{--</li>--}}
+           {{--</ul>--}}
+        {{--</div>--}}
+
+
+        <ul  psi-sortable=""  ng-model="stockRequestProductsArray"  class="col-md-12 ng-scope" style="list-style: none">
+          <li ng-repeat="SRPA in stockRequestProductsArray track by $index"   class="divTableRowB row moveable " id="DivRow@{{$index}}" >
+           <div class="col-md-1 pull-right"  > @{{$index+1}}  </div>
            <div class="col-md-2 pull-right"  >
-
                <span  ng-click="showSubchassisParts(SRPA.productID,SRPA.StockRequestRowID,echo_StockRequestID ,SRPA.product_partnumbers ,SRPA.ProductTitle ,$index,sr_type)">
-
-                   <i ng-show="SRPA.typeCat == 3"   style="font-size:30px;padding-top: 15px;" class="fa fa-puzzle-piece" aria-hidden="true"></i>
+                   <i ng-show="SRPA.typeCat == 3"   style=" cursor: pointer; font-size:30px;padding-top: 15px;" class="fa fa-puzzle-piece" aria-hidden="true"></i>
                </span>
            </div>
            <div class="col-md-2 pull-right"> @{{ SRPA.SubRow }}   @{{SRPA.product_partnumbers}}  </div>
@@ -397,7 +406,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
            <div class="col-md-1 pull-right" ng-click="changeQTY(SRPA.productID ,SRPA.product_QTY,echo_StockRequestID,sr_type ,$index)"> @{{SRPA.product_QTY}}  </div>
            <div class="col-md-1  pull-right"  ng-click="Delete_product_of_Request($index,sr_type,echo_StockRequestID,SRPA.productID, SRPA.StockRequestRowID,sr_type)"> <i class="fa fa-trash gray " aria-hidden="true"></i> </div>
          {{--<!-- -->--}}
-
+{{--<div class="row " style="height: 10px ;background: yellow"></div>--}}
              <div class="col-md-12"  id="NgRow@{{SRPA.productID}}" style="margin-top: 10px;border-top: 2px solid #c0bdbd;">
                <div ng-repeat="Sub_Chassis_part in SRPA.Sub_Chassis_part"  class="">
                    <div id="sub_row_list@{{Sub_Chassis_part[0].id}}" class="Row col-md-12 Sub_Chassis_part" >
@@ -438,8 +447,11 @@ $all_Custommers= Invoice::Get_all_Custommers();
                 {{--</div>--}}
 
              </div>
-         </div>
-       </div>
+
+            </li>
+        </ul>
+
+  </div>
 <!-- -->
        <div class="col-md-12">
          <div class="col-md-4"> </div>

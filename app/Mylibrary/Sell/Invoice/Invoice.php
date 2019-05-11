@@ -1194,433 +1194,67 @@ public function add_subProduct_in_Invoice   ($request)
       return  $si_pdf_settings= $model['si_pdf_settings'];
     }
 //--------------------
+
     public function getPdf($data)
     {
+        $style=new pdf_Style();
+        $HFD= new pdf_headerFooterDesc($data);
+        $pdfSetting= new pdf_setting($data);
 
-        $InvoiceInfo=$data[0][0];
-        $productList=$data[1];
-        $invoiceTolalInfo=$data[2];
-        $invoice_Setting=json_decode($InvoiceInfo->si_pdf_settings,'true');
-         $dateConvert=new PublicClass();
-        //--------------------------------
-        $ee="";
-     // Defult Value
-        $stng_customerName=false;
-        $stng_changeDirection=false;
-        $stng_header_To_InvoiceBody=0;
-        $space_date_To_sellerInfo=0;
-        $space_seller_To_InvoiceTable=0;
-        $space_InvoiceTable_To_DescriptionTable=0;
-        $stng_signature_Table_height=90;
-        $stng_mainTableFontSize=12;
-        $stng_Desc_fontSize=12;
+        $mainTite=" پیش فاکتور فروش";
+        //Header
+            $Header=$HFD->get_header();
+        // Main Data
+            $Invoice_info =$HFD->get_invoice_info();
+            $MainData=$HFD->get_MainTable();
+        // Descriptions
+            $Descriptions=$HFD->get_desc();
+        //Footer
+            $footer =$HFD->get_footer();
 
+        $marginTop=50;
+        $space=1;
 
-        if (count($invoice_Setting))
-        {
-            foreach ($invoice_Setting as $IVsetting)
-            {
-                foreach ($IVsetting AS $key=>$value)
-                {
-                    switch ($key)
-                    {
-                        case 'stng_customerName':
-                            $stng_customerName=true;
-                            break;
-                        case 'stng_changeDirection':
-                            $stng_changeDirection=true;
-                            break;
-                        case 'stng_header_To_InvoiceBody':
-                            $stng_header_To_InvoiceBody=$value;
-                            break;
+        if ($pdfSetting->stng_mainTableFontSize())
+              $stng_mainTableFontSize=$pdfSetting->stng_mainTableFontSize();
+         else $stng_mainTableFontSize=12;
 
-                        case 'stng_date_To_sellerInfo':
-                             $space_date_To_sellerInfo=$value;
-                            break;
-                        case 'stng_seller_To_InvoiceTable':
-                             $space_seller_To_InvoiceTable=$value;
-                        break;
-                        case 'stng_InvoiceTable_To_DescriptionTable':
-                             $space_InvoiceTable_To_DescriptionTable=$value;
-                        break;
+        $pdfStyle= $style->pdf_Css_Style($stng_mainTableFontSize);
 
-                        case 'stng_signature_Table_height':
-                            $stng_signature_Table_height=$value;
-                            break;
-                        case 'stng_mainTableFontSize':
-                            $stng_mainTableFontSize=$value;
-                            break;
-                        case 'stng_Desc_fontSize':
-                            $stng_Desc_fontSize=$value;
-                            break;
+        $Separator='<div  style="height: '.$space.'cm " > </div>';
+        $Seprator_date_To_sellerInfo ='<div  style="height: '.$pdfSetting->space_date_To_sellerInfo() .'cm " > </div>';
+        $Seprator_seller_To_InvoiceTable='<div  style="height: '.$pdfSetting->space_seller_To_InvoiceTable().'cm " > </div>';
+        $Seprator_InvoiceTable_To_DescriptionTable='<div  style="height: '. $pdfSetting->space_InvoiceTable_To_DescriptionTable() .'cm " ></div>';
 
-
-
-                    }
-                }
-            }
-        }
-
-   $custommerName=($stng_customerName ?  '-'.$InvoiceInfo->cstmr_name.' '.$InvoiceInfo->cstmr_family : "");
-   $direction=($stng_changeDirection ? 'rtldir' : 'ltrdir');
-   $space=0; //Separator Spacing in pixel
-   $marginTop = ($stng_header_To_InvoiceBody ? $stng_header_To_InvoiceBody : 30);
-
-
-
-
-        //--------------------------------
-
-        $CreatedBy= $invoiceTolalInfo['CreatedBy'];
-        $verified_By="";
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        $pageNum= '<div style="text-align: left; margin-top: -50px">'.'   صفحه  {PAGENO}از{nb}'.'</div>';
-        $header='<img src="img/sr_print_logo.png"> '.$pageNum;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        $officeAddress=\Lang::get('labels.officeAddress'); $webSiteURL=\Lang::get('labels.webSiteURL'); $Tel=\Lang::get('labels.Tel');
-        $invoiceSeller=\Lang::get('labels.invoiceSeller');  $invoiceSalesExpert=\Lang::get('labels.invoiceSalesExpert');$invoiceVerifiedBy=\Lang::get('labels.invoiceVerifiedBy');
-
-     $footer='<table style="width: 100% ;   border: 1px solid gray;"  >
-                <tr >
-                    <td class="invoice_Creator_Cells" style="vertical-align:top ;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSalesExpert.' : '.$CreatedBy.'</td>
-                    <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceVerifiedBy.':'.$verified_By.'</td>
-                    <td class="invoice_Creator_Cells" style="vertical-align:top;border-left: 1px solid gray" height="'.$stng_signature_Table_height.'">'.$invoiceSeller.':</td>
-                </tr>                      
-               </table>                                                                     
-               <img style="margin-top: 10px " src="img/footer.png">';
         $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
             1,  9,   'P');
-        //        $mpdf->SetFont('garuda');
-        //LANG
-       $codeghtesadi=\Lang::get('labels.codeghtesadi'); $codeEghtesadiPishro= \Lang::get('labels.codeEghtesadiPishro');$date= \Lang::get('labels.date'); $Number=\Lang::get('labels.Number');$invoiceSalesExpert=\Lang::get('labels.invoiceSalesExpert');$invoice_seller=\Lang::get('labels.invoice_seller');$address2=\Lang::get('labels.address2');$Orders_row=\Lang::get('labels.Orders_row');$Product_title=\Lang::get('labels.Product_title');$QTY=\Lang::get('labels.QTY');$invoice_Unit_price=\Lang::get('labels.invoice_Unit_price');$invoice_Total_Price=\Lang::get('labels.invoice_Total_Price');$invoice_Info=\Lang::get('labels.invoice_Info');$tel=\Lang::get('labels.tel');
-       $Totalsummery=\lang::get('labels.Totalsummery');$invoice_Discount= \lang::get('labels.invoice_Discount');$invoice_tax=\lang::get('labels.invoice_tax');$invoice_Total=\lang::get('labels.invoice_Total');$invoice_Description	=\Lang::get('labels.invoice_Description');$invoice_warranty	=\Lang::get('labels.invoice_warranty');$invoice_Payment 	=\Lang::get('labels.invoice_Payment');$invoice_deliveryDate 	=\Lang::get('labels.invoice_deliveryDate');$invoice_Info 		=\Lang::get('labels.invoice_Info');
-        $TaxTitle=\lang::get('labels.TaxTitle');$validityDuration=\lang::get('labels.validityDuration');$invoice_delivery_Type=\Lang::get('labels.invoice_delivery_Type');
-       //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        $rowID=1;
-        $mainTable='';
-        $BGcolor='#f4f4f4';
-        $r='';
-  $mainTable=$mainTable.'<tr colspan="6" style="background:black"> s</tr>';
-        for ($i = 0; $i <= count($productList)-1; $i++)
-        {
-            $SubProductData=$productList[$i]['SubProductData'];
-//            $rowID=$i+1;
-            $mainTable=$mainTable.'<tr colspan="6" style="background:black"> s</tr>';
-            if ($BGcolor=='#f4f4f4') $BGcolor='#fff'  ;  else $BGcolor='#fff';
-            $mainTable=$mainTable.'<tr class="" style="background:'.$BGcolor.'">';
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="text-align: center; !important;">'.$rowID++.'</td>';
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre '.$direction.'">'.$productList[$i]['product_Title'].'</td>';
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="text-align: center; !important;">'.$productList[$i]['qty'].'</td>';
-
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="border-top: 1px solid #000;  text-align: center; !important;" >'.PublicController::CurencySeprator($productList[$i]['Unit_price']).'</td>';
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="border-top: 1px solid #000; text-align: center; !important;">'.PublicController::CurencySeprator($productList[$i]['Unit_price'] * $productList[$i]['qty'] ).'</td>';
-
-            $mainTable=$mainTable.'<td class="cellBorder fontSizre ltrdir" style="text-align: center; !important;">'.$productList[$i]['partNumber'].'</td>';
-            $mainTable=$mainTable.'</tr>';
-
-            if (count($SubProductData)>0 )
-            {
-                for ($G = 0; $G <= count($SubProductData)-1; $G++)
-                {
-
-                    $mainTable=$mainTable.'<tr style="background:'.$BGcolor.'">';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="text-align: center; !important;">'.$rowID++.'</td>';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre '.$direction.'" >'.$SubProductData[$G]->product_Title.'</td>';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber"  style="text-align: center; !important;">'.$SubProductData[$G]->qty.'</td>';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="text-align: center;"> 0 </td>';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre farsiNumber" style="text-align: center;"> 0 </td>';
-                        $mainTable=$mainTable.'<td class="cellBorder fontSizre   ltrdir" style="text-align: center; !important;">'.$SubProductData[$G]->partNumber.'</td>';
-                    $mainTable=$mainTable.'</tr>';
-                }
-
-            }
-
-//            for ($i = 0; $i <= count($SubProductData); $i++)
-//            {
-//                $mainTable=$mainTable.'<tr>';
-//                $mainTable=$mainTable.'<td>'.$SubProductData[$i]->partNumber.'</td>';
-//                $mainTable=$mainTable.' </tr>';
-//            }
-
-        }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        $n2s=new NumberToString();
-        if ($InvoiceInfo->si_tax_setting_status) // Add TAX
-        {
-            $tax_val=($invoiceTolalInfo['TotalPrice']-$InvoiceInfo->si_Discount)*0.09;
-            $totalwithtax=$invoiceTolalInfo['TotalPrice']+$tax_val;
-        }
-        else
-        {
-            $tax_val=0;
-            $totalwithtax=$invoiceTolalInfo['TotalPrice']-$InvoiceInfo->si_Discount;
-        }
-
-        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        if ($InvoiceInfo->si_warranty != NULL)
-        {
-            $show_invoice_warranty= $invoice_warranty.$InvoiceInfo->si_warranty.'<br/>';
-        }
-
-        if ($InvoiceInfo->si_Payment != NULL)
-        {
-            $show_invoice_Payment=$invoice_Payment.$InvoiceInfo->si_Payment.'<br/>';
-        }
-
-        if ($InvoiceInfo->si_deliveryDate != NULL)
-        {
-            $show_invoice_si_deliveryDate=$invoice_deliveryDate.$InvoiceInfo->si_deliveryDate.'<br/>';
-        }
-
-        if ($InvoiceInfo->si_delivery_type != NULL)
-        {
-            $show_invoice_si_delivery_type=$invoice_delivery_Type.':'.$InvoiceInfo->si_delivery_type.'<br/>';
-        }
-
-        if ($InvoiceInfo->si_validityDuration != NULL)
-        {
-            $show_invoice_validityDuration=$validityDuration.':'.$InvoiceInfo->si_validityDuration.'<br/>';
-        }
-
-
-        if ($InvoiceInfo->si_warranty != NULL ||
-            $InvoiceInfo->si_Payment != NULL ||
-            $InvoiceInfo->si_deliveryDate != NULL  ||
-            $InvoiceInfo->si_delivery_type != NULL  ||
-            $InvoiceInfo->si_validityDuration != NULL)
-            $show_invoice_Description ='<span style="padding-bottom: 20px;font-weight: bold; text-decoration: underline ;">'.$invoice_Description.'</span><br/>';
-
-        if ($InvoiceInfo->si_Description !=null)
-        {
-            $show_Description='
-                <hr/>
-             <div style="font-weight: bold;width: 20% ;text-decoration: underline">'.$invoice_Info.': </div>
-                <div style="width: 100% ;text-align: justify ;font-size: '.$stng_Desc_fontSize.'px ">'.$InvoiceInfo->si_Description.'</div>
-            ';
-        }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-
-
-        $invoice_Result='
- 
-     <tr>
-        <td colspan="6" style="height: 3px;">  </td>
-      </tr>
-     <tr>
-                        <td  style="vertical-align:top" colspan="3" rowspan="5">'.
-                            $show_invoice_Description.
-                            '<div style="height: 3mm !important;color: #fff;font-size: 5px">.</div>'.
-                            $show_invoice_warranty.
-                            $show_invoice_Payment.
-                            $show_invoice_si_deliveryDate.
-                            $show_invoice_si_delivery_type.
-                            $show_invoice_validityDuration.
-                        '</td>
-                        <td class="cellBorder">'.$Totalsummery.'</td>
-                        <td class="cellBorder farsiNumber txt_center">'.PublicController::CurencySeprator($invoiceTolalInfo['TotalPrice']).' </td><td></td>
-                    </tr>
-                    <tr>
-                        
-                        <td class="cellBorder">'.$invoice_Discount.'</td>
-                        <td class="cellBorder farsiNumber txt_center">'.PublicController::CurencySeprator($InvoiceInfo->si_Discount) .'</td><td></td>
-                    </tr>
-                    <tr>                        
-                        <td class="cellBorder">'.$TaxTitle .'  </td>
-                        <td class="cellBorder farsiNumber txt_center" >'.
-                            PublicController::CurencySeprator($tax_val ).
-
-                        ' </td><td></td>
-                    </tr>
-                    <tr>                        
-                        <td class="cellBorder" style="background: black  !important;color: #fff !important;">'.$invoice_Total.' </td>
-                        <td class="cellBorder farsiNumber txt_center" >'.PublicController::CurencySeprator($totalwithtax) .'</td>
-                        <td></td>
-                    </tr>
-                     <tr>                        
-                        <td colspan="4" > '.  $n2s->digit_to_persain_letters($totalwithtax).' '.$InvoiceInfo->sic_Currency.''.' </td>
-                        
-                        
-                    </tr>
-   
-    ';
-
-
-     $invoice_information_Descriptions='
-    
-     <table  style=" width: 100%;">
-                         '.$show_invoice_Description.'   
-                         '.$show_invoice_warranty.'                    
-                         '.$show_invoice_Payment.' 
-                         '.$show_invoice_si_deliveryDate.' 
-                         '.$show_invoice_validityDuration.'                                                                               
-                </table>
-               
-                '.$show_Description.'
-               
-     ';
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.....
-        $Separator='<div  style="height: '.$space.'cm " > </div>';
-        $Seprator_date_To_sellerInfo ='<div  style="height: '. $space_date_To_sellerInfo.'cm " > </div>';
-        $Seprator_seller_To_InvoiceTable='<div  style="height: '.  $space_seller_To_InvoiceTable.'cm " > </div>';
-        $Seprator_InvoiceTable_To_DescriptionTable='<div  style="height: '.  $space_InvoiceTable_To_DescriptionTable.'cm " ></div>';
-        $Jdate=$dateConvert->gregorian_to_jalali_byString($InvoiceInfo->si_date);
-        $html =
+$html =
 <<<EOT
-        <!DOCTYPE>
-        <html>
-            <head>
-                <style>
-                body {
-                direction: rtl;                
-                font-family: byekan !important;            
-                } 
-                .font12
-                {
-                 font-size: 12px !important;
-                }
-                
-                .fontSizre
-                {
-                font-size: $stng_mainTableFontSize px !important;
-                }
-                
-                .font13
-                {
-                font-size: 13px !important;
-                }
-                .farsiNumber
-                {
-                font-family: Koodak !important;
-                }
-                
-                .ltrdir
-                {
-                    direction: ltr !important;
-                    padding-left:5px;
-                }
-                .rtldir
-                {
-                    direction: rtl !important;
-                    padding-left:5px;
-                    text-align: right!important;
-                } 
-                
-                .officeAddress
-                {
-                    font-size: 13.5px;
-                    text-align: center;
-                    padding-top: 5px;
-                    padding-bottom: 5px;                    
-                }
-                .invoice_Creator
-                {
-                
-                    display: block;
-                    margin:auto;
-                    font-size: 13px;
-                    font-weight: bold;  
-                    text-align: right;
-                    border-top: 1px dotted lightgrey;
-                    border-bottom: 1px dotted lightgrey;
-                    padding-top: 10px;
-                    padding-bottom: 10px;    
-                    color: gray;
-                }
-                .invoice_Creator_Cells{
-                    width:33.33% !important;
-                    font-size: 13px;
-                    font-weight: bold;  
-                    color: gray;
-                }
-                
-                table {
-                border-collapse: collapse;
-                }
-                
-                .trMain {
-                border: 1px solid black !important;
-                }
-                
-                .cellBorder
-                {
-                 border: 1px solid black ;
-                }
-                .sepratBordr
-                {
-                    border: 1px solid red;
-                    left: 0; 
-                    position: absolute;
-                    display: block;
-                }    
-                .txt_center
-                {
-                text-align: center;
-                }   
-                </style>
-            </head>
-            <body>  
-            $s     
-            $Separator 
-           <h4 style="font-family: byekan; text-align: center ;font-size: 20px"> 
-            پیش فاکتور فروش
-            </h4>
-            $Separator
-                <div style="margin-top: -30px" class="row">
-                    <div style="width: 60%; float: right;"> </div>
-                    <div style="width: 20%; float: left;" >  
-                        <div> </div>                      
-                        <div> $date  : <span  class="farsiNumber"> $Jdate[0]/$Jdate[1]/$Jdate[2] </span> </div>
-                        <div > $Number  :  $InvoiceInfo->si_Alias_id </div>                      
-                    </div>                
-                </div>  
-                <hr/>  
-                 $Seprator_date_To_sellerInfo
-                    <table class="table" style="width: 100%;font-family: vYekan">
-                    <tr  style="border-bottom: 1px solid">
-                        <td style="font-weight: bold">$invoice_seller  : </td>
-                        <td>$InvoiceInfo->org_name    $custommerName  </td>
-                        <td style="font-weight: bold">$codeghtesadi : </td>
-                        <td class="farsiNumber">$InvoiceInfo->org_codeeghtesadi </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold">$address2 : </td>
-                        <td>$InvoiceInfo->org_address </td>
-                        <td style="font-weight: bold" >$tel : </td>
-                        <td class="farsiNumber">$InvoiceInfo->org_tel</td>
-                    </tr>
-                </table>                                
-                 <hr/> 
-                  $Seprator_seller_To_InvoiceTable
-                 <table class="table" border="0.2" style="width: 100%;">
-                    <tr style="background:lightgray;color:white !important;">
-                        <th width="5%">$Orders_row</th>
-                        <th width="38%">$Product_title</th>
-                        <th width="5%">$QTY</th>
-                        <th  width="16%"  style="text-align: center">$invoice_Unit_price ($InvoiceInfo->sic_Currency)</th>
-                        <th width="19%"  style="text-align: center" >$invoice_Total_Price ($InvoiceInfo->sic_Currency)</th>
-                        <th width="17%">$invoice_Info</th>
-                    </tr>
-                   
-                    $mainTable                    
-                    $invoice_Result                                        
-                    </table>
-                    $Seprator_InvoiceTable_To_DescriptionTable
-                    $invoice_information_Descriptions  
-                     $Separator                                                    
-                  </table>                                                                                                             
-            </body>
-        </html>
+            <!DOCTYPE>
+            <html>
+                <head>
+                    $pdfStyle;
+                </head>
+                <body> 
+                      <hr>                                        
+                      $Invoice_info
+                      <hr> 
+                      $Seprator_seller_To_InvoiceTable
+                     <table class="table" border="0.2" style="width: 100%;">                   
+                        $MainData                                                                                                                                  
+                        $Descriptions   
+                      </table>                                                    
+                </body>
+            </html>
 EOT;
-        $mpdf->SetHTMLHeader($header);
+        $mpdf->SetHTMLHeader($Header);
         $mpdf->SetHTMLFooter($footer);
         $mpdf->AddPage(); // force pagebreak
         $mpdf->WriteHTML($html);
-
-        $file_name=$InvoiceInfo->si_Alias_id ;
-        if ($InvoiceInfo->org_name !=null) $file_name =$file_name.'_'.$InvoiceInfo->org_name.'.pdf';
+        $InvInfo=$data[0][0];
+        $file_name=$InvInfo->si_Alias_id ;
+        if ($InvInfo->org_name !=null) $file_name =$file_name.'_'.$InvInfo->org_name.'.pdf';
         $mpdf->Output($file_name, 'D');
-
     }
 
 }

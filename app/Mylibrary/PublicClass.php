@@ -59,6 +59,7 @@ public static   function jalali_to_gregorian($jy,$jm,$jd,$mod=''){
     $date=$day.'/'.$month.'/'.$year;
     return $date;
   }
+
 //---------------------------------
 function gregorian_to_jalali_byString($date)
 {
@@ -118,8 +119,15 @@ function gregorian_to_jalali($gy,$gm,$gd,$mod=''){
     return $date;
   }
 //---------------------------------
+public   function ConvertStringDatePicker($stringDate){
+    $arDate= explode(",",$stringDate);
+    $y=$arDate[0];$yr=explode("{\"Year\":",$y); $year=$yr[1];
+    $m=$arDate[1]; $mn=explode("\"Month\":",$m); $month=$mn[1];
+    $d=$arDate[2];$dy=explode("\"Day\":",$d);  $day=$dy[1];
 
-
+    return $this->convert_jalali_to_gregorian($year,$month,$day );
+}
+//---------------------------------
   public static function get_Table_Name($slug)
     {
   //     if ($slug == 'xeeoirder')

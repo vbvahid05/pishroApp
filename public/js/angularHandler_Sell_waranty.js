@@ -151,6 +151,8 @@ app.filter('pTypeCat', function() {
 app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$sce',
     function($scope, $http,Pagination,$filter,$sce )
     {
+
+        $scope.showAddnewSerial=false;
 //---------------###############################---------------
      function OnInit()
         {
@@ -257,6 +259,8 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
                     $scope.prodctTitle='';
                     $scope.snA='';
                     $scope.snB='';
+
+                    $scope.showAddnewSerial=false;
 
                     SelectDimmer('new');
                     $('#Dimmer_page').dimmer('show');
@@ -419,10 +423,10 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             $scope.ShowAlternativeSerialFlage=true;
             $('#alternative_serial'+id).val('');
         }
-///-------------------------------------------------
-        $("#SerialNumberList").change(function() {
 
-            SerialNumber = $("#SerialNumberList").val();
+///--------------------------------------------------
+
+        $scope.addSeralTolist =function (SerialNumber){
             $scope.Warranty_total_Period ='';
             $scope.warranty_start_date ='';
             $scope.WarrantyPeriod='';
@@ -466,6 +470,14 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
             }), function xError(response)
             {
             }
+        }
+
+///-------------------------------------------------
+        $("#SerialNumberList").change(function() {
+
+            SerialNumber = $("#SerialNumberList").val();
+            $scope.addSeralTolist(SerialNumber);
+
         });
 
 ///-------------------------------------------------
@@ -1470,6 +1482,83 @@ $scope.save_Update_Warranty=function (action) {
             }
 
         });
+
+//-----------------------------
+
+        $("#product_partnumbers_Finder").change(function(){
+
+            productID=$('#product_partnumbers_Finder').val();
+            var Args={
+                product_ID:productID,
+            }
+            $http.post('/services_sell/warranty/getProductByPartNumber',Args).then(function xSuccess(response)
+            {
+               data=response.data[0];
+               $scope.echo_ProductTitle= data['prodct_title'];
+               $scope.echo_Brand= data['brand_title'];
+               $scope.echo_Type= data['type_title'];
+               $scope.echo_typeCat= data['prodct_type_cat'];
+            }), function xError(response)
+            {
+                console.log(response.data);
+            }
+
+        });
+//-----------------------------
+          $scope.AddnewSerial=function()
+          {
+              $('#sr_custommer').val(0);
+              $("#warranty_register_date").val('');
+              $("#warranty_date").val('');
+              $("#warranty_delivery_date").val('');
+              $scope.warranty_duration='';
+              $('#product_partnumbers_Finder').val(0);
+              $scope.warranty_faulty_serialNumber_a='';
+              $scope.warranty_faulty_serialNumber_b='';
+              $scope.showAddnewSerial = !$scope.showAddnewSerial;
+          }
+//-----------------------------
+        $scope.addFaulty_serialNumber=function(){
+            var arg={
+                custommer:$('#sr_custommer').val(),
+                warranty_register_date: $("#warranty_register_date").attr("data-mdpersiandatetimepickerselecteddatetime")  ,
+                warranty_date :         $("#warranty_date").attr("data-mdpersiandatetimepickerselecteddatetime") ,
+                warranty_delivery_date: $("#warranty_delivery_date").attr("data-mdpersiandatetimepickerselecteddatetime") ,
+                warranty_duration: $scope.warranty_duration,
+                productID: $('#product_partnumbers_Finder').val(),
+                warranty_faulty_serialNumber_a: $scope.warranty_faulty_serialNumber_a ,
+                warranty_faulty_serialNumber_b: $scope.warranty_faulty_serialNumber_b
+
+            }
+            $http.post('/services_sell/warranty/addFaulty_serialNumber',arg).then(function xSuccess(response)
+            {
+                if (response.data=='snDuplicated')
+                    toast_alert('Duplicated ','warning');
+
+                if (response.data )
+                {
+                    console.log(response.data);
+                    toast_alert('added','success');
+                    $scope.showAddnewSerial=false;
+                    SerialNumber=response.data;
+                    $scope.addSeralTolist(SerialNumber[0]['id']);
+                    //............
+                    var myArray = {
+                        id : SerialNumber[0]['id'],
+                        snA: SerialNumber[0]['snA'],
+                        snB: SerialNumber[0]['snB'],
+                        prodctTitle:  SerialNumber[0]['prodctTitle'] ,
+                        partNumber :  SerialNumber[0]['partNumber']
+                    };
+                    $scope.SeriallistArray.push(myArray);
+                    //............
+                }
+            }), function xError(response)
+            {
+                console.log(response.data);
+            }
+        }
+//-----------------------------
 
         $scope.selectProduct=function(mode)
         {

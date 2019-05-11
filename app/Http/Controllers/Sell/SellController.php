@@ -340,6 +340,17 @@ public function Invoice(request $request ,$function)
                         return $data->WarrantyFullDelete($request);
                         break;
 
+                    case 'getProductByPartNumber':
+                        $data= new Warranty();
+                        return $data->getProductByPartNumber($request);
+                        break;
+
+                    case 'addFaulty_serialNumber':
+                        $data= new Warranty();
+                        return $data->addFaulty_serialNumber($request);
+                        break;
+
+
                 }
             break ;
 
@@ -404,6 +415,18 @@ public function Invoice(request $request ,$function)
                         $data= new New_Edit_stockRequest();
                         return $data->UpdateWarrantyDiuration($request);
                         break;
+                    case 'reIndex' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->reIndex($request);
+                        break;
+
+                    case 'updateSortableList_StockRequestArray' :
+
+                        $data= new New_Edit_stockRequest();
+                        return $data->updateSortableList_StockRequestArray($request);
+                        break;
+
+
 
 
                 }
@@ -822,6 +845,8 @@ public  function get_SubChassisParts (request $request)
                                  ')) */
                     ->where('stockrequests.id', '=', $StockRequestID)
                     ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
+                    ->orderBy('stockrequests_details.ssr_d_position', 'ASC')
+                    ->orderBy('stockrequests_details.id', 'ASC')
                    ->get();
         }
 
@@ -1090,6 +1115,8 @@ public  function get_SubChassisParts (request $request)
             ->where('stockrequests.id', '=', $id)
             ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
             ->select('*', \DB::raw('stockrequests_details.id AS stkreqdeta_id ,stockrequests.id AS stockrequestsid' ))
+            ->orderBy('stockrequests_details.ssr_d_position', 'ASC')
+            ->orderBy('stockrequests_details.id', 'ASC')
             ->get();
 
         $serialnumberData = \DB::table('stockroom_serialnumbers AS serialnumbers')

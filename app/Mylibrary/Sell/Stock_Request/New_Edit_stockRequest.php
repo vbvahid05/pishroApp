@@ -70,16 +70,20 @@ class New_Edit_stockRequest
             $data = $request->all();
             $StockRequestType = $data['StockRequestType'];  //Ghatii=0  TaaHodi =1
 
+            $count= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $data["StockRequestID"])
+            ->where('ssr_d_ParentChasis', '=', 0)
+            ->count();
+
             $val= new sell_stockrequests_detail ();
             $val->ssr_d_stockrequerst_id= $data["StockRequestID"];
             $val->ssr_d_product_id=$data["product_ID"];
             $val->ssr_d_qty=$data["product_QTY"];
             $val->ssr_d_ParentChasis =0;
             $val->ssr_d_status=0;
+            $val->ssr_d_position=++$count;
             $val->deleted_flag=0;
             $val->archive_flag=0;
             if ($val->save())
-
                 $nextStep=true;
             //---------------------
 
@@ -1313,6 +1317,8 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
             ->where('stockrequests_detail.ssr_d_stockrequerst_id', '=', $StockRequestID)
             ->where('stockrequests_detail.ssr_d_ParentChasis', '=', 0)
             ->select('*', \DB::raw( 'stockrequests_detail.id AS stckreqstDtlRowID'))
+            ->orderBy('stockrequests_detail.ssr_d_position', 'ASC')
+            ->orderBy('stockrequests_detail.id', 'ASC')
             ->get();
 
         $finalArray=array();
@@ -1405,5 +1411,36 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
         else
             return 'failed';
     }
+//----------------------------------------------------------------------------------
+    public function reIndex($req )
+    {
+        return 'blucked';
+       $StockRequestID=  $req['StockRequestID'];
+      $rows= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $StockRequestID)
+                          ->where('ssr_d_ParentChasis', '=', 0)
+                          ->get();
+      $i=1;
+      foreach ($rows AS $r)
+      {
 
+        echo  sell_stockrequests_detail::where('id', '=', $r->id)
+                                  ->update(array('ssr_d_position' => $i));
+          $i++;
+      }
+      return $i;
+    }
+//----------------------------------------------------------------------------------
+    public  function updateSortableList_StockRequestArray ($request)
+    {
+
+        $data=$request['data'];
+        $i=0;
+        foreach ($data as $r)
+        {
+            $i++;
+            sell_stockrequests_detail::where('id', '=', $r['StockRequestRowID'])
+                ->update(array('ssr_d_position' => $i));
+        }
+        return 'OK';
+    }
 }

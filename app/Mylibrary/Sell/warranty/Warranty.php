@@ -9,9 +9,12 @@
 namespace App\Mylibrary\Sell\warranty;
 
 use App\Mylibrary\PublicClass;
+use App\sell_stockrequest;
+use App\sell_stockrequests_detail;
 use App\sell_stockrequests_warrantie;
 use App\sell_stockrequests_warranties_detail;
 use App\sell_takeoutproduct;
+use App\stockroom_order;
 use App\stockroom_product_statu;
 use App\stockroom_serialnumber;
 use App\Stockroom_stock_putting_product;
@@ -396,8 +399,10 @@ class Warranty
                     //Serial Number Status ...................................................................................
                     stockroom_serialnumber::where('id', '=', $faulty_serial_ID)
                         ->update(array('stkr_srial_status' => 2)); //AS warranty
+
                     stockroom_serialnumber::where('id', '=', $AlternativeSerial_id)
                         ->update(array('stkr_srial_status' => 1)); //AS warranty
+
 
                     //update takeoutproducts ............................................................................
                     $takeoutproduct = sell_takeoutproduct::where('sl_top_product_serialnumber_id', '=', $faulty_serial_ID)
@@ -568,6 +573,267 @@ class Warranty
         return 'EP'.substr($year, 2, 2).'-'.$warrantyStockReqID;
     }
 
+
+//---------------------------------------------------
+    public function getProductByPartNumber($request){
+        $product_ID= $request['product_ID'];
+
+        return $r=  \DB::table('stockroom_products AS products')
+            ->join('stockroom_products_brands    AS brands', 'brands.id', '=', 'products.stkr_prodct_brand')
+            ->join('stockroom_products_types     AS types', 'types.id', '=', 'products.stkr_prodct_type')
+
+            ->where('products.id', '=', $product_ID)
+            ->where('products.deleted_flag', '=', 0)
+
+            ->select(\DB::raw('
+                              products.id   AS productID,
+                              products.stkr_prodct_partnumber_commercial   AS partnumber,
+                              products.stkr_prodct_title         AS  prodct_title, 
+                              products.stkr_prodct_type_cat      AS  prodct_type_cat,                                                                                   
+                              brands.stkr_prodct_brand_title     AS  brand_title,
+                              types.stkr_prodct_type_title       AS  type_title                                                            
+                              '))
+            ->get();
+
+    }
+
+    public function NextStep($step)
+    {
+        switch ($step){
+            case 3:
+                $step3=true;
+            break;
+        }
+
+    }
+    //---------------------------------------------------
+    public function rollback($step)
+    {
+        switch ($step){
+            case 3:
+                $step3=false;
+                break;
+        }
+    }
+    //---------------------------------------------------
+    public function addFaulty_serialNumber($requset){
+        $systemUserId=9;
+        $jconvert= new PublicClass;
+        $start= false;
+        $Allsteps= false;
+        $SerialIs=1;
+        $faulty_serialNumber_A= $requset['warranty_faulty_serialNumber_a'];
+        $faulty_serialNumber_B= $requset['warranty_faulty_serialNumber_b'];
+        $productID= $requset['productID'];
+        $custommer_id = $requset['custommer'];
+        $warranty_duration =$requset['warranty_duration'];
+        $warrantyRegisterDate = $jconvert->ConvertStringDatePicker($requset['warranty_register_date']);
+        $warrantyDate         = $jconvert->ConvertStringDatePicker($requset['warranty_date']);
+        $warrantyDeliveryDate = $jconvert->ConvertStringDatePicker($requset['warranty_delivery_date']);
+
+    // 1) -----------------------------------------------
+          //check for serial Availability
+         $F_SN_A= stockroom_serialnumber::where('stkr_srial_serial_numbers_a','=',$faulty_serialNumber_A)->count();
+         $F_SN_B= stockroom_serialnumber::where('stkr_srial_serial_numbers_b','=',$faulty_serialNumber_B)->count();
+         if ($F_SN_A==0 && $F_SN_B==0)
+             $start=true;
+         else
+             return 'snDuplicated';
+
+         if ($start)
+             {
+                 if ($faulty_serialNumber_B !=null) $SerialIs =2;
+        // 2) -----------------------------------------------
+             // add Product to Order  / Warranty_SYS
+            $order = stockroom_order::where('stk_ordrs_id_number', '=', 'Warranty_SYS')->firstOrFail();
+            $orderID= $order['id'];
+
+             $putting_product = new stockroom_stock_putting_product;
+             $putting_product->stkr_stk_putng_prdct_order_id = $orderID;
+             $putting_product->stkr_stk_putng_prdct_product_id = $productID;
+             $putting_product->stkr_stk_putng_prdct_partofchassis = null;
+             $putting_product->stkr_stk_putng_prdct_tech_part_numbers='';
+             $putting_product->stkr_stk_putng_prdct_qty=1;
+             $putting_product->stkr_stk_putng_prdct_serial_Number_id=1;
+             $putting_product->stkr_stk_putng_prdct_in_date=date("Y-m-d");
+             $putting_product->stkr_stk_putng_prdct_chassis_number =null;
+             $putting_product->stkr_stk_putng_prdct_SO_Number=null;
+             $putting_product->stkr_stk_putng_prdct_More_info=null;
+             $putting_product->deleted_flag=0;
+             $putting_product->	archive_flag=0;
+             if($putting_product->save())
+                 {$step3=true;
+                  $putting_productID = $putting_product['id'] ;
+                 }
+//                  else {
+//
+//                  };
+
+        // 3) -----------------------------------------------
+             //add Serial Number to seraiNumber Table , with flag =1  as a Burnt Serial
+                    try{
+                        $serialnumber = new stockroom_serialnumber;
+                        $serialnumber->stkr_srial_putting_product_id =$putting_productID;
+                        $serialnumber->stkr_srial_parent =null;
+                        $serialnumber->stkr_srial_serial_numbers_a =$faulty_serialNumber_A;
+                        $serialnumber->stkr_srial_serial_numbers_b =$faulty_serialNumber_B;
+                        $serialnumber->stkr_srial_more ='';
+                        $serialnumber->stkr_srial_status =1;
+                        $serialnumber->deleted_flag=0;
+                        $serialnumber->archive_flag=0;
+                        $serialnumber->save();
+                        $serialnumberID= $serialnumber['id'];
+                    }
+                    catch (\Exception $e){
+                        if(stockroom_stock_putting_product::find($putting_productID)->delete())
+                            echo $putting_productID.'Deleted';
+                    }
+
+//                      try{
+//                              $product_statu = stockroom_product_statu::where('sps_product_id', '=', $productID)->count();
+//                               if (!$product_statu){
+//                                    stockroom_product_statu::where('sps_product_id', '=', $productID)->firstOrFail();
+//                                   $product_statu = new stockroom_product_statu;
+//                                   $product_statu->sps_product_id = $productID;
+//                                   $product_statu->sps_available = 1;
+//                                   $product_statu->sps_reserved =null;
+//                                   $product_statu->sps_sold = null;
+//                                   $product_statu->sps_warranty=null;
+//                                   $product_statu->sps_borrowed=null;
+//                                   $product_statu->sps_Taahodi=null;
+//                                   $product_statu->deleted_flag=0;
+//                                   $product_statu->archive_flag=0;
+//                                   $product_statu->save();
+//                                     $product_statuID =$product_statu['id'];
+////                                   $product_statu['id'];
+//                               }
+//                               else
+//                               {
+//                                   $product_statuID= stockroom_product_statu::where('sps_product_id', '=', $productID)
+//                                       ->update(array('sps_available' => $product_statu['sps_available']));
+//
+//                               }
+//                          }catch (\Exception $e){
+//                              return $e->getMessage();
+//                          }
+
+              //   }
+        // 4) -----------------------------------------------
+             // add a request in StockRequest Table
+             try{
+                 $stockrequest = new sell_stockrequest;
+                 $stockrequest->sel_sr_type =0;
+                 $stockrequest->sel_sr_custommer_id =$custommer_id;
+                 $stockrequest->sel_sr_registration_date =$warrantyRegisterDate;
+                 $stockrequest->sel_sr_delivery_date =$warrantyDeliveryDate;
+                 $stockrequest->sel_sr_warranty_priod = $warranty_duration;
+                 $stockrequest->sel_sr_pre_contract_number ='';
+                 $stockrequest->sel_sr_lock_status =1;
+                 $stockrequest->sel_sr_pdf_setting =null;
+                 $stockrequest->sel_sr_created_by =$systemUserId;
+                 $stockrequest->deleted_flag=0;
+                 $stockrequest->archive_flag=0;
+                 $stockrequest->save() ;
+                 $stockrequestID= $stockrequest['id'] ;
+
+             }
+             catch (\Exception $e){
+
+                          if(stockroom_stock_putting_product::find($putting_productID)->delete())
+                              echo $putting_productID.'Deleted';
+                          if(stockroom_serialnumber::find($serialnumberID)->delete())
+                              echo $serialnumberID.'deleted ';
+                          return $e->getMessage();
+             }
+
+        // 5) -----------------------------------------------
+            //add this product to StockrequestDitals Table
+        try {
+            $stockrequests_details = new  sell_stockrequests_detail;
+            $stockrequests_details->ssr_d_stockrequerst_id = $stockrequestID;
+            $stockrequests_details->ssr_d_product_id = $productID;
+            $stockrequests_details->ssr_d_qty = 1;
+            $stockrequests_details->ssr_d_ParentChasis = 0;
+            $stockrequests_details->ssr_d_status = 0;
+            $stockrequests_details->ssr_d_position = null;
+            $stockrequests_details->deleted_flag =0;
+            $stockrequests_details->archive_flag = 0;
+            $stockrequests_details->save();
+            $stockrequestsROWid = $stockrequests_details['id'];
+        }
+        catch (\Exception $e){
+            if(stockroom_stock_putting_product::find($putting_productID)->delete())
+                echo $putting_productID.'Deleted';
+            if(stockroom_serialnumber::find($serialnumberID)->delete())
+                echo $serialnumberID.'deleted ';
+            if(sell_stockrequest::find($stockrequestID)->delete())
+                echo $stockrequestID.'deleted ';
+                 return $e->getMessage();
+        }
+
+
+
+        // 6)------------------------------------------------
+            //TackOut the Serial from TackoutProducts Table
+      try {
+          $takeoutproducts = new  sell_takeoutproduct;
+          $takeoutproducts->sl_top_stockrequest_id = $stockrequestID;
+          $takeoutproducts->sl_top_product_serialnumber_id = $serialnumberID;
+          $takeoutproducts->sl_top_productid = $productID;
+          $takeoutproducts->sl_top_StockRequestRowID = $stockrequestsROWid;
+          $takeoutproducts->deleted_flag = 0;
+          $takeoutproducts->archive_flag = 0;
+          $takeoutproducts->save();
+          $takeoutproductsID = $takeoutproducts['id'];
+
+          return $this->getProductBySerialNumberId($serialnumberID);
+         // return $serialnumberID;
+
+      }
+      catch (\Exception $e){
+          if(stockroom_stock_putting_product::find($putting_productID)->delete())
+              echo $putting_productID.'Deleted';
+          if(stockroom_serialnumber::find($serialnumberID)->delete())
+              echo $serialnumberID.'deleted ';
+          if(sell_stockrequest::find($stockrequestID)->delete())
+              echo $stockrequestID.'deleted ';
+          if(sell_stockrequests_detail::find($stockrequestsROWid)->delete())
+              echo $stockrequestsROWid.'deleted ';
+           return $e->getMessage();
+
+      }
+
+        // 7)------------------------------------------------
+            // Update Product Status Table
+
+        // 8)------------------------------------------------
+            //check for  all steps run Successfully
+
+                echo '1-'.$putting_productID .' / '.
+                     '2-'.$serialnumberID.' / '.
+//                     '3-'.$product_statuID.' / '.
+                     '4-'.$stockrequestID.' / '.
+                     '5-'.$stockrequestsROWid.' / '.
+                     '6-'.$takeoutproductsID.'';
+
+             }
+    }
+//---------------------------------------------------
+
+    public  function getProductBySerialNumberId($serialID){
+           return   \DB::table('stockroom_serialnumbers AS serialnumbers')
+                     ->join('stockroom_stock_putting_products    AS putting_products'  , 'putting_products.id'  , '=' ,'serialnumbers.stkr_srial_putting_product_id')
+                     ->join('stockroom_products    AS products'  , 'products.id'  , '=' ,'putting_products.stkr_stk_putng_prdct_product_id')
+                     ->where('serialnumbers.id', '=', $serialID)
+               ->select( \DB::raw('
+                              serialnumbers.id   AS  id,
+                              serialnumbers.stkr_srial_serial_numbers_a AS  snA ,      
+                              serialnumbers.stkr_srial_serial_numbers_b AS  snB ,    
+                              products.stkr_prodct_title AS  prodctTitle,   
+                              products.stkr_prodct_partnumber_commercial AS  partNumber                                                          
+                              '))
+                     ->get();
+    }
 
 //---------------------------------------------------
     public function getWarrantyPdf($data)

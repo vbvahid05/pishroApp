@@ -98,7 +98,7 @@
                   {{Lang::get('labels.print')}}
                 </a></td>
                 {{--@{{ row.qtyStatus}}--}}
-                <td> <div > @{{ row.totalQTY  }} /  @{{row.AvailableQTY}}</div></td>
+                <td> <div >  @{{ row.totalQTY  }} /  @{{row.AvailableQTY}}</div></td>
                <br/>
 
 

@@ -224,7 +224,7 @@
                         <div class="col-md-3">@{{echo_ProductTitle}}</div>
                         <div class="col-md-2">
                              {{ Lang::get('labels.QTY') }} :
-                            <input ng-model="product_QTY"  type="number" style="width: 70px !important;">
+                            <input ng-model="product_QTY"  type="number" style="width: 110px !important;">
                         </div>
                         <div class="col-md-4">
                             {{ Lang::get('labels.invoice_Unit_price') }} :

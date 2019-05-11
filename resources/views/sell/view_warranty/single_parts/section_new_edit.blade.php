@@ -1,6 +1,10 @@
 <?php
     use App\Mylibrary\Sell\Warranty\Warranty;
     $SerialNumbers =Warranty::GetSerialNumbers();
+
+use App\Mylibrary\Sell\Invoice\Invoice;
+$All_PartNumbers =Invoice::All_PartNumbers();
+$all_Custommers= Invoice::Get_all_Custommers();
 ?>
 
 @section('section_new_edit')
@@ -18,9 +22,12 @@
             <div ng-show="RequestMode" class="col-md-3">سریال نامبر معیوب را انتخاب نمایید</div>
             <div ng-show="RequestMode" class="col-md-4">
                 <div  class="select_CustommerList">
-                    <select class="selectpicker" data-live-search="true"  id="SerialNumberList"   >
+                    <select class="selectpicker" data-live-search="true"  id="SerialNumberList" >
                         <?php echo $SerialNumbers; ?>
                     </select>
+                    <span class="btn btn-default" ng-click="AddnewSerial()">
+                    درج سریال قدیمی در سامانه
+                    </span>
                 </div>
             </div>
            <div class="col-md-5" style="text-align: right;border-right: 1px dashed #e0e0e0;margin-bottom: 10px;">
@@ -34,7 +41,6 @@
                    @{{ custommerFamily }}
                    @{{ orgName }}
                <br/>
-
 
                <span ng-show="RegistrDate">
                     <i class="fa fa-calendar"></i>
@@ -214,6 +220,93 @@
           </div>
 
       </div>
-    </div>
+
+
+
+
+
+      <div ng-show="showAddnewSerial" class="addnewSerial" style="width: 100%;height: 640px;background: #fdfdfd;position: absolute;top:0px;right: 0;border-top: 5px  solid #efeff3;z-index: 100;">
+          <div class="col-md-8 col-md-offset-2 pull-right">
+          <div class="ui form">
+              <div class="field header_lable">
+                  <label>
+                        مشخصات حواله
+                  </label>
+              </div>
+                  <div class="field" >
+                      <label>تاریخ ثبت</label>
+                      <select class="selectpicker" data-live-search="true"  id="sr_custommer"  >
+                          <?php echo $all_Custommers; ?>
+                      </select>
+                  </div>
+                  <div class="field">
+                      <label>تاریخ ثبت</label>
+                      <input  ng-show="RequestMode" type="text" class="form-control" ng-model="warranty_register_date" id="warranty_register_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" required />
+                  </div>
+                  <div class="field">
+                      <label>تاریخ گارانتی</label>
+                      <input  ng-show="RequestMode" type="text" class="form-control" ng-model="warranty_date" id="warranty_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" required />
+                  </div>
+                  <div class="field">
+                      <label>تاریخ تحویل</label>
+                      <input  ng-show="RequestMode" type="text" class="form-control" ng-model="warranty_delivery_date" id="warranty_delivery_date" placeholder="تاریخ" data-mddatetimepicker="true" data-placement="right" data-englishnumber="true" required />
+                  </div>
+
+                  <div class="field">
+                      <label>مدت گارانتی</label>
+                      <input class="form-control" type="number" ng-model="warranty_duration" id="warranty_period">
+                  </div>
+
+              <div class="field header_lable">
+                  <label>
+                      جستجوی کالا
+                  </label>
+              </div>
+          </div>
+
+
+              <div ng-showX="resultProduct" class="OrderStatus " style="height:  60px;">
+                  <div class="">
+                      <div class="col-md-4 InvoicePartNumbers">
+                          <select class="selectpicker" data-live-search="true" focus-me="focusInput" id="product_partnumbers_Finder"   name="OrderStatus" >
+                              <?php echo $All_PartNumbers ?>
+                          </select>
+                      </div>
+                      <div class="col-md-8">
+                          <span >
+                              @{{echo_Brand}}  @{{echo_Type}}  @{{echo_typeCat | pTypeCat}}<br/>
+                              @{{echo_ProductTitle}}
+                          </span>
+                      </div>
+                  </div>
+              </div>
+              <hr/>
+              <div class="ui form">
+                  <div class="two fields">
+                      <div class="field">
+                          <label>سریال اول کالای معیوب</label>
+                          <input class="form-control"   ng-model="warranty_faulty_serialNumber_a" id="warranty_faulty_serialNumber_a">
+                      </div>
+                      <div class="field">
+                          <label>سریال  دوم کالای معیوب</label>
+                          <input class="form-control"   ng-model="warranty_faulty_serialNumber_b" id="warranty_faulty_serialNumber_b">
+                      </div>
+                  </div>
+              </div>
+
+              <hr>
+              <div class="row">
+                  <div class="col-md-6 col-md-offset-2 pull-right">
+                      <div class="btn btn-success" ng-click="addFaulty_serialNumber()"> درج سریال</div>
+                      <span class="btn btn-danger" ng-click="AddnewSerial()">
+                    {{lang::get('labels.close')}}
+                    </span>
+                  </div>
+              </div>
+
+          </div>
+
+
+     </div>
   </div>
   @endsection

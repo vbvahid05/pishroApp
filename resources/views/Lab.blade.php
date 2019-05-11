@@ -174,6 +174,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <!-- Angular Simple change Label -->
   <div class="ui tab" data-tab="tab-name2">

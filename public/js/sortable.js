@@ -7,7 +7,7 @@ angular.module('psi.sortable', [])
     helper: 'clone',
     forcePlaceholderSize: true
   })
-  .directive("psiSortable", ['psiSortableConfig', '$log', function(psiSortableConfig, $log) {
+  .directive("psiSortable", ['psiSortableConfig', '$log', function(psiSortableConfig, $log ) {
     return {
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
@@ -37,6 +37,20 @@ angular.module('psi.sortable', [])
 
         // jQuery sortable update callback
         function update(event, ui) {
+            switch (attrs['ngModel'])
+            {
+                case 'stockRequestProductsArray':
+                    scope.updateSortableList_StockRequestArray();
+                    break;
+
+                case 'subProduct':
+                    scope.updateSortableList();
+               break;
+            }
+
+
+
+
           // get model
           var model = ngModel.$modelValue;
           // remember its length
@@ -60,6 +74,7 @@ angular.module('psi.sortable', [])
               // and remove item from dom
               item.detach();
             }
+
           });
 
           model.splice(0, modelLength);
