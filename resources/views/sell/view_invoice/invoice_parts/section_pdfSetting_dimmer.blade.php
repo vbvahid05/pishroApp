@@ -142,7 +142,8 @@
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-4 pull-right"> </div>
                         <div class="col-md-2 pull-right">
-                            <div class="btn btn-success" ng-click="allSettingSave('Close')" style="width: 100%;">{{lang::get('labels.save')}}</div>
+                            {{--ng-click="allSettingSave('Close')"--}}
+                            <div class="btn btn-success"  style="width: 100%;">{{lang::get('labels.save')}}</div>
                         </div>
                         <div class="col-md-2 pull-right">
                             <div class="btn btn-danger" ng-click="closepdfSetting()" style="width: 100%;">{{lang::get('labels.close')}}</div>

@@ -45,6 +45,7 @@ class New_Edit_stockRequest
             $val->sel_sr_delivery_date =$request->sr_deliveryDate;
             $val->sel_sr_registration_date=date("Y/m/d");
             $val->sel_sr_warranty_priod=$request->WarrantyPriod;
+            $val->sel_sr_created_by	=Auth::user()->id;
             $val->sel_sr_lock_status =0;
             $val->deleted_flag=0;
             $val->archive_flag=0;

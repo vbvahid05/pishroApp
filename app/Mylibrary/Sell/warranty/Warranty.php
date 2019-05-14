@@ -8,6 +8,7 @@
 
 namespace App\Mylibrary\Sell\warranty;
 
+use App\acl_userRoleAction;
 use App\Mylibrary\PublicClass;
 use App\sell_stockrequest;
 use App\sell_stockrequests_detail;
@@ -617,7 +618,8 @@ class Warranty
     }
     //---------------------------------------------------
     public function addFaulty_serialNumber($requset){
-        $systemUserId=9;
+         $user = acl_userRoleAction::where('ura_details', '=', 'Warranty_SYS')->firstOrFail();
+        $systemUserId=$user->ura_user_id;
         $jconvert= new PublicClass;
         $start= false;
         $Allsteps= false;

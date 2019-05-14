@@ -85,7 +85,7 @@
                  </span>
              @endcan
              @can('order_delete', 1)
-                 <span class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
+                 <span ng-show="row.stk_ordrs_id_number != 'Warranty_SYS'" class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
                  </span>
              @endcan
                  <span class="view"><a href="#" rel="bookmark"> </a>  </span>
@@ -105,7 +105,11 @@
                @{{ row.stk_ordrs_putting_date | Jdate}}</td>
              <td>  @{{ row.stkr_ordrs_stus_title}}</td>
              <td>  @{{ row.stk_ordrs_comment}}</td>
-             <td>  @{{ row.name}}</td>
+             <td>
+                  <span class="label label-danger" ng-show="row.stk_ordrs_id_number == 'Warranty_SYS'">
+                   #   @{{ row.name}}</span>
+                  <span  ng-show="row.stk_ordrs_id_number != 'Warranty_SYS'">@{{ row.name}}</span>
+             </td>
       </tr>
     </table>
   </div>
