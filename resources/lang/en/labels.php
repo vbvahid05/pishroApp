@@ -347,5 +347,8 @@ return [
 'addNewUserToApp'=>'درج کاربر جدید در سیستم ',
 'rePassNotValid'=> ' تکرار پسورد صحیح نیست',
 
+'WarrantyStockCommit'=>'تاییدیه انبار',
+'warrantyStockRoom'=>'انبار گارانتی',
+
 
 ];

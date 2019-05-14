@@ -349,6 +349,11 @@ public function Invoice(request $request ,$function)
                         $data= new Warranty();
                         return $data->addFaulty_serialNumber($request);
                         break;
+                    case 'getWarrantyStockRoomList':
+                        $data= new Warranty();
+                        return $data->getWarrantyStockRoomList($request);
+                        break;
+
 
 
                 }

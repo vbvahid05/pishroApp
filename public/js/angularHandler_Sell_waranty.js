@@ -208,6 +208,7 @@ app.controller('Sell_warranty_Ctrl', ['$scope','$http','Pagination','$filter','$
 ///-------------------------------------------------
     $scope.showAll=function(val)
     {
+
         getList_Warranty_Request($scope.pageTypeIs ,val);
         $scope.showListStatus=val;
         $('.DatalistSelector').removeClass('active');
@@ -562,8 +563,11 @@ $scope.save_Update_Warranty=function (action) {
     };
     // $scope.SeriallistArray.push(myArray);
         masterArray=[];
+    if ($("#warranty_delevery_date").val()==''){
+        toast_alert('تاریخ تحویل را مشخص نمایید ' , 'danger');
+    }
 
-    if ($scope.SeriallistArray.length !=0 )
+    if ($scope.SeriallistArray.length !=0 && $("#warranty_delevery_date").val()!='' )
     {
         masterArray.push(WarrantyInfoArray);
         masterArray.push($scope.SeriallistArray);
@@ -1532,12 +1536,13 @@ $scope.save_Update_Warranty=function (action) {
             }
             $http.post('/services_sell/warranty/addFaulty_serialNumber',arg).then(function xSuccess(response)
             {
-                if (response.data=='snDuplicated')
-                    toast_alert('Duplicated ','warning');
+                console.log(response.data);
 
-                if (response.data )
+                if (response.data == 'snDuplicated')
+                    toast_alert('Duplicated','warning');
+
+                else  (response.data + response.data)
                 {
-                    console.log(response.data);
                     toast_alert('added','success');
                     $scope.showAddnewSerial=false;
                     SerialNumber=response.data;
@@ -1553,6 +1558,7 @@ $scope.save_Update_Warranty=function (action) {
                     $scope.SeriallistArray.push(myArray);
                     //............
                 }
+
             }), function xError(response)
             {
                 console.log(response.data);
@@ -2711,8 +2717,20 @@ $scope.save_Update_Warranty=function (action) {
         }
 
 //*********************************
+//       Warranty StockRoom
+//*********************************
+    $scope.getWarrantyStockRoomList=function () {
+        var args= {
+            mode:0,
+        };
+        $http.post('/services_sell/warranty/getWarrantyStockRoomList',args).then
+        (function xSuccess(response) {
+            $scope.WarrantyStockRoomList = response.data;
+            console.log($scope.WarrantyStockRoomList);
+        }), function xError(response)
+        {}
+    }
 
 
-
-
+//*********************************
     }]);

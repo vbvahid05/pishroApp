@@ -18,13 +18,14 @@ $all_Custommers= Invoice::Get_all_Custommers();
       </div>
 
       <div class="main">
-          <div class="row">
+          <div class="row" >
             <div ng-show="RequestMode" class="col-md-3">سریال نامبر معیوب را انتخاب نمایید</div>
             <div ng-show="RequestMode" class="col-md-4">
-                <div  class="select_CustommerList">
-                    <select class="selectpicker" data-live-search="true"  id="SerialNumberList" >
+                <div  class="select_CustommerList warranty">
+                    <select class="selectpicker" data-live-search="true"  id="SerialNumberList"  style="margin-bottom: 10px">
                         <?php echo $SerialNumbers; ?>
                     </select>
+
                     <span class="btn btn-default" ng-click="AddnewSerial()">
                     درج سریال قدیمی در سامانه
                     </span>

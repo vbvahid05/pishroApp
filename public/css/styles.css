@@ -2365,3 +2365,7 @@ i.fa.fa-trash.gray {
     font-weight: bold !important;
 }
 
+.select_CustommerList.warranty .btn-group.bootstrap-select {
+    margin: 0 !important;
+    margin-bottom: 5px !important;
+}
