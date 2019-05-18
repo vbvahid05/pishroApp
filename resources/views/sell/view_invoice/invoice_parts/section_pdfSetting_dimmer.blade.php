@@ -143,7 +143,7 @@
                         <div class="col-md-4 pull-right"> </div>
                         <div class="col-md-2 pull-right">
                             {{--ng-click="allSettingSave('Close')"--}}
-                            <div class="btn btn-success"  style="width: 100%;">{{lang::get('labels.save')}}</div>
+                            <div class="btn btn-success"  ng-click="closepdfSetting()" style="width: 100%;">{{lang::get('labels.save')}}</div>
                         </div>
                         <div class="col-md-2 pull-right">
                             <div class="btn btn-danger" ng-click="closepdfSetting()" style="width: 100%;">{{lang::get('labels.close')}}</div>

@@ -277,17 +277,20 @@ class pdf_headerFooterDesc
             if ($this->InvoiceInfo->si_warranty != NULL)
             {
                 $show_invoice_warranty= $invoice_warranty.$this->InvoiceInfo->si_warranty.'<br/>';
-            }
+            }else $show_invoice_warranty='';
 
             if ($this->InvoiceInfo->si_Payment != NULL)
             {
                 $show_invoice_Payment=$invoice_Payment.$this->InvoiceInfo->si_Payment.'<br/>';
             }
+            else $show_invoice_Payment='';
 
             if ($this->InvoiceInfo->si_deliveryDate != NULL)
             {
                 $show_invoice_si_deliveryDate=$invoice_deliveryDate.$this->InvoiceInfo->si_deliveryDate.'<br/>';
             }
+            else
+                $show_invoice_si_deliveryDate='';
 
             if ($this->InvoiceInfo->si_delivery_type != NULL)
             {
@@ -297,7 +300,8 @@ class pdf_headerFooterDesc
             if ($this->InvoiceInfo->si_validityDuration != NULL)
             {
                 $show_invoice_validityDuration=$validityDuration.':'.$this->InvoiceInfo->si_validityDuration.'<br/>';
-            }
+            }else
+                $show_invoice_validityDuration='';
 
             if ($this->InvoiceInfo->si_warranty != NULL ||
                 $this->InvoiceInfo->si_Payment != NULL ||
@@ -305,11 +309,9 @@ class pdf_headerFooterDesc
                 $this->InvoiceInfo->si_delivery_type != NULL  ||
                 $this->InvoiceInfo->si_validityDuration != NULL)
                 $show_invoice_Description ='<span style="padding-bottom: 20px;font-weight: bold; text-decoration: underline ;">'.$invoice_Description.'</span><br/>';
-
-
-           $invoice_Result='
-
-  
+            else
+                $show_invoice_Description='';
+ $invoice_Result=' 
      <tr>
         <td colspan="3" style="height: 3px;">  </td>
       </tr>
@@ -320,7 +322,6 @@ class pdf_headerFooterDesc
                 $show_invoice_warranty.
                 $show_invoice_Payment.
                 $show_invoice_si_deliveryDate.
-
                 $show_invoice_validityDuration.
                 '</td>
                         <td class="cellBorder">'.$Totalsummery.'</td>

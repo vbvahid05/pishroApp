@@ -50,7 +50,10 @@
                     <td>@{{ row.sel_sr_registration_date | Jdate}}</td>
                     <td>@{{ row.sel_sr_delivery_date | Jdate}}</td>
                     <td>@{{ row.sel_sr_pre_contract_number}}</td>
-                    <td> @{{ row.userName }}</td>
+                    <td>
+                        <span class="label label-danger" ng-show="row.userName == 'سامانه' "># @{{ row.userName }} </span>
+                        <span ng-show="row.userName != 'سامانه' ">  @{{ row.userName }} </span>
+                    </td>
                     <td>
                         <button id="Finalconfirm@{{row.id}}" class="toggleButton btn btn-success" ng-click="ActionBTN(1,row.id,row.AvailableQTY,row.totalQTY,row.lockStatus)" >
                          {{Lang::get('labels.Final_approval')}}

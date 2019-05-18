@@ -621,13 +621,53 @@ public  function get_SubChassisParts (request $request)
   //%%%%%%%%%%%%  SUBPAGE DATA SERVICES
   public function count_Of_takeoutproducts(request $request )
   {
+       $newQty=$request['newQty'];
+      $oldQty=$request['oldQty'];
+      $type=$request['type'];
+      $stockrequest_id=$request['stockrequest_id'];
+      $productid=$request['productid'];
+
+
       $argdata = $request->all();
       $stockrequest_id=$argdata['stockrequest_id'];
       $productid=$argdata['productid'];
-      return  \DB::table('sell_takeoutproducts AS takeoutproducts')
+       $takeOutQTY=  \DB::table('sell_takeoutproducts AS takeoutproducts')
           ->where('takeoutproducts.sl_top_stockrequest_id', '=', $stockrequest_id)
           ->where('takeoutproducts.sl_top_productid', '=', $productid)
           ->count();
+
+       if ($newQty >= $takeOutQTY)
+       {
+           sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $stockrequest_id)
+                                    ->where('ssr_d_product_id', '=', $productid)
+                                    ->update(array('ssr_d_qty' => $newQty));
+            if ($type==0){
+                $x=$oldQty-$newQty;
+                $product_statu=stockroom_product_statu::where('sps_product_id', '=', $productid) ->firstOrFail();
+                $reserved=$product_statu['sps_reserved'];
+                $newReservedQty = $reserved-$x;
+                $AvailQty = $product_statu['sps_available'];
+                $newAvailQty = $AvailQty+$x;
+
+                stockroom_product_statu::where('sps_product_id', '=', $productid)
+                    ->update(array('sps_reserved' => $newReservedQty ,
+                        'sps_available' => $newAvailQty
+                    ));
+                return 1;
+            }
+            else if ($type==1){
+                $product_statu=stockroom_product_statu::where('sps_product_id', '=', $productid) ->firstOrFail();
+                $Taahodi=$product_statu['sps_Taahodi'];
+                $newTaahodi=$Taahodi-$newQty;
+                stockroom_product_statu::where('sps_product_id', '=', $productid)
+                    ->update(array('sps_Taahodi' => $newTaahodi
+                    ));
+                return 1;
+            }
+       }
+       else
+           return 0;
+
   }
   public function List_Of_PartNumbers   (request $request)
   {

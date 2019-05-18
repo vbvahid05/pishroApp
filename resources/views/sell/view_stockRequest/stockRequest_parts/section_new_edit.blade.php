@@ -341,7 +341,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
 
                <div class="four fields">
                  <div class="two wide field"><label > {{ Lang::get('labels.QTY') }} :</label></div>
-                 <div class="field">
+                 <div class="field " >
                       <input ng-model="product_QTY" id="product_QTY"   max="@{{maxQTY | checkMax : echo_typeCat  }}" min="1" type="number" style="width: 70px !important;">
                       <div style="width: 40px;float:  left;padding-top:  6px;font-weight:  bold;margin-right:  -25px;">
                         {{ Lang::get('labels.of') }}  @{{totalQTY}}
@@ -403,7 +403,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
            <div class="col-md-2 pull-right"> @{{ SRPA.SubRow }}   @{{SRPA.product_partnumbers}}  </div>
            <div class="col-md-2 pull-right"> @{{SRPA.typeCat | pTypeCat}} -      @{{SRPA.ProductBrand}}  @{{SRPA.ProductType}}  </div>
            <div class="col-md-3 pull-right"> @{{SRPA.ProductTitle}}  </div>
-           <div class="col-md-1 pull-right" ng-click="changeQTY(SRPA.productID ,SRPA.product_QTY,echo_StockRequestID,sr_type ,$index)"> @{{SRPA.product_QTY}}  </div>
+           <div class="col-md-1 pull-right pointerGreen " ng-click="changeQTY(SRPA.productID ,SRPA.product_QTY,echo_StockRequestID,sr_type ,$index)" style="font-size: 15px !important;"> @{{SRPA.product_QTY}}  </div>
            <div class="col-md-1  pull-right"  ng-click="Delete_product_of_Request($index,sr_type,echo_StockRequestID,SRPA.productID, SRPA.StockRequestRowID,sr_type)"> <i class="fa fa-trash gray " aria-hidden="true"></i> </div>
          {{--<!-- -->--}}
 {{--<div class="row " style="height: 10px ;background: yellow"></div>--}}

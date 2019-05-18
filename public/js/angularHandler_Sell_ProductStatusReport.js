@@ -2319,63 +2319,74 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         //--------------------
         $scope.changeQTY=function(productID,OldQTY,StockRequestID,sr_type,index)
         {
-            alert('The Codes are Commented ');
-          //  var newQTY = prompt(insetNewQTY_message, OldQTY);
+     //       alert('The Codes are Commented ');
+     //       var newQTY = prompt(insetNewQTY_message, OldQTY);
 
 
-            //
-            //  var newQTY = prompt(insetNewQTY_message, OldQTY);
-            //  if (newQTY < OldQTY && newQTY != null)
-            //  {
-            //      var Args={
-            //          stockrequest_id:StockRequestID,
-            //          productid:productID,
-            //      }
-            //      $http.post('/services/sell/countOftakeoutproducts',Args).then(function xSuccess(response)
-            //      {
-            //        toast_alert('تعداد وارد شده از تعداد قبلی کمتر است ','warning')
-            //
-            //      }), function xError(response) { }
-            //  }
+
+             var newQTY = prompt(insetNewQTY_message, OldQTY);
+             if (newQTY < OldQTY && newQTY != null)
+             {
+                 var Args={
+                     type:sr_type,
+                     stockrequest_id:StockRequestID,
+                     productid:productID,
+                     newQty:parseInt(newQTY),
+                     oldQty:OldQTY
+                 }
+                 $http.post('/services/sell/countOftakeoutproducts',Args).then(function xSuccess(response)
+                 {
+                     console.log(response.data);
+                     if(response.data==0)
+                        toast_alert('تعداد قبلی از انبار خارج شده است ','warning')
+                     if(response.data==1){
+                         $scope.ReloadData(StockRequestID);
+                     }
+
+
+                 }), function xError(response) { }
+             }
             //
             // // else if (newQTY == null || newQTY == "") {/*toast_alert('empty !!?','warning');*/ }
-            //  else
-            //   {
-            //      if (sr_type==1) // is  Ta'ahodi
-            //      {
-            //          var Args={
-            //              type:sr_type,
-            //              stockrequerst_id:StockRequestID,
-            //              product_id:productID,
-            //              qty:parseInt(newQTY),
-            //              oldQty:OldQTY,
-            //          }
-            //          $http.post('/services/sell/UpdateProductQTY',Args).then(function xSuccess(response)
-            //          {
-            //              stockRequestProducts[index].product_QTY= newQTY;
-            //          }), function xError(response) { }
-            //      }
-            //      else if (sr_type==0) // is  Ghatii  sr_type=0
-            //      {
-            //        //Update QTY  OLdQTY+newQTY | in -> stockrequests details Table
-            //        //chak if Product is Avail ->  Avail=Avail-newQTY  &  Reserve=Reserve+newQTY | in -> product_status Table
-            //          var Args={
-            //              type:sr_type,
-            //              stockrequerst_id:StockRequestID,
-            //              product_id:productID,
-            //              qty:parseInt(newQTY),
-            //              oldQty:OldQTY,
-            //          }
-            //          $http.post('/services/sell/UpdateProductQTY',Args).then(function xSuccess(response)
-            //          {
-            //              if (response.data==1)
-            //                stockRequestProducts[index].product_QTY= newQTY;
-            //              else
-            //                  toast_alert(Order_QTY_error_message,'danger');
-            //          }), function xError(response) { }
-            //      }
-            //  }
+             else
+              {
+                 if (sr_type==1) // is  Ta'ahodi
+                 {
+                     var Args={
+                         type:sr_type,
+                         stockrequerst_id:StockRequestID,
+                         product_id:productID,
+                         qty:parseInt(newQTY),
+                         oldQty:OldQTY,
+                     }
+                     $http.post('/services/sell/UpdateProductQTY',Args).then(function xSuccess(response)
+                     {
+                         stockRequestProducts[index].product_QTY= newQTY;
+                     }), function xError(response) { }
+                 }
+                 else if (sr_type==0) // is  Ghatii  sr_type=0
+                 {
+                   //Update QTY  OLdQTY+newQTY | in -> stockrequests details Table
+                   //chak if Product is Avail ->  Avail=Avail-newQTY  &  Reserve=Reserve+newQTY | in -> product_status Table
+                     var Args={
+                         type:sr_type,
+                         stockrequerst_id:StockRequestID,
+                         product_id:productID,
+                         qty:parseInt(newQTY),
+                         oldQty:OldQTY,
+                     }
+                     $http.post('/services/sell/UpdateProductQTY',Args).then(function xSuccess(response)
+                     {
+                         if (response.data==1)
+                           stockRequestProducts[index].product_QTY= newQTY;
+                         else
+                             toast_alert(Order_QTY_error_message,'danger');
+                     }), function xError(response) { }
+                 }
+             }
         }
+
+
         //-------------------
         $scope.DeleteRequestFromBaseList=function(rowid)
         {

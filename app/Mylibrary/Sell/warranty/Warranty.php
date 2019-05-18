@@ -210,6 +210,7 @@ class Warranty
             $affectedRows = sell_stockrequests_warrantie
                 ::where('id', '=', $WarrantyId)
                 ->update(array(
+                    'ssw_stockReqID' => $stockrequestsID ,
                     'ssw_warranty_start_date' => $pb->jalali_to_gregorian_byString($warranty_start_date),
                     'ssw_delivery_date' => $pb->jalali_to_gregorian_byString($delevery_date),
                     'ssw_duration_of_warranty' => $WarrantyPeriod,
