@@ -123,7 +123,7 @@ class New_Edit_stockRequest
 
 
             //---------------------
-            if ($nextStep && $StockRequestType ==0) //Ghatii
+            if ($nextStep && $StockRequestType ==0 || $StockRequestType ==2 ) //Ghatii
             {
                 $newAvailQty =$OldAvailable-$data["product_QTY"];
                 $newReservQty= $OldReserved+$data["product_QTY"];
@@ -415,7 +415,7 @@ class New_Edit_stockRequest
     }
 
 
-    public function DeleteProduct_From_StackRequest($request)
+    public function   DeleteProduct_From_StackRequest($request)
     {
 
         $State = "State::>";
@@ -430,7 +430,7 @@ class New_Edit_stockRequest
 //            ->where('stockrequests_details.ssr_d_ParentChasis', '=', $StockReq_RowID)
 //            ->get();
 
-          $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
+           $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
 
         //Step 1: Delete Or Delete Tag  From  "sell_stockrequests_details" Table
         try
@@ -441,10 +441,10 @@ class New_Edit_stockRequest
                 ->firstOrFail();
             $recordIsInDB="Yes";
             //.........................
-            $SerialFlagIsFree = \DB::table('sell_takeoutproducts AS takeoutproducts')
+              $SerialFlagIsFree = \DB::table('sell_takeoutproducts AS takeoutproducts')
                 ->where('takeoutproducts.sl_top_stockrequest_id', '=', $StockRequestID)
                 ->where('takeoutproducts.sl_top_productid', '=', $productID)
-//                ->where('takeoutproducts.sl_top_StockRequestRowID', '=', $StockReq_RowID)
+               ->where('takeoutproducts.sl_top_StockRequestRowID', '=', $StockReq_RowID)
                 ->count();
         }
         catch (\Exception $e)
@@ -454,12 +454,12 @@ class New_Edit_stockRequest
         }
 
 
-        if ($recordIsInDB=="Yes" && $SerialFlagIsFree==0 && $TakeOut==0)
+        if ($recordIsInDB=="Yes" && $SerialFlagIsFree==0 && $TakeOut==0 ) //
         {
             // Full Delete
             sell_stockrequests_detail::destroy($RowID['id']);
             //Step 2: Change QTY From "stockroom_product_status"  Table
-            if ($type == 0) //Ghatiiiii
+            if ($type == 0 || $type == 2) //Ghatiiiii Or borrowed
             {
                 //..................
                 $QTYinDB = \DB::table('stockroom_product_status AS product_status')
@@ -803,7 +803,7 @@ class New_Edit_stockRequest
         $formType=$stockrequest->sel_sr_type;
         // if chassis then find Sub chassis List
         //1):
-        $stock = \DB::table('Stockroom_stock_putting_products AS stock')
+         $stock = \DB::table('Stockroom_stock_putting_products AS stock')
             ->join('stockroom_products AS  products'   ,   'products.id', '=','stock.stkr_stk_putng_prdct_product_id')
             ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
             ->where('products.stkr_prodct_type_cat', '=', 3) // Just Chassis
@@ -828,7 +828,7 @@ class New_Edit_stockRequest
                 $productArray[]=$ProductRecord->id;
                }
         }
-        $productArray= array_unique($productArray);
+         $productArray= array_unique($productArray);
 
         //----------------------
           $sell_stockrequests_detail=sell_stockrequests_detail::
@@ -870,7 +870,7 @@ class New_Edit_stockRequest
                 $stockrequest->archive_flag=0;
                 $stockrequest->save();
 
-                $subChasiss =
+                 $subChasiss =
                     \DB::table('stockroom_products AS  products')
                         ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
                         ->where('products.id', '=', $array)
@@ -885,53 +885,11 @@ class New_Edit_stockRequest
             {
                 array_push($Arry_SubChassisParts, $subChasiss);
             }
-//            try
-//            {
-//
-//                $subChasiss =
-//                    \DB::table('stockroom_products AS  products')
-//                        ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
-//                        ->where('products.id', '=', $array)
-//                        ->select('*', \DB::raw( 'products.id AS products_id ,
-//                                           product_status.id AS product_status_id  '))
-//                        ->get();
-//                if (count ($subChasiss) ==0 )
-//                    return 'Null Array';
-//                else
-//                array_push($Arry_SubChassisParts, $subChasiss);
-//            }
-//            catch ( \Exception $e)
-//            {
-//
-//                //........................
-//                $stockrequest = new stockroom_product_statu;
-//                $stockrequest->sps_product_id =$array;
-//                $stockrequest->sps_available = 0;
-//                $stockrequest->sps_reserved = 0;
-//                $stockrequest->sps_sold=0;
-//                $stockrequest->sps_warranty=0;
-//                $stockrequest->sps_Taahodi=0;
-//                $stockrequest->sps_borrowed=0;
-//                $stockrequest->deleted_flag=0;
-//                $stockrequest->archive_flag=0;
-//                $stockrequest->save();
-//                //........................
-//                $subChasiss =
-//                    \DB::table('stockroom_products AS  products')
-//                        ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
-//                        ->where('products.id', '=', $array)
-//                        ->select('*', \DB::raw( 'products.id AS products_id ,
-//                                           product_status.id AS product_status_id  '))
-//                        ->get();
-//                array_push($Arry_SubChassisParts, $subChasiss);
-//            }
         }
         $finalArray=array();
         array_push($finalArray, $Arry_SubChassisParts);
         array_push($finalArray, $formType);
         return $finalArray;
-
-
     }
 
 //---------------------------------------------------------------
@@ -948,7 +906,7 @@ class New_Edit_stockRequest
         $newAvialQty = $availQty - $data['QTY'];
         $newReservedQty = $reservedQty + $data['QTY'];
 
-    if ($formType==0) //Ghatii
+    if ($formType==0 || $formType==2) //Ghatii  Or Borrowed
         {
             if ($availQty >=$data['QTY'])
             {
@@ -1046,7 +1004,7 @@ class New_Edit_stockRequest
             $model = sell_stockrequests_detail::where('id', '=',  $stckreqstDtlRowID)->firstOrFail();
             $OldQty= $model->ssr_d_qty;
         //-------------------------------------------------------
-            if ($formType==0) //Ghatiiii
+            if ($formType==0 || $formType==2) //Ghatiiii Or Borrowed
             {
                 try
                 {

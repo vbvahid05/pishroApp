@@ -122,7 +122,7 @@
               <td style="border-left: 1px dashed #addcb4;"><span class="@{{row.productID}}rec4  numberBorder" > @{{ row.status2_1_avail | isZiro:row.productID :4}} </span></td>
               <td> <span class="numberBorder bluex" >    </span></td>
               <!-- *************************** -->
-              <td> <span class="numberBorder    AvlStock@{{row.productID}}" > @{{ row.AvailableStock | signeChecker:row.productID }}  <span>  </td>
+              <td> <span class="numberBorder    AvlStock@{{row.productID}}" > @{{ row.sum +  row.status2_1_avail| signeChecker:row.productID }}  <span>  </td>
 
 
 

@@ -46,7 +46,11 @@
                   </td>
 
                     <td>@{{ row.cstmr_name}} @{{ row.cstmr_family}}  <br/> @{{ row.org_name}} </td>
-                    <td> <span  ng-class="row.sel_sr_type == 0 ? 'StockType_span_A' : 'StockType_span_B'"> @{{ row.sel_sr_type  | stockRequestTYPE}}  </span></td>
+                    <td>
+                        <span ng-show="row.sel_sr_type !=2" ng-class="row.sel_sr_type == 0 ? 'StockType_span_A' : 'StockType_span_B'"> @{{ row.sel_sr_type  | stockRequestTYPE}}  </span>
+                        <span ng-show="row.sel_sr_type ==2" ng-class="'StockType_span_C'"> @{{ row.sel_sr_type  | stockRequestTYPE}}  </span>
+
+                    </td>
                     <td>@{{ row.sel_sr_registration_date | Jdate}}</td>
                     <td>@{{ row.sel_sr_delivery_date | Jdate}}</td>
                     <td>@{{ row.sel_sr_pre_contract_number}}</td>

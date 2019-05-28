@@ -22,11 +22,12 @@ class ListPage
         if ($type==0)
         {
             $valus = \DB::table('sell_stockrequests AS stockrequests')
+                ->join('sell_stockrequests_tpes AS stockrequests_tpes' , 'stockrequests_tpes.ids', '=','stockrequests.sel_sr_type')
                 ->join('custommers'   ,   'custommers.id', '=','stockrequests.sel_sr_custommer_id')
                 ->join('custommerorganizations AS cusmrORD'   ,   'cusmrORD.id', '=','custommers.cstmr_organization')
                 ->select('*', \DB::raw('stockrequests.id AS stockrequestsID '))
                 ->where('stockrequests.deleted_flag', '=', $mode)
-                ->where('stockrequests.sel_sr_type', '=', $type)
+                ->where('stockrequests_tpes.ssr_type_slug', '!=', 'taahodi' )
                 ->orderBy('stockrequestsID', 'desc')
                 ->get();
         }

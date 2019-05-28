@@ -12,7 +12,7 @@ return [
     | you want to customize your views to better match your application.
     |
     */
-'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.3.0' ,
+'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.3.1' ,
 'copyright' => 'گروه شرکت های مهندسی پیشرو '  ,
 'copyright_date' => '© Copyright 2017-2019' ,
 'changeLog'=>'تغییرات انجام شده',
@@ -256,6 +256,7 @@ return [
 'Title_PartofChassis'=> 'لیست قطعات منفصله مربوط به شاسی فوق',
 'showEmptyListMessage'=> 'فاقد قطعه منفصله',
 'Search_pre_contract_number'=>  'جستجوی شماره پیش فاکتور' ,
+'Amani' =>'امانی' ,
 
 /*Pring page*/
 'EhrazText'=>'احراز صلاحيت شده توسط شوراي عالي انفورماتيك كشور عضو سازمان نظام صنفي رايانه‌اي كشور',

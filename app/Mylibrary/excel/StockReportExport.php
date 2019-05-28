@@ -36,6 +36,28 @@ class StockReportExport implements fromArray,WithHeadings
          return $sumTahodiQTY;
     }
 
+    public function borrowedQTY($productsId)
+    {
+//        $results=  \DB::table('sell_stockrequests_details AS stockrequests_details')
+//            ->join('sell_stockrequests AS stockrequest', 'stockrequest.id', '=','stockrequests_details.ssr_d_stockrequerst_id')
+//            ->where ('stockrequests_details.ssr_d_product_id','=',$productsId)
+//            ->where ('stockrequest.sel_sr_type','=',2)
+//            ->get();
+
+    return    $results=  \DB::table('stockroom_stock_putting_products AS putting_products')
+                  ->join('stockroom_serialnumbers AS serialnumbers', 'serialnumbers.stkr_srial_putting_product_id', '=','putting_products.id')
+                  ->where ('putting_products.stkr_stk_putng_prdct_product_id','=',$productsId)
+                  ->where ('serialnumbers.stkr_srial_status','=',3)
+                  ->count();
+
+
+//        $sumBorrowedQTY=0;
+//        foreach ( $results as $res)
+//        {
+//            $sumBorrowedQTY=$sumBorrowedQTY+$res->ssr_d_qty;
+//        }
+//        return $sumBorrowedQTY;
+    }
 
     public function WarrantyQTY($productsId)
     {
@@ -124,6 +146,7 @@ class StockReportExport implements fromArray,WithHeadings
                 $reservedQTY =$this->reservedQTY($r->productsId);//
                 $taahodiQTY= $this->taahodiQTY($r->productsId);
                 $WarrantyQTY =$this->WarrantyQTY($r->productsId);
+                $borrowQty = $this->borrowedQTY($r->productsId);
 
                 $reminedQTY=($AllSerialInQTY-($takeoutQTY+$reservedQTY));
                     if ($reminedQTY ==0) $reminedQTY='0';
@@ -131,7 +154,7 @@ class StockReportExport implements fromArray,WithHeadings
                     if ($reservedQTY ==0) $reservedQTY='0';
                     if ($taahodiQTY ==0) $taahodiQTY='0';
                     if ($WarrantyQTY ==0) $WarrantyQTY='0';
-
+                    if ($borrowQty ==0) $borrowQty='0';
 
 
 //--------------           Update     stockroom_product_status
@@ -144,10 +167,13 @@ class StockReportExport implements fromArray,WithHeadings
                                   'sps_sold' => $takeoutQTY-$WarrantyQTY ,
                                   'sps_Taahodi' => $taahodiQTY ,
                                   'sps_warranty' => $WarrantyQTY ,
+                                   'sps_borrowed' => $borrowQty ,
+
                    ));
 //--------------------------------
 
                 $row=array(
+                    "borrowed"=>$borrowQty,
                     "warranty"=>$WarrantyQTY,
                     "taahodi"=>$taahodiQTY,
                     "reminedQTY"=>$reminedQTY ,
@@ -173,6 +199,7 @@ class StockReportExport implements fromArray,WithHeadings
     public function headings(): array
     {
         return [
+            'امانی',
             'گارانتی',
             'تعهدی',
             'باقی مانده انبار',

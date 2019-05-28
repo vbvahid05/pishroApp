@@ -1819,6 +1819,12 @@ label.invcsting {
     border-radius: 100px;
     padding: 5px;
 }
+.StockType_span_C {
+    background: rgba(149, 107, 244, 0.37);
+    border-radius: 100px;
+    padding: 5px;
+}
+
 .edit_link {
     cursor: pointer;
     color: #0000ca;

@@ -73,7 +73,7 @@
                             <div class="col-md-1 pull-right" >@{{SCP.products_id}} </div>
                             <div class="col-md-2 pull-right">@{{SCP.stkr_prodct_partnumber_commercial}}</div>
                             <div class="col-md-4 pull-right" >@{{SCP.stkr_prodct_title}}</div>
-                            <div class="col-md-3 pull-right" ng-show="formType ==0 " >
+                            <div class="col-md-3 pull-right" ng-show="formType ==0 || formType ==2 " >
                                 <input ng-model="product_QTY"  ng-keypress="add_subchassis_to_list_by_Enter($event,StockRequestID,chassisID,StockRequestRowID,SCP.products_id,SCP.sps_available,formType)" id="product_QTY@{{SCP.products_id}}" max="@{{SCP.sps_available}}" min="1" type="number" style="width: 70px !important;" class="ng-pristine ng-valid-min ng-not-empty ng-invalid ng-invalid-max ng-touched">
                                 /
                                 @{{SCP.sps_available}}

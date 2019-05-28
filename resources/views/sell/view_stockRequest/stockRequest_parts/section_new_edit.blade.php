@@ -111,10 +111,13 @@ $all_Custommers= Invoice::Get_all_Custommers();
              <div ng-show="newStockRequestForm" class="five fields resultProduct " style="height:  100px;">
                  <div class="field">
                    <Label class="xLabel">{{ Lang::get('labels.stockRequest_type') }}  </Label>
-                      <select ng-model="sr_type" name="sr_type" class="ui fluid dropdown" style="padding-right:  30px;" required>
-                        <option value="0"><i class="fa fa-cubes"></i>{{ Lang::get('labels.stockRequest_type_certain') }}</option>
-                        <option value="1">{{ Lang::get('labels.stockRequest_type_Accrual') }}</option>
-                      </select>
+                  <select ng-model="sr_type" name="sr_type" class="ui fluid dropdown" style="padding-right:  30px;" required>
+                    <option value="0"><i class="fa fa-cubes"></i>{{ Lang::get('labels.stockRequest_type_certain') }}</option>
+                    <option value="1">{{ Lang::get('labels.stockRequest_type_Accrual') }}</option>
+                    <option value="2">{{ Lang::get('labels.Amani') }}</option>
+                  </select>
+
+
                   </div>
                    <div class="field">
                        <div class="StockRequest_CustommerList">
@@ -185,7 +188,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
                     </tr>
                     <tr>
                         <td style="padding-right: 15px;font-weight: bold;">@{{echo_StockRequestID}}</td>
-                        <td>@{{sr_type | stockRequestTYPE}}</td>
+                        <td>@{{sr_type| stockRequestTYPE}}</td>
                         <td>
                             <div ng-if="!showCustommerList" style="text-align:  right;font-size: 12px"  class="edit_link " ng-click="edit_StockRequest_field('custmrList')" title="{{lang::get('labels.edit')}}">
                                 @{{sr_custommer}}   ( @{{sr_Org_Name}} )
@@ -195,10 +198,7 @@ $all_Custommers= Invoice::Get_all_Custommers();
                                     <select class="selectpicker" data-live-search="true"  id="CustommerID"  >
                                     <?php echo $all_Custommers; ?>
                                     </select>
-                                    {{--<select  id="CustommerID"   style="padding: 0;width: 90%;float: right;">--}}
-                                    {{--<option  value="@{{sr_cstmr_id}}"> @{{sr_custommer}}   (  @{{sr_Org_Name}} )</option>--}}
-                                    {{--<option ng-repeat="cstmr in allCustommers" value="@{{cstmr.id}}"> @{{cstmr.custommer_name}} @{{cstmr.custommer_family}} (  @{{cstmr.orgName}} )</option>--}}
-                                    {{--</select>--}}
+
                                     <i ng-click="update_StockRequest_field('custmrList')" class="fa fa-check saveCheckSmall" style=""> </i>
                                 </div>
                             </div>

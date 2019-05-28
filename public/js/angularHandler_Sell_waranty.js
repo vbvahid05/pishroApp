@@ -114,10 +114,11 @@ app.filter('Jdate', function() {
 //-----------
 app.filter('stockRequestTYPE', function() {
     return function(type) {
-        if (type==1)
-            return "تعهدی";
-        else
-            return "قطعی";
+        switch (type){
+            case 0: return "قطعی"; break;
+            case 1: return "تعهدی"; break;
+            case 2: return "امانی"; break;
+        }
     };
 });
 //-------------

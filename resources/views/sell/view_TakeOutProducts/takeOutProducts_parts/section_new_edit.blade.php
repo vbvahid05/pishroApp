@@ -96,7 +96,11 @@
                           <div   class="col-md-1 pull-right">
                               @can('TakeOutProducts_Delete',0)
                               <i class="fa fa-trash gray "
-                                 ng-click="deleteSubChassisSerialFromTakeOutProducts(ADSLS.sl_top_StockRequestRowID,ADSLS.sl_top_product_serialnumber_id ,ADSLS.sl_top_productid,ADSLS.sl_top_stockrequest_id)" aria-hidden="true">
+                                 ng-click="deleteSubChassisSerialFromTakeOutProducts(ADSLS.sl_top_StockRequestRowID,
+                                                                                     ADSLS.sl_top_product_serialnumber_id ,
+                                                                                     ADSLS.sl_top_productid,
+                                                                                     ADSLS.sl_top_stockrequest_id,
+                                                                                     sr_type)" aria-hidden="true">
                               </i>
                               @endcan
                           </div>
@@ -104,7 +108,7 @@
                   </div>
 
                    @can('TakeOutProducts_create', 1)
-                   <div ng-show="save_takeOut_Btn" class="btn btn-success" ng-click="takeOutSerials(echo_StockRequestID,SRPA.productID,SRPA.StockRequestRowID)" >
+                   <div ng-show="save_takeOut_Btn" class="btn btn-success" ng-click="takeOutSerials(echo_StockRequestID,SRPA.productID,SRPA.StockRequestRowID,sr_type)" >
                       {{ Lang::get('labels.save') }}
                   </div>
                    @endcan
@@ -163,11 +167,11 @@
                                   <tr class="serialInputRow@{{$index+1}}" >
                                       <td>@{{$index+1}}</td>
                                       <td>
-                                          <input  id="inptA@{{SRPA.StockRequestRowID}}@{{$index+1}}"   class="inptA@{{$index+1}}" type="text" ng-keypress="checkSubInputEnterpressdA($event ,$index+1,SRPA.StockRequestRowID  )" >
+                                          <input  id="inptA@{{SRPA.StockRequestRowID}}@{{$index+1}}"   class="inptA@{{$index+1}}" type="text" ng-keypress="checkSubInputEnterpressdA($event ,$index+1,SRPA.StockRequestRowID ,sr_type )" >
                                       </td>
                                       <td ng-show="towSerial ==1">-</td>
                                       <td ng-show="towSerial ==1">
-                                          <input   id="inptB@{{SRPA.StockRequestRowID}}@{{$index+1}}"  class="inptB@{{$index+1}}" type="text" ng-keypress="checkSubInputEnterpressdB($event ,$index+1,SRPA.StockRequestRowID)">
+                                          <input   id="inptB@{{SRPA.StockRequestRowID}}@{{$index+1}}"  class="inptB@{{$index+1}}" type="text" ng-keypress="checkSubInputEnterpressdB($event ,$index+1,SRPA.StockRequestRowID ,sr_type)">
                                       </td>
                                   </tr>
                                </table>

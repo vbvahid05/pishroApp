@@ -119,10 +119,18 @@ app.filter('Jdate', function() {
 //-----------
 app.filter('stockRequestTYPE', function() {
     return function(type) {
-        if (type==1)
-            return "تعهدی";
-        else
-            return "قطعی";
+        switch (parseInt(type)){
+
+            case 0:
+                return 'قطعی';
+                break;
+            case 1:
+                return 'تعهدی';
+                break;
+            case 2:
+                return 'امانی';
+                break;
+        }
     };
 });
 //-------------
@@ -2093,7 +2101,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         }
 
 //**************
-        $scope.showSubchassisParts=function (chassisID,StockRequestRowID,StockRequestID,product_partnumbers ,ProductTitle,index) {
+        $scope.showSubchassisParts=function (chassisID,StockRequestRowID,StockRequestID,product_partnumbers ,ProductTitle,index,type) {
             SelectDimmer('sub_chassis_list');
             $('#Dimmer_page').dimmer('show');
             $scope.FormTitle='lbl_partList';
@@ -2111,7 +2119,11 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
 
             var args=
-                {qmode:1,StockRequest_ID:StockRequestID ,chassisID:chassisID ,StockRequestRowID:StockRequestRowID };
+                {qmode:1,
+                 StockRequest_ID:StockRequestID,
+                 chassisID:chassisID ,
+                 StockRequestRowID:StockRequestRowID ,
+                 type : type };
             $http.post('/services_sell/Stockrequest/GetSubChassisParts',args).then
             (function xSuccess(response)
             {
@@ -2194,7 +2206,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.closeDimmer=function()
         {
             $('#Dimmer_page').dimmer('hide');
-            getList_StockRequest(0);
+              getList_StockRequest(0);
         }
 //**************
 //ToolBar BTN      ||-> Add New StockRequest
@@ -2242,6 +2254,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                  $scope.sr_cstmr_id=  $resp.cstmr_id;
                 $scope.sr_custommer=$resp.cstmrName+' '+$resp.cstmrFamily;
                 $scope.sr_type=$resp.stockRequestsType.toString();
+                console.log($scope.sr_type);
                 $scope.sr_preFaktorNum=$resp.contract_number;
                 //console.log($resp.warranty_date);
                 $scope.warranyDate=Date_Convert_gregorianToJalali($resp.warranty_date);
@@ -2432,8 +2445,9 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
                     if (response.data !='SerialFlagError')
                     {
+                        $scope.ReloadData(StockRequestID);
                         stockRequestProducts.splice(index, 1);
-                        $("#DivRow" + index).hide(1000);
+                        // $("#DivRow" + index).hide(1000);
                     }
                     else toast_alert(delete_SerialFlagError,'danger');
 
@@ -2462,7 +2476,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 var Args={mode:0,}
                 $http.post('/services/sell/getList_AllCustommers',Args).then(function xSuccess(response)
                 {
-                    console.log( response.data);
                     return  $scope.custommersNameOrgList=response.data;
                 }), function xError(response)
                 {
@@ -2700,43 +2713,74 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 $scope.echo_typeCat=Marray[j].typeCat;
             }
 
+
             //-----------------------
-            if ($scope.sr_type==0)  // agar ghaTiii Bood
+              switch( parseInt($scope.sr_type)){
+                  case 0:   // agar ghaTiii Bood
+                      var Args={
+                          product_ID:productID,
+                      }
+                      $http.post('/services/sell/countofavailableProduct',Args).then(function xSuccess(response)
+                      {
+                          /**/
+                          $scope.resultProduct=true;
+                          /**/
+                          $scope.totalQTY=parseInt(response.data);
+                          $scope.maxQTY=parseInt(response.data);
+                          //$scope.product_QTY=parseInt(response.data);
+                          $scope.product_QTY=parseInt(1);
+                      }), function xError(response)
+                      {
+                          console.log(response.data);
+                      }
+                  break;
+
+                  case 1: // agar Ta'ahodi Bood
+                      var Args={
+                          product_ID:productID,
+                      }
+                      $http.post('/services/sell/countofavailableProduct',Args).then(function xSuccess(response)
+                      {
+                          /**/
+                          $scope.resultProduct=true;
+                          /**/
+                          $scope.totalQTY="~";
+                          //$scope.maxQTY=parseInt(response.data);
+                          $scope.product_QTY=parseInt(1);
+                      }), function xError(response)
+                      {
+                          console.log(response.data);
+                      }
+                  break;
+
+                  case 2:   //AMANI
+                      var Args={
+                          product_ID:productID,
+                      }
+                      $http.post('/services/sell/countofavailableProduct',Args).then(function xSuccess(response)
+                      {
+                          /**/
+                          $scope.resultProduct=true;
+                          /**/
+                          $scope.totalQTY=parseInt(response.data);
+                          $scope.maxQTY=parseInt(response.data);
+                          //$scope.product_QTY=parseInt(response.data);
+                          $scope.product_QTY=parseInt(1);
+                      }), function xError(response)
+                      {
+                          console.log(response.data);
+                      }
+                  break;
+
+              }
+            //-----------------------
+            if ($scope.sr_type==0 || $scope.sr_type==2)
             {
-                var Args={
-                    product_ID:productID,
-                }
-                $http.post('/services/sell/countofavailableProduct',Args).then(function xSuccess(response)
-                {
-                    /**/
-                    $scope.resultProduct=true;
-                    /**/
-                    $scope.totalQTY=parseInt(response.data);
-                    $scope.maxQTY=parseInt(response.data);
-                    //$scope.product_QTY=parseInt(response.data);
-                    $scope.product_QTY=parseInt(1);
-                }), function xError(response)
-                {
-                    console.log(response.data);
-                }
+
             }
             else {
 
-                var Args={
-                    product_ID:productID,
-                }
-                $http.post('/services/sell/countofavailableProduct',Args).then(function xSuccess(response)
-                {
-                    /**/
-                    $scope.resultProduct=true;
-                    /**/
-                    $scope.totalQTY="~";
-                    //$scope.maxQTY=parseInt(response.data);
-                    $scope.product_QTY=parseInt(1);
-                }), function xError(response)
-                {
-                    console.log(response.data);
-                }
+
             }
 
         });
@@ -2871,7 +2915,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 partID:partID,
                 QTY:QTY,
             }
-            if (formType==0) //GHatii
+            if (formType==0 || formType==2) //GHatii
             {
                 if (QTY !=0 &&  QTY<=availQty)
                 {
@@ -3057,7 +3101,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         $scope.selectRow =function (productID,Totalqty,StockRequestID,StockRequestRowID)
         {
-
             $('i.fa.fa-close').addClass('hide');
             $('.closeSubRow'+StockRequestRowID).removeClass('hide');
             $scope.showspinner_Loading=true;
@@ -3240,19 +3283,21 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         }
         ///////////////
-        $scope.takeOutSerials=function (StockRequestID,productID,StockRequestRowID)
+        $scope.takeOutSerials=function (StockRequestID,productID,StockRequestRowID,stockRequestType)
         {
             var newFormData={
                 StockRequestRowID :StockRequestRowID ,
                 StockRequest_id:StockRequestID,
                 product_id:productID,
                 SerialNumbers:$scope.choicesx,
+                stockRequestType : stockRequestType
             }
-
+            console.log(newFormData);
 
             $http.post('/services/sell/takeOutSerials',newFormData).then
             (function pSuccess(response)
             {
+                    console.log(response.data)
                 if (response.data==1)
                 {
                     toast_alert(Seved_Message,'success');
@@ -3361,7 +3406,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $('.closeSubRow'+StockRequestRowID).addClass('hide');
         }
 //------------------------------------------------
-        $scope.checkSubInputEnterpressdA=function ($event,index,StockRequestRowID) {
+        $scope.checkSubInputEnterpressdA=function ($event,index,StockRequestRowID,stockRequestType) {
 
             // $scope.stockrequerstId
             // $scope.productId
@@ -3387,7 +3432,8 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                         stockrequerstId :$scope.stockrequerstId,
                         parent_chassis_StockRequestRowID :StockRequestRowID ,
                         productId :$scope.productId ,
-                        this_product_StockRequestRowID :$scope.StockRequestRowID
+                        this_product_StockRequestRowID :$scope.StockRequestRowID ,
+                        stockRequestType:stockRequestType
                     }
 
                     SubInputEnterpressdAction(index,arg);
@@ -3467,14 +3513,16 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         }
 //---------------------------------------------------
 
-        $scope.deleteSubChassisSerialFromTakeOutProducts=function( StockRequestRowID,serialnumber_id ,productid,stockrequest_id)
-        {
+        $scope.deleteSubChassisSerialFromTakeOutProducts=function( StockRequestRowID,serialnumber_id ,productid,stockrequest_id,stockRequestType) {
             var arg={
                 StockRequestRow_ID :StockRequestRowID ,
                 serialnumber_ID :serialnumber_id ,
                 product_ID :productid,
-                stockrequest_ID :stockrequest_id
+                stockrequest_ID :stockrequest_id,
+                stockRequestType:stockRequestType
             }
+
+            //
             $http.post('/services_sell/TakeOutProducts/deleteSubChassisSerial',arg).then
             (function pSuccess(response){
                 $scope.selectRow(productid,2,stockrequest_id,StockRequestRowID)

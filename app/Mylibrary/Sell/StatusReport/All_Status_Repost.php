@@ -31,7 +31,6 @@ class All_Status_Repost
             //-----------------------
             $val = \DB::table('stockroom_stock_putting_products')
                 ->join('stockroom_products AS products'   ,   'products.id', '=','stockroom_stock_putting_products.stkr_stk_putng_prdct_product_id')
-
                 ->join('stockroom_orders AS orders'   ,   'orders.id', '=','stockroom_stock_putting_products.stkr_stk_putng_prdct_order_id')
                 ->join('stockroom_orders_status AS status'   ,   'status.id', '=','orders.stk_ordrs_status_id')
                 ->select('*')
@@ -102,8 +101,18 @@ class All_Status_Repost
              // $sum=$stVal1+$stVal2+$stVal3+$stVal4+$stVal5;
             //$AvailableStock=($avail+$sum)-($reserved+$borrowed+$warranty+$sps_Taahodi);
 
-            $sum=($stVal1+$stVal2+$stVal3+$stVal4+$stVal5)-($avail+$sold+$reserved);
+            $sum=($stVal1+$stVal2+$stVal3+$stVal4+$stVal5)-($avail+$sold+$reserved+$borrowed+$warranty);
+            if ($sum >=0)
+                $sum=$sum;
+            else
+                $sum=0;
+
             $AvailableStock=($avail+$sum+$reserved)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+
+            if ($stVal4-($avail+$sold+$reserved+$warranty+$borrowed) >=0)
+                $stVal4 =$stVal4-($avail+$sold+$reserved+$warranty+$borrowed);
+            else
+                $stVal4=0;
 
             $array = array(
                 "productID"    => $vm->id,
@@ -115,7 +124,7 @@ class All_Status_Repost
                 "status1" =>  $stVal1 ,//در حال مذاکره
                 "status2" =>  $stVal2 , //تایید سفارش
                 "status3" =>  $stVal3 , //منتظر بررسی در مبدا
-                "status4" =>  $stVal4-($avail+$sold+$reserved+$warranty) , //ترخیص شده
+                "status4" =>  $stVal4 , //ترخیص شده
                 "status5" =>  $stVal5 ,//گمرکات داخل کشور
 
                 "status2_1_avail"    =>  $avail  ,
@@ -125,7 +134,7 @@ class All_Status_Repost
                 "status2_5_warranty" =>  $warranty,
                 "status2_6_sps_Taahodi" =>  $sps_Taahodi,
                 "AvailableStock" => $AvailableStock,
-                "sum"     =>$sum-$warranty //جمع کل ورودی
+                "sum"     =>  $sum //$sum-$warranty //جمع کل ورودی
 
             );
             if ($mode==0)

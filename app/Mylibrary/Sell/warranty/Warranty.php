@@ -1160,6 +1160,7 @@ EOT;
                               warranties_details . sswd_alternative_serial  AS alter_serialID ,
                               warranties.ssw_warranty_start_date AS  warranty_start_date
                               '))
+            ->orderBy('warrantieID','DESC')
             ->get();
 
         $date= new PublicClass();

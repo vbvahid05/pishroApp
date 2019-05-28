@@ -907,6 +907,7 @@ public  function get_SubChassisParts (request $request)
     $StockRequest_id =$data['StockRequest_id'];
     $serialArray=$data['SerialNumbers'];
     $StockRequestRowID = $data['StockRequestRowID'];
+    $stockRequestType = $data['stockRequestType'];
   $i=0;
   $Result_status=true;
 
@@ -948,16 +949,32 @@ public  function get_SubChassisParts (request $request)
        $serialnumberRowID=$val[0]->serialnumberID;
 
        //Update serial number status  :: stockroom_serialnumbers
-         $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
-         $val->stkr_srial_status =1; //sold Status
-       if ($val->save()) $Result_status=$Result_status && true;
+        if ($stockRequestType ==0){ //Ghatii
+            $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
+            $val->stkr_srial_status =1; //sold Status
+            if ($val->save()) $Result_status=$Result_status && true;
 
-      //Update  count of products     :: stockroom_product_status
-        $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
-        if ($val->sps_reserved-1 >=0)
-          $val->sps_reserved =$val->sps_reserved-1;
-        $val->sps_sold =$val->sps_sold+1;
-      if ($val->save()) $Result_status=$Result_status && true;
+            //Update  count of products     :: stockroom_product_status
+            $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
+            if ($val->sps_reserved-1 >=0)
+                $val->sps_reserved =$val->sps_reserved-1;
+            $val->sps_sold =$val->sps_sold+1;
+            if ($val->save()) $Result_status=$Result_status && true;
+        }
+
+
+        else if ($stockRequestType ==2) { //Amani
+            $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
+            $val->stkr_srial_status =3; //Borrowed Status
+            if ($val->save()) $Result_status=$Result_status && true;
+
+            //Update  count of products     :: stockroom_product_status
+            $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
+            if ($val->sps_reserved-1 >=0)
+                $val->sps_reserved =$val->sps_reserved-1;
+            $val->sps_borrowed =$val->sps_borrowed+1;
+            if ($val->save()) $Result_status=$Result_status && true;
+        }
 
        //insert serilaNumber to stockrequests  :: sell_takeoutproducts
         $val= new sell_takeoutproduct ($request->all());
@@ -970,16 +987,6 @@ public  function get_SubChassisParts (request $request)
       if ($val->save()) $Result_status=$Result_status && true;
 
         }
-
-        //update count of serialnumbers  ::sell_stockrequests_details
-        /*
-        $val = sell_stockrequests_detail ::
-        where('id', $serialnumberRowID)
-        ->first();
-        $val->stkr_srial_status =1; //sold Status
-        if ($val->save()) $Result_status=$Result_status && true;
-      */
-
         if ($Result_status )return 1;
   }
 
