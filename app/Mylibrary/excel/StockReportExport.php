@@ -80,7 +80,8 @@ class StockReportExport implements fromArray,WithHeadings
         $result=  \DB::table('sell_stockrequests AS stockrequests')
             ->join('sell_stockrequests_details AS stockrequests_details', 'stockrequests.id', '=','stockrequests_details.ssr_d_stockrequerst_id')
             ->where ('stockrequests_details.ssr_d_product_id','=',$productsId)
-            ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+          //  ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+            ->where ('stockrequests.sel_sr_type','!=',1) // Taahodi
             ->select('*')
             ->get();
 
@@ -95,7 +96,8 @@ class StockReportExport implements fromArray,WithHeadings
             ->join('sell_takeoutproducts AS takeoutproducts', 'takeoutproducts.sl_top_stockrequest_id', '=','stockrequests.id')
             ->where ('takeoutproducts.sl_top_productid','=',$productsId)
             ->where ('takeoutproducts.deleted_flag','=',0)
-            ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+           // ->where ('stockrequests.sel_sr_type','=',0) // ghatii
+           ->where ('stockrequests.sel_sr_type','!=',1) // Taahodi
             ->select('*')
             ->count();
 
@@ -164,7 +166,7 @@ class StockReportExport implements fromArray,WithHeadings
                    ->update(array(
                                  'sps_available' => $reminedQTY ,
                                   'sps_reserved' => $reservedQTY ,
-                                  'sps_sold' => $takeoutQTY-$WarrantyQTY ,
+                                  'sps_sold' => $takeoutQTY-$WarrantyQTY  ,
                                   'sps_Taahodi' => $taahodiQTY ,
                                   'sps_warranty' => $WarrantyQTY ,
                                    'sps_borrowed' => $borrowQty ,

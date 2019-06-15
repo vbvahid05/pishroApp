@@ -223,7 +223,7 @@ Route::get('sell/stockRequest', function () {return view('sell/view_stockRequest
   Route::post('/services/sell/insert_Edit_StockRequest_details_DB','sell\SellController@insertOrEdit_StockRequest_details_DB');
   Route::post('/services/sell/getStockRequestData_by_id','sell\SellController@get_StockRequestData_by_id');
   \Illuminate\Support\Facades\Route::get ('/sell/stockRequest/print/{id}' ,'sell\SellController@printStockRequest');
-  \Illuminate\Support\Facades\Route::get ('/sell/stockRequest/pdf/{id}'   ,'sell\SellController@pdfStockRequest');
+  \Illuminate\Support\Facades\Route::get ('/sell/stockRequest/pdf/{id}/{outPut}'   ,'sell\SellController@pdfStockRequest');
   Route::post('/services/sell/getList_AllCustommers','sell\SellController@getList_AllCustommers');
   Route::post('/services/sell/UpdateProductQTY','sell\SellController@Update_ProductQTY');
   Route::post('/services/sell/countOftakeoutproducts','sell\SellController@count_Of_takeoutproducts');

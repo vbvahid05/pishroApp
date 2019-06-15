@@ -49,6 +49,11 @@ var message_convertSuccessfully ="تبدیل حواله به صورت کامل �
 var message_duplicated ="این کالا در لیست وجود دارد";
 var message_changedPassword ="کلمه عبور با موفقیت تغییر کرد";
 var message_CantDeleteAdmin ="شما نمی توانید کاربر با عنوان مدیریت را حذف نمایید !";
+var message_noserial_cantReturnTOStock='کالایی خارج نشده است که بازگردانده شود';
+var message_notComplete_cantReturnTOStock='ابتدا همه کالای موجود در سفارش را خارج نمایید';
+var message_addOneChassisinStockRequest ='در هر ردیف فقط یک شاسی قابل پذیرش می باشد';
+var message_StockRequest_Archived_and_returned='قطعات به انبار بازگردانده و  سوابق آن بایگانی شد';
+
 var lbl_new_puttingStock ="ورود کالای جدید به انبار";
 var lbl_edit_org_info ="ویرایش اطلاعات سازمان";
  var lbl_serialNumber ="ثبت شماره سریال کالا";

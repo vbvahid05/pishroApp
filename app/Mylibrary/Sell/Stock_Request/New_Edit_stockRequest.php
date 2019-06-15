@@ -8,7 +8,9 @@
 
 namespace App\Mylibrary\Sell\Stock_Request;
 //>>>>>>>>>>>> Model
+use App\Http\Controllers\Sell\SellController;
 use App\sell_stockrequest;
+use App\sell_stockrequests_archive;
 use App\sell_stockrequests_detail;
 use App\stockroom_product_statu;
 use App\sell_takeoutproduct;
@@ -555,13 +557,21 @@ class New_Edit_stockRequest
     {
         $argdata = $request->all();
         $rowid = $argdata['rowid'];
+        $deleteType = $argdata['type'];
+
 
         $countOfstockrequests_details = \DB::table('sell_stockrequests_details AS stockrequests_details')
             ->where('stockrequests_details.ssr_d_stockrequerst_id', '=', $rowid)
             ->count();
         if ($countOfstockrequests_details==0)
         {
-            sell_stockrequest::destroy($rowid);
+            if ($deleteType=='hide')
+                sell_stockrequest::where('id', '=', $rowid) ->update(array('deleted_flag' => 1));
+            else if ($deleteType=='fullDelete')
+                sell_stockrequest::destroy($rowid);
+            else if ($deleteType=='restore')
+                sell_stockrequest::where('id', '=', $rowid) ->update(array('deleted_flag' => 0));
+
             return '1';
         }
         else
@@ -1402,4 +1412,125 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
         }
         return 'OK';
     }
+
+//----------------------------------------------------------------------------------
+    public function borrow_BacktoStock($request){
+        $StockRequestID= $request['StockRequestID'];
+        //____________________________
+        $Qty=0;
+         $stockrequests_detail= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $StockRequestID)->get();
+        foreach ($stockrequests_detail as $st)
+        {
+            $Qty=$Qty+$st->ssr_d_qty;
+        }
+        //____________________________
+        $state= sell_takeoutproduct::where('sl_top_stockrequest_id', '=', $StockRequestID)->count();
+        if ($state==$Qty){
+             return   $this->onBacktoStock($StockRequestID);
+        }else {
+//            return $state;
+                if ($state == 0)   return 'stockIsEmpty';
+                else  return 'TackOut All Stock ';
+            }
+    }
+      //____________________________
+        function  onBacktoStock($StockRequestID){
+        // 1).........add new Archive Data from StockRequest  ...........
+
+
+
+            $detailDate = \DB::table('sell_stockrequests_details    AS details')
+                                 ->join('sell_takeoutproducts     AS  takeout','takeout.sl_top_StockRequestRowID', '=','details.id')
+                                 ->join('stockroom_serialnumbers  AS  serialnumbers','serialnumbers.id', '=','takeout.sl_top_product_serialnumber_id')
+
+                                 ->join('stockroom_products AS  products','products.id', '=','details.ssr_d_product_id')
+                                 ->join('stockroom_products_brands AS  brands','brands.id', '=','products.stkr_prodct_brand')
+                                 ->join('stockroom_products_types  AS  types' ,'types.id', '=','products.stkr_prodct_type')
+                                 ->where('details.ssr_d_stockrequerst_id', '=', $StockRequestID)
+
+                                 ->select(\DB::raw('
+                                                     details.id AS details_ID ,
+                                                     details.ssr_d_product_id         AS ssr_d_product_id,
+                                                     details.ssr_d_qty                AS ssr_d_qty,
+                                                     details.ssr_d_ParentChasis       AS ssr_d_ParentChasis,
+                                                     details.ssr_d_status             AS ssr_d_status,
+                                                     details.ssr_d_position           AS ssr_d_position ,
+                                                     products.stkr_prodct_partnumber_commercial AS stkr_prodct_partnumber_commercial ,
+                                                     products.stkr_prodct_title       AS stkr_prodct_title,
+                                                     products.stkr_prodct_type_cat    AS   prodct_type_cat,
+                                                     brands.stkr_prodct_brand_title   AS stkr_prodct_brand_title ,
+                                                     types.stkr_prodct_type_title     AS stkr_prodct_type_title,
+                                                     serialnumbers.id                 AS srial_ID ,
+                                                     serialnumbers.stkr_srial_parent  AS srial_parent ,
+                                                     serialnumbers.stkr_srial_serial_numbers_a AS srial_numbers_a,
+                                                     serialnumbers.stkr_srial_serial_numbers_b AS srial_numbers_b  ,
+                                                     takeout.id AS takeout_ID
+                                                   '))
+                                 ->get();
+
+
+          $pdfStockRequest= new SellController();
+          $pdfStockRequest->pdfStockRequest($StockRequestID ,'saveFile');
+
+          $stockrequests_archive = new sell_stockrequests_archive;
+          $stockrequests_archive->slsr_arch_stockrequests_id =$StockRequestID;
+          $stockrequests_archive->slsr_arch_products_data =$StockRequestID.'.pdf';
+          $stockrequests_archive->slsr_arch_more ='';
+          $stockrequests_archive->deleted_flag ='0';
+          $stockrequests_archive->archive_flag ='0';
+          $stockrequests_archive->save();
+
+
+
+
+//echo '1- stockrequests archive added';
+        // 2).........Change Serial Flag to ziro ...........
+            foreach ($detailDate AS $ddata ){
+                    stockroom_serialnumber::where('id', '=', $ddata->srial_ID)
+                               ->update(array('stkr_srial_status' => 0));
+//echo '2- freeUp serialNumber '.$ddata->srial_ID;
+            }
+        // 3).........delete takeoutproducts...........
+            foreach ($detailDate AS $ddata ){
+                sell_takeoutproduct::where('id', '=', $ddata->takeout_ID)
+                    ->delete();
+//echo '3- Delete takeoutproduct '.$ddata->takeout_ID;
+            }
+        // 4).........Delete sell_stockrequests_details ...........
+            foreach ($detailDate AS $ddata ){
+                sell_stockrequests_detail::where('id', '=', $ddata->details_ID)
+                    ->delete();
+//echo '4- Delete sell_stockrequests_details '.$ddata->takeout_ID;
+            }
+        // 5).........set Archive Field from sell_stockrequests ...........
+              if(sell_stockrequest::where('id', '=', $StockRequestID)
+                  ->update(array('archive_flag' => 1)))
+//echo '5- sell_stockrequest Archive Field set 1';
+        // 6).........Update stockroom_product_status...........
+$ret="__(";
+            foreach ($detailDate AS $ddata ){
+                $product_statu= stockroom_product_statu::where('sps_product_id', '=', $ddata->ssr_d_product_id)->firstOrFail();
+                $oldBorrowed= $product_statu->sps_borrowed;
+                $oldAvailable= $product_statu->sps_available;
+
+                $currentQTY= $ddata->ssr_d_qty;
+
+                $newBorrow=$oldBorrowed-1;
+                $newAvailable=$oldAvailable+1;
+                stockroom_product_statu::where('sps_product_id', '=', $ddata->ssr_d_product_id)
+                    ->update(array('sps_available' => $newAvailable ,
+                        'sps_borrowed' => $newBorrow
+                    ));
+                $ret= $ret.  '$oldBorrowed'.$oldBorrowed .'| $oldAvailable'.$oldAvailable .' | $currentQTY'.$currentQTY.
+                '| $newBorrow'.$newBorrow .'| $newAvailable'.$newAvailable .' )';
+            }
+//            return $ret;
+//echo '6- Update stockroom_product_status';
+        // 7).........Disable Edit Info Of StockRequest  ...........
+
+            return 'archived';
+
+        }
+     //____________________________
+
 }

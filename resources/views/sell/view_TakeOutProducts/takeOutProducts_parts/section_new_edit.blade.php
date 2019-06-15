@@ -149,7 +149,7 @@
                                 </span>
                               <span>
                               @can('TakeOutProducts_Delete', 1)
-                                  <i class="fa fa-trash gray "  ng-click="deleteSubChassisSerialFromTakeOutProducts(SSV.sl_top_StockRequestRowID,SSV.sl_top_product_serialnumber_id ,SSV.sl_top_productid,SSV.sl_top_stockrequest_id)" aria-hidden="true"></i>
+                                  <i class="fa fa-trash gray "  ng-click="deleteSubChassisSerialFromTakeOutProducts(SSV.sl_top_StockRequestRowID,SSV.sl_top_product_serialnumber_id ,SSV.sl_top_productid,SSV.sl_top_stockrequest_id,sr_type)" aria-hidden="true"></i>
                               @endcan
                              <br/>
 

@@ -23,6 +23,7 @@
       @section('section_filter') @show<p></p>
     <!-- List Table-->
       @section('section_list') @show
+
 @endcan
 @cannot('stockRequest_read', 1)
      <div class="alert alert-danger"><i class="fa fa-ban" aria-hidden="true"></i>{{Lang::get('labels.Access_denied')}}</div>

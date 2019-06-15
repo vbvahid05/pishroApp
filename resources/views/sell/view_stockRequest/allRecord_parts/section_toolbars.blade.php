@@ -3,13 +3,13 @@
 
   <!--  All view -->
     @can('stockRequest_create', 1)
-    <button ng-click="add_new()" ng-showx="btn_Add_new" class="btn btn-default">
+    <button ng-show="!showAllStockRequestIs" ng-click="add_new()" ng-showx="btn_Add_new" class="btn btn-default">
           <i class="fa fa-plus" aria-hidden="true"></i>
           {{ Lang::get('labels.stockRequest_Addnew') }}
       </button>
     @endcan
     @can('stockRequest_delete', 1)
-      <div ng-click="move_Selected_to_Trash()" ng-showx="btn_move_trash" class="btn btn-default">
+      <div ng-show="!showAllStockRequestIs" ng-click="move_Selected_to_Trash()" ng-showx="btn_move_trash" class="btn btn-default">
             <i class="fa fa-trash" aria-hidden="true"></i>
           {{ Lang::get('labels.delete') }}
       </div>
@@ -40,8 +40,10 @@
 <!-- TOOLBAR -->
 @can('stockRequest_delete', 1)
 <div class="toolbars well well-sm">
-      <span id="ShowAll" class="DatalistSelector active"  ng-click="showAll(0)" >      {{ Lang::get('labels.all') }}   </span>
-      <span id="ShowTrashed"  class="DatalistSelector" ng-click="showAll(1)" >   {{ Lang::get('labels.Trash') }}  </span>
+      <span id="ShowAll" class="DatalistSelector active"  ng-click="showAllStockRequest(0)" >      {{ Lang::get('labels.all') }}   </span>
+      <span id="ShowTrashed"  class="DatalistSelector" ng-click="showAllStockRequest(1)" >   {{ Lang::get('labels.Trash') }}  </span>
+      <span id="ShowArchive"  class="DatalistSelector" ng-click="showAllStockRequest(2)" >   {{ Lang::get('labels.Archive') }}  </span>
+
 </div>
 @endcan
 @endsection

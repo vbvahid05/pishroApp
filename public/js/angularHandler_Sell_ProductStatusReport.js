@@ -40,6 +40,26 @@ app.filter('isZiro', function() {
     };
 });
 //------------
+
+app.filter('SetRowColor',function() {
+    return function (Value) {
+        switch (Value){
+            case 0:
+                return 'StockTypeA';
+            break;
+            case 1:
+                return 'StockTypeB';
+            break;
+            case 2:
+                return 'StockTypeC';
+            break;
+
+
+        }
+
+    }
+});
+//------------
 app.filter('Vcurrency',function()
 {
     return function (BValue)
@@ -324,7 +344,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 }
             }
         }
-
 //----------------------------
         $scope.addDotToPrice=function(index)
         {
@@ -375,7 +394,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
         }
 //----------------------------
-
         function All_invoice_Date(mode,currentPage)
         {
 
@@ -421,12 +439,12 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $('#Dimmer_page').dimmer('hide');
             // All_invoice_Date(0,currentPage);
         }
-
         //!!!!!! SUB ACTION MENU !!!!!!!
         $scope.showAll=function (mode)
         {
             if (mode==1)
             {
+
                 $('#ShowTrashed').addClass('active');
                 $('#ShowAll').removeClass('active');
 
@@ -441,6 +459,10 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
             All_invoice_Date (mode);
         }
+
+
+
+
         //```````````````````````````
         $scope.RestoreFromTrash=function()
         {
@@ -451,12 +473,8 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         {
             alert('DeleteFromDataBase');
         }
-
-
         //iiiiiiiiiiiiiiiiiii
         //......................
-
-
         $scope.add_new_invoice=function()
         {
             $scope.FormTitle=lbl_new_invoice;
@@ -468,6 +486,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.mode1_fiald=false;
             $scope.NewinvoiceRow=true;
             $scope.edit_form_control=false;
+
 
             $scope.invoiceDetials('Set_newform','none','none');
 
@@ -486,7 +505,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             sritems=[];
 
         }
-
         //................................
         function GenerateInvoiceAlias_ID()
         {
@@ -499,7 +517,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
         //.................................
         function Load_curency()
         {
@@ -525,7 +542,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
         //..................................
         function load_PartNumbers()
         {
@@ -538,7 +554,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
         //..................................
         function load_Brands()
         {
@@ -550,7 +565,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
         //.............................
         $scope.getRelatedType_INV=function ()
         {
@@ -571,7 +585,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
 //-------------------------------------
         $scope.invoiceDetials =function(mode,task,oldVal)
         {
@@ -727,7 +740,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     break;
             }
         }
-
 //----------------------
         function update_invoice_description(task,newValue)
         {
@@ -751,7 +763,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     console.log(response.data);
                 }
         }
-
         //@@@@@@@@@@@@@@@
         function do_invoice_action (task,promptMessage,oldVal)
         {
@@ -782,10 +793,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 }
             }
 
-            //...............
-
         }
-
         //..................................
         $scope.getRelated_CAT_Type=function ()
         {
@@ -831,9 +839,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
         }
         //..................................
-
-
-        //..................................
         $scope.getProductData=function ()
         {
 
@@ -852,47 +857,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 reset();
             }), function xError(response)
             {}
-
-            // var args= {
-            //     Action:"select_product_by_partNum",
-            //     Product_id:$scope.partnumbers_id
-            // };
-
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            // $scope.echo_prodct_type_cat = $("#TypCatID option:selected").text();
-            // $scope.echo_Brand=$("#brandsID option:selected").text();
-            // $scope.echo_Type= $("#TypeID option:selected").text();
-            // $scope.echo_ProductTitle=$("#ProductID option:selected").text();
-            // reset();
         }
-
-
-        // $scope.selectProductByPartNum=function ()
-        // {
-        //
-        //     var args= {
-        //         Action:"select_product_by_partNum",
-        //         Product_id:$scope.partnumbers_id
-        //     };
-        //     $http.post('/services/sell/select_product_by_partNum',args).then
-        //     (function xSuccess(response) {
-        //         Rdata=response.data[0];
-        //         $scope.echo_Brand=Rdata['brand'];
-        //         $scope.echo_Type=Rdata['type'];
-        //         $scope.echo_ProductTitle=Rdata['prodct_title'];
-        //         $scope.echo_EPLPrice=Rdata['price'];
-        //         //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
-        //         reset();
-        //     }), function xError(response)
-        //     {}
-        // }
 //--
         $("#partnumber_list").change(function() {
             partnumbers_id=$("#partnumber_list").val();
@@ -913,8 +878,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 }), function xError(response)
                 {}
         });
-
-
 
         $("#selectProductByPartNum_SubProductB").change(function () {
 
@@ -956,35 +919,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
         }
 
-        //-0-------------------------------
-
-        // $scope.selectProductByPartNum_SubProduct=function ()
-        // {
-        //     if ($scope.mode==1)
-        //         productIDx=$scope.ProductID;
-        //     else
-        //         productIDx=$scope.partnumbers_id;
-        //
-        //     var args= {
-        //         Action:"select_product_by_partNum",
-        //         Product_id:productIDx
-        //     };
-        //     $http.post('/services/sell/select_product_by_partNum',args).then
-        //     (function xSuccess(response) {
-        //         $scope.product_details=true;
-        //         Rdata=response.data[0];
-        //         $scope.echo_Brand_B=Rdata['brand'];
-        //         $scope.echo_Type_B=Rdata['type'];
-        //         $scope.echo_ProductTitle_B=Rdata['prodct_title'];
-        //         $scope.echo_EPLPrice_B=Rdata['price'];
-        //         //$scope.echo_prodct_type_cat=Rdata['TypeCat'];
-        //         // reset();
-        //     }), function xError(response)
-        //     {}
-        // }
-//-0-------------------------------
-
-        //
         function reset()
         {
             $scope.resultProduct=true;
@@ -992,7 +926,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.product_QTY=1;
         }
         //----------------
-
         $scope.add_product_to_invoice_array=function()
         {
             if($scope.Unit_price == undefined || $scope.Unit_price == null)
@@ -1075,7 +1008,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
 
         }
-
 //------------------------------------------------
         $scope.add_subProduct_in_Invoice=function()
         {
@@ -1100,19 +1032,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
         }
 //------------------------------------------------
-
-
-
-
         function checkEplValu(val)
         {
             if (val=='--')
                 return 0;
             return val;
         }
-
         //-------------------
-
         $scope.addSubproduct=function(invoiceID,parentid)
         {
 
@@ -1130,7 +1056,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.echo_ProductTitle_B="";
             get_subProduct_Data(invoiceID,parentid);
         }
-
         function get_subProduct_Data(invoiceID,parentid)
         {
             $scope.waitForLoading=true;
@@ -1148,7 +1073,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }), function xError(response)
             {}
         }
-
 //--------------------------------------
         $scope.updateSortableList=function() {
             var args= {
@@ -1198,7 +1122,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         }
 //--------------------------------------
-
         $scope.checkEnterpressd=function ($event)
         {
             var keyCode = $event.which || $event.keyCode;
@@ -1225,7 +1148,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
             return cleanedValue;
         }
-
         //######## ACTIONS ###################
         $scope.save_Invoice_Base=function()
         {
@@ -1254,8 +1176,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 console.log(response.data);
             }
         }
-
-        //-------------
+//-------------
         $scope.addInvoiceDetailsTo_DB=function (mode)
         {
             var Args= {
@@ -1286,8 +1207,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 }
 
         }
-        //------------------------
-
+ //------------------------
         $scope.Show_Selected_invoice =function(Invoice_id)
         {
             $('.mainInvoice').removeClass('backLayer');
@@ -1511,17 +1431,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             {}
         }
 //-------------------
-
-
         $scope.cancle_invoice_Desc =function()
         {
             $scope.Show_Selected_invoice($scope.echo_invoicesID);
             $scope.invoiceDescription_edit=false;
             $scope.invoiceDescription_view=true;
         }
-
 //-------------------
-
         $scope.invoiceConfirm=function(invoiceID)
         {
             access=false;
@@ -1547,7 +1463,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
         }
         //---------------
-
         $scope.EditInvoiceLIST=function(mode)
         {
             // alert('EditInvoiceLIST');
@@ -1579,8 +1494,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             // }
 
         }
-
-//-----------------------------------
+//----------------------------------
         $scope.checkall=function ($id)
         {
 
@@ -1638,8 +1552,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
 
         }
-        //------------------------------------]
-
+//------------------------------------]
         $scope.move_invoicetoTrash=function(id,Delmode)
         {
             access=false;var r = confirm(deleteMessage);if (r == true) {access=true;} else {access=false; }
@@ -1663,7 +1576,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
 
         }
-
 //----------------------
         $scope.change_invoice_qty=function(invoiceID,producID,OldQty,roID)
         {
@@ -1717,8 +1629,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
             //alert(invoiceID+')'+producID+'-'+OldQty)
         }
-
-
         $scope.editUnit_price=function (index)
         {
             $("#editUnitprice"+index).removeClass('hidden');
@@ -1998,9 +1908,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.selectedModeIs='edit';
                     $scope.FormTitle=lbl_TakeOutProducts;
                     $scope.FormTitle_viewMode =lbl_view_stockRequest;
-
                     $scope.section_convert_stockrequerst_in_Dimmer=false;
-
                     $scope.section_new_edit_in_Dimmer=true; //show add_new_putting
                     $scope.section_sub_chassis_list=false;
                     $scope.section_pdf_Setting_dimmer=false;
@@ -2170,7 +2078,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             StockRequestID=($scope.echo_StockRequestID);
             SelectDimmer('edit');
             $('#Dimmer_page').dimmer('show');
-            $scope.EditSelected(StockRequestID);
+            $scope.EditSelected(StockRequestID,'viewMode');
 
         }
 //**************
@@ -2190,8 +2098,11 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                     $scope.showSubchassisParts  (productID,chassisID,StockRequestID )
                     // $scope.showSubchassisParts(chassisID,stckreqstDtlRowID,StockRequestID);
                 }
-                else
-                    toast_alert(response.data,'danger');
+                else {
+                    if (response.data='can not Delete')
+                        toast_alert(delete_Error_Message_Serial,'danger');
+                }
+
                 console.log(response.data)
 
             }), function xError(response)
@@ -2201,7 +2112,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
 
         }
-
 
         $scope.closeDimmer=function()
         {
@@ -2220,10 +2130,13 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $("#mode1").removeClass("positive");
             $scope.mode0_fiald=true;
             $scope.mode1_fiald=false;
+            $scope.new_edit_in_Dimmer=true;
+            $scope.stockrequestArchiveDate=false;
         }
 // BTN      ||-> edit Stock Request Row
-        $scope.EditSelected=function(StockRequest_id)
+        $scope.EditSelected=function(StockRequest_id,viewType)
         {
+
             $scope.PublicStockRequestid=StockRequest_id;
             SelectDimmer('edit');
             $('#Dimmer_page').dimmer('show')
@@ -2239,107 +2152,133 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             $scope.showRegistrdays=false;
             $scope.ShowWarrantyDiuration=false;
 
-            getList_PartNumbers(0);
+            switch (viewType) {
+                case 'viewMode':
+                    $scope.new_edit_in_Dimmer =true;
+                    getList_PartNumbers(0);
+                    $(".section_new_edit").removeClass("lowOpacity");
+                    var args={
+                            qmode:0,
+                            StockRequestID:StockRequest_id ,
+                            viewType:viewType
+                        };
+                    $http.post('/services/sell/getStockRequestData_by_id',args).then
+                    (function xSuccess(response)
+                    {
+                        console.log(response.data);
+                        $resp=response.data[0];
+                        $scope.sr_cstmr_id=  $resp.cstmr_id;
+                        $scope.sr_custommer=$resp.cstmrName+' '+$resp.cstmrFamily;
+                        $scope.sr_type=$resp.stockRequestsType.toString();
+                        console.log($scope.sr_type);
+                        $scope.sr_preFaktorNum=$resp.contract_number;
+                        //console.log($resp.warranty_date);
+                        $scope.warranyDate=Date_Convert_gregorianToJalali($resp.warranty_date);
+                        $scope.WarrantyPriod=$resp.WarrantyPriod ;
 
-            $(".section_new_edit").removeClass("lowOpacity");
-            var args=
-                {
-                    qmode:0,
-                    StockRequestID:StockRequest_id
-                };
-            $http.post('/services/sell/getStockRequestData_by_id',args).then
-            (function xSuccess(response)
-            {
-                $resp=response.data[0];
-                 $scope.sr_cstmr_id=  $resp.cstmr_id;
-                $scope.sr_custommer=$resp.cstmrName+' '+$resp.cstmrFamily;
-                $scope.sr_type=$resp.stockRequestsType.toString();
-                console.log($scope.sr_type);
-                $scope.sr_preFaktorNum=$resp.contract_number;
-                //console.log($resp.warranty_date);
-                $scope.warranyDate=Date_Convert_gregorianToJalali($resp.warranty_date);
-                $scope.WarrantyPriod=$resp.WarrantyPriod ;
+                        $('.selectpicker').selectpicker('val', $resp.cstmr_id.toString());
 
-                $('.selectpicker').selectpicker('val', $resp.cstmr_id.toString());
-
-                $scope.sr_deliveryDate=$resp.delivery_date;
-                    var res =$scope.sr_deliveryDate.split("-");
-                    $scope.jalaiDliver=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
-                    var res =$scope.jalaiDliver.split("/");
+                        $scope.sr_deliveryDate=$resp.delivery_date;
+                        var res =$scope.sr_deliveryDate.split("-");
+                        $scope.jalaiDliver=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
+                        var res =$scope.jalaiDliver.split("/");
                         $scope.Dliverdays=res[2];
                         $scope.DliverMonths=res[1];
                         $scope.Dliveryears=res[0];
 
-                $scope.sr_registration_date=$resp.registration_date;
-                    var res =$scope.sr_registration_date.split("-")
-                $scope.jalaiRegistr=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
-                    var res =$scope.jalaiRegistr.split("/");
-                    $scope.Registrdays=res[2];
-                    $scope.RegistrMonths = res[1];
-                    $scope.Registryears = res[0];
+                        $scope.sr_registration_date=$resp.registration_date;
+                        var res =$scope.sr_registration_date.split("-")
+                        $scope.jalaiRegistr=gregorian_to_jalali( parseInt(res[0]), parseInt(res[1]), parseInt(res[2]));
+                        var res =$scope.jalaiRegistr.split("/");
+                        $scope.Registrdays=res[2];
+                        $scope.RegistrMonths = res[1];
+                        $scope.Registryears = res[0];
 
 
 //-----------------Get Organization Name -------
-                if ($resp.cstmrOrganization) // if cstmr Organization not null
-                {
-                    var args=
-                        {qmode:1,StockRequestID:StockRequest_id};
-                    $http.post('/services/sell/getStockRequestData_by_id',args).then
-                    (function xSuccess(response)
-                    {
-                        $resp=response.data[0];
-                        $scope.sr_Org_Name=$resp.orgName;
+                        if ($resp.cstmrOrganization) // if cstmr Organization not null
+                        {
+                            var args=
+                                {qmode:1,StockRequestID:StockRequest_id};
+                            $http.post('/services/sell/getStockRequestData_by_id',args).then
+                            (function xSuccess(response)
+                            {
+                                $resp=response.data[0];
+                                $scope.sr_Org_Name=$resp.orgName;
+                            }), function xError(response)
+                            {
+                                toast_alert(response.data,'danger');
+                            }
+                        }
+//--------------GET stockrequests Products---------------
+                        $scope.Loading_waitForDB=true;
+                        var args=
+                            {qmode:2,StockRequestID:StockRequest_id};
+                        $http.post('/services/sell/getStockRequestData_by_id',args).then
+                        (function xSuccess(response)
+                        {
+                            stockRequestProducts=response.data;
+                            $scope.stockRequestProductsArray= stockRequestProducts;
+                            $scope.list = ['first', 'second', 'third', 'last'];
+                            $scope.Loading_waitForDB=false;
+                            if ( Toast_error_500(response))
+                                $scope.ReloadData($scope.echo_StockRequestID);
+                        }), function xError(response)
+                        {
+                            if ( Toast_error_500(response))
+                                $scope.ReloadData($scope.echo_StockRequestID);
+                        }
+//-----------------------------
+                        $("#Dimmer_page").addClass("dimmer_scroller");
                     }), function xError(response)
                     {
                         toast_alert(response.data,'danger');
                     }
-                }
-//--------------GET stockrequests Products---------------
-                $scope.Loading_waitForDB=true;
-                var args=
-                    {qmode:2,StockRequestID:StockRequest_id};
-                $http.post('/services/sell/getStockRequestData_by_id',args).then
-                (function xSuccess(response)
-                {
-                    stockRequestProducts=response.data;
-                    $scope.stockRequestProductsArray= stockRequestProducts;
-                    $scope.list = ['first', 'second', 'third', 'last'];
-                    $scope.Loading_waitForDB=false;
-                     if ( Toast_error_500(response))
-                        $scope.ReloadData($scope.echo_StockRequestID);
-                }), function xError(response)
-                {
-                    if ( Toast_error_500(response))
-                        $scope.ReloadData($scope.echo_StockRequestID);
-                }
-//-----------------------------
-                console.log(response.data);
-                $("#Dimmer_page").addClass("dimmer_scroller");
-            }), function xError(response)
-            {
-                toast_alert(response.data,'danger');
-            }
-            $scope.echo_StockRequestID =StockRequest_id;
-            //$scope.sr_custommer="@";
-            $('.refreshBtn i.fa.fa-refresh').removeClass('fa-spin');
-        }
-        //--------------------
+                    $scope.echo_StockRequestID =StockRequest_id;
+                    $('.refreshBtn i.fa.fa-refresh').removeClass('fa-spin');
+                break;
 
-            $scope.updateMainList=function()
+                case 'archiveMode':
+                    $scope.new_edit_in_Dimmer =false;
+                    var args={
+                        qmode:0,
+                        StockRequestID:StockRequest_id ,
+                        viewType:viewType
+                    };
+                    $http.post('/services/sell/getStockRequestData_by_id',args).then
+                    (function xSuccess(response){
+                        // console.log(response.data);
+                        data=response.data;
+                        $scope.stockrequestArchiveDate=JSON.parse(data[0]['archivesData']);
+                        console.log($scope.stockrequestArchiveDate);
+
+
+                        }),
+                     function xError(response){
+
+                     }
+
+                break;
+
+            }//switch
+        }
+
+
+
+
+        //--------------------
+       $scope.updateMainList=function()
             {
                     alert('updateMainList');
             }
         //--------------------
         $scope.changeQTY=function(productID,OldQTY,StockRequestID,sr_type,index)
         {
-     //       alert('The Codes are Commented ');
-     //       var newQTY = prompt(insetNewQTY_message, OldQTY);
-
-
-
+         //       var newQTY = prompt(insetNewQTY_message, OldQTY);
              var newQTY = prompt(insetNewQTY_message, OldQTY);
-             if (newQTY < OldQTY && newQTY != null)
+             if (newQTY < OldQTY && newQTY != null &&  newQTY >0 )
              {
+
                  var Args={
                      type:sr_type,
                      stockrequest_id:StockRequestID,
@@ -2347,6 +2286,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                      newQty:parseInt(newQTY),
                      oldQty:OldQTY
                  }
+
                  $http.post('/services/sell/countOftakeoutproducts',Args).then(function xSuccess(response)
                  {
                      console.log(response.data);
@@ -2363,6 +2303,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             // // else if (newQTY == null || newQTY == "") {/*toast_alert('empty !!?','warning');*/ }
              else
               {
+                // alert('B');
                  if (sr_type==1) // is  Ta'ahodi
                  {
                      var Args={
@@ -2377,7 +2318,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                          stockRequestProducts[index].product_QTY= newQTY;
                      }), function xError(response) { }
                  }
-                 else if (sr_type==0) // is  Ghatii  sr_type=0
+                 else if (sr_type==0 || sr_type==2  && newQTY >0 ) // is  Ghatii  sr_type=0 Or Amani sr_type==2
                  {
                    //Update QTY  OLdQTY+newQTY | in -> stockrequests details Table
                    //chak if Product is Avail ->  Avail=Avail-newQTY  &  Reserve=Reserve+newQTY | in -> product_status Table
@@ -2390,25 +2331,37 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                      }
                      $http.post('/services/sell/UpdateProductQTY',Args).then(function xSuccess(response)
                      {
+                         console.log(response.data);
                          if (response.data==1)
                            stockRequestProducts[index].product_QTY= newQTY;
-                         else
+                         else if (response.data==0)
                              toast_alert(Order_QTY_error_message,'danger');
+                         else toast_alert(message_addOneChassisinStockRequest,'danger');
                      }), function xError(response) { }
                  }
              }
         }
-
-
         //-------------------
-        $scope.DeleteRequestFromBaseList=function(rowid)
+        $scope.DeleteRequestFromBaseList=function(rowid,type)
         {
             /*confirm ؟ */
-            access=false;var r = confirm(deleteMessage);if (r == true) {access=true;} else {access=false; }
+            switch (type) {
+                case 'restore':
+                    message=Q_Restor_Message;
+                break;
+                case 'fullDelete':
+                    message=Q_Full_delete_Message;
+                break;
+                case 'hide':
+                    message=deleteMessage;
+                break;
+            }
+            access=false;var r = confirm(message);if (r == true) {access=true;} else {access=false; }
             if(access)
             {
                 var Args = {
                     rowid: rowid,
+                    type: type
                 }
                 $http.post('/services/sell/Delete_StockRequest_From_BaseList', Args).then(function xSuccess(response) {
                     if (response.data == 1) {
@@ -2459,6 +2412,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 //Load List
         function getList_StockRequest(amode,currentPage,pagin)
         {
+
             if (pagin) pagination=pagin
             else pagination=10;
             sPageURL =document.URL;
@@ -2505,39 +2459,31 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             getList_StockRequest(0,0,100000);
 
         }
-//-------------------------------------------------
-//     $scope.showDroplist=function()
-//     {
-//         getList_StockRequest(0,0,100000);
-//         if ($scope.search.cstmr_family.length >=3)
-//         {
-//              $('.vbDropList').addClass('show');
-//              $('.vbDropList').removeClass('hide');
-//         }
-//     }
-//-------------------------------------------------
-//     $scope.hideDroplist=function()
-//     {
-//
-//         if ($scope.search.cstmr_family.length <3)
-//         {
-//             $('.vbDropList').addClass('hide');
-//             $('.vbDropList').removeClass('show');
-//         }
-//     }
-//-------------------------------------------------
-// $scope.SelectItemFromDropList=function(family)
-// {
-//     try {
-//         $scope.search.cstmr_family =family;
-//     }
-//     catch (e) {
-//             $('#serchInput').val(family);
-//     }
-//
-//     $('.vbDropList').addClass('hide');
-//     $('.vbDropList').removeClass('show');
-// }
+
+        //--------------------------------------------------------
+        $scope.showAllStockRequest=function (mode)
+        {
+            switch (mode){
+                case 0:
+                    $('.DatalistSelector').removeClass('active');
+                    $('#ShowAll').addClass('active');
+                    $scope.showAllStockRequestIs=0;
+                break;
+                 case 1:
+                     $('.DatalistSelector').removeClass('active');
+                     $('#ShowTrashed').addClass('active');
+
+                     $scope.showAllStockRequestIs=1;
+                 break;
+                case 2:
+                     $('.DatalistSelector').removeClass('active');
+                     $('#ShowArchive').addClass('active');
+                     $scope.showAllStockRequestIs=2;
+                 break;
+            }
+            getList_StockRequest(mode,0,0)
+        }
+
         //--------after show List  Show Action Buttons -----------
         $scope.showActionBTNs=function ()
         {
@@ -2883,7 +2829,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 function xSuccess(response)
                 {
                     console.log(response.data);
-                    $scope.EditSelected(StockRequestID);
+                    $scope.EditSelected(StockRequestID,'viewMode');
                 }), function xError(response)
             {
                 alert(response.data);
@@ -2990,9 +2936,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             }
         }
         //-------------
-
-
-        //-------------
         $scope.edit_DB=function (mode)
         {
 
@@ -3097,7 +3040,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 $scope.product_prtNum=null;
             }
         }
-
 
         $scope.selectRow =function (productID,Totalqty,StockRequestID,StockRequestRowID)
         {
@@ -3222,7 +3164,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             //`````````````````````````````````````
 
         }
-
         //-------------
         $scope.checkThisSerial=function (serial ,productID ,inputIndex)
         {
@@ -3323,9 +3264,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         {
             $("#status25").html("subrow_Show");
         }
-
 //---------------
-
         $scope.Check =function ()
         {
             //alert($(".search").text());
@@ -3333,7 +3272,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
             alert( $('#partnumber_list').dropdown('get value '));
         }
-
 //---------------
         $scope.checkEnterpressdB=function ($event,id)
         {
@@ -3361,9 +3299,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 $('.A'+newid).trigger("focus");
             }
         }
-
 //------------------------------------------------
-
         $scope.selectSubChassis=function(productid)
         {
             $(".singleRow").removeClass('active');
@@ -3511,8 +3447,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             index++;
             $('.inptA'+index).trigger("focus");
         }
-//---------------------------------------------------
-
+//--------------------------------------------------
         $scope.deleteSubChassisSerialFromTakeOutProducts=function( StockRequestRowID,serialnumber_id ,productid,stockrequest_id,stockRequestType) {
             var arg={
                 StockRequestRow_ID :StockRequestRowID ,
@@ -3521,7 +3456,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 stockrequest_ID :stockrequest_id,
                 stockRequestType:stockRequestType
             }
-
+            console.log(arg);
             //
             $http.post('/services_sell/TakeOutProducts/deleteSubChassisSerial',arg).then
             (function pSuccess(response){
@@ -3533,7 +3468,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
             });
 
         }
-
 //---------------------------------------------
         $scope.showConvertStockRequestPage=function()
         {
@@ -3593,7 +3527,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
                 });
             }
         }
-
 //---------------------------------------------
         $scope.closeConvertDimmer=function()
         {
@@ -3694,7 +3627,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
         }
 //---------------------------------------------
-            $scope.updateSortableList_StockRequestArray=function()
+        $scope.updateSortableList_StockRequestArray=function()
             {
                 var args= {
                     Action:"updateSortableList_StockRequestArray",
@@ -3711,10 +3644,8 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         $scope.ReloadData=function(echo_StockRequestID)
         {
             $('.refreshBtn i.fa.fa-refresh').addClass('fa-spin');
-            $scope.EditSelected($scope.PublicStockRequestid);
+            $scope.EditSelected($scope.PublicStockRequestid ,'viewMode');
         }
-
-
 //---------------------------------------------
         $scope.pdf_config=function (invoice_id)
         {
@@ -3844,7 +3775,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
             }
         }
-
 //----------------------------------------------
         $scope.allSettingSave=function(param)
         {
@@ -3993,7 +3923,6 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
 
         }
-
 //*********************************
     $scope.editWarrantyDiuration=function (value)
     {
@@ -4015,7 +3944,7 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         {}
 
     }
-
+//*********************************
     $scope.reIndex=function (id) {
         var arg={
             StockRequestID :id ,
@@ -4028,7 +3957,32 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
         {}
     }
 
+    //-------Borrow StockRequest
+    $scope.borrow_BacktoStock=function(StockRequestID){
+        var args=
+            {StockRequestID: StockRequestID };
+        $http.post('/services_sell/Stockrequest/borrow_BacktoStock',args).then
+        (function xSuccess(response)
+        {
+            // alert(response.data)
+            if(response.data=='archived'){
+                toast_alert( message_StockRequest_Archived_and_returned,'success');
+                $scope.closeDimmer();
+            }
 
+            if(response.data=='stockIsEmpty')
+                toast_alert( message_noserial_cantReturnTOStock,'warning');
+            if (response.data =='TackOut All Stock ')
+                toast_alert(  message_notComplete_cantReturnTOStock ,'warning');
+
+        }), function xError(response)
+        {
+            toast_alert(response.data,'danger');
+        }
+    }
+
+
+//*********************************
     $scope.testC=function () {
         alert('@#');
     }

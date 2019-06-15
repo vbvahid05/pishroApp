@@ -102,10 +102,12 @@ class TakeOutProducts
 //---------------------------------------
     public function TakeASerial($request)
     {
+
         $re=$request->all();
         $serial =$re['serial'];
         $serialA=$re['serialA'];
         $serialB=$re['serialB'];
+        $stockRequestType =$re['stockRequestType'];
 
         $serialnumber = stockroom_serialnumber::
                  where('stkr_srial_status', '=', '0')
@@ -132,18 +134,36 @@ class TakeOutProducts
             $stockrequest->save();
         //2) the active SerialNumber
             //--------------------------------
-             stockroom_serialnumber::where('id', '=', $serialnumberID) ->update(array('stkr_srial_status' => 1));
+            if ($stockRequestType==0)
+                stockroom_serialnumber::where('id', '=', $serialnumberID) ->update(array('stkr_srial_status' => 1));
+            if ($stockRequestType==2)
+                stockroom_serialnumber::where('id', '=', $serialnumberID) ->update(array('stkr_srial_status' => 3));
+
             //--------------------------------
         //3) change reserve Status to sold Status
-            $product_statu = stockroom_product_statu::where('sps_product_id', '=', $productId)->firstOrFail();
-            $reservedQTY=$product_statu->sps_reserved; if ($reservedQTY==null) $reservedQTY =0;
-            $sps_soldQTY=$product_statu->sps_sold; if ($sps_soldQTY==null) $sps_soldQTY=0;
-            $reservedQTY --;
-            $sps_soldQTY++;
-            stockroom_product_statu::where('sps_product_id', '=', $productId)
-                                    ->update(array('sps_reserved' => $reservedQTY , 'sps_sold' => $sps_soldQTY));
+
+            if ($stockRequestType==0){
+                $product_statu = stockroom_product_statu::where('sps_product_id', '=', $productId)->firstOrFail();
+                $reservedQTY=$product_statu->sps_reserved; if ($reservedQTY==null) $reservedQTY =0;
+                $sps_soldQTY=$product_statu->sps_sold; if ($sps_soldQTY==null) $sps_soldQTY=0;
+                $reservedQTY --;
+                $sps_soldQTY++;
+                stockroom_product_statu::where('sps_product_id', '=', $productId)
+                    ->update(array('sps_reserved' => $reservedQTY , 'sps_sold' => $sps_soldQTY));
+                return 1;
+            }
+           else if ($stockRequestType==2){
+                $product_statu = stockroom_product_statu::where('sps_product_id', '=', $productId)->firstOrFail();
+                $reservedQTY=$product_statu->sps_reserved; if ($reservedQTY==null) $reservedQTY =0;
+                $sps_borrowed=$product_statu->sps_borrowed; if ($sps_borrowed==null) $sps_borrowed=0;
+                $reservedQTY --;
+                $sps_borrowed++;
+                stockroom_product_statu::where('sps_product_id', '=', $productId)
+                    ->update(array('sps_reserved' => $reservedQTY , 'sps_borrowed' => $sps_borrowed));
+               return 1;
+            }
             //--------------------------------
-           return 1;
+
         }
         else
         {
@@ -170,6 +190,7 @@ class TakeOutProducts
                 $this->updateFieldsAfterDelete_Amani($product_ID,$exep,$serialnumber_ID,$stockrequest_ID,$StockRequestRow_ID);
             //----------
    }
+
     public function updateFieldsAfterDelete($product_ID,$exep,$serialnumber_ID,$stockrequest_ID,$StockRequestRow_ID){
        $product_statu = stockroom_product_statu::where('sps_product_id', '=', $product_ID )->firstOrFail();
        $sold= $product_statu->sps_sold;

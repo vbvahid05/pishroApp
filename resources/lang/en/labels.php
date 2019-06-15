@@ -66,6 +66,7 @@ return [
 'update' => 'ثبت',
 'delete' => 'حذف',
 'view' => 'نمایش',
+'Archive'=>'بایگانی',
 'fulldelete' => 'حذف کامل',
 'all' => 'همه',
 'Trash' => 'زباله دان',

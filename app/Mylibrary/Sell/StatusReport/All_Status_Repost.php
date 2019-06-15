@@ -9,8 +9,18 @@
 namespace App\Mylibrary\Sell\StatusReport;
 
 
+use App\Stockroom_stock_putting_product;
+
 class All_Status_Repost
 {
+    function getParentQty($parentID){
+        if ($parentID){
+            $parentData = stockroom_stock_putting_product::find($parentID);
+            return $parentQty= $parentData->stkr_stk_putng_prdct_qty;
+        }else
+            return 1;
+    }
+
     public  function get_reports ($request)
     {
         $data=$request->all();
@@ -41,22 +51,23 @@ class All_Status_Repost
             foreach ($val as $v)
             {
                 $status =$v->stk_ordrs_status_id;
+                $parentQty = $this->getParentQty($v->stkr_stk_putng_prdct_partofchassis);
                 switch($status)
                 {
                     case 1:
-                        $stVal1=$stVal1+$v->stkr_stk_putng_prdct_qty;
+                        $stVal1=$stVal1+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 2:
-                        $stVal2=$stVal2+$v->stkr_stk_putng_prdct_qty;
+                        $stVal2=$stVal2+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 3:
-                        $stVal3=$stVal3+$v->stkr_stk_putng_prdct_qty;
+                        $stVal3=$stVal3+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 4:
-                        $stVal4=$stVal4+$v->stkr_stk_putng_prdct_qty;
+                        $stVal4=$stVal4+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 5:
-                        $stVal5=$stVal5+$v->stkr_stk_putng_prdct_qty;
+                        $stVal5=$stVal5+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                 }
             }

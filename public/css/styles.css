@@ -1802,10 +1802,16 @@ label.invcsting {
 
 .StockTypeA {
     border-right: 5px solid #8BC34A;
+    background: #8bc3490d;
 }
 
 .StockTypeB {
     border-right: 5px solid #FFC107;
+    background: #ffc1060d;
+}
+.StockTypeC {
+    border-right: 5px solid #956bf4;
+    background: #956af412;
 }
 
 .StockType_span_A {
@@ -2374,4 +2380,7 @@ i.fa.fa-trash.gray {
 .select_CustommerList.warranty .btn-group.bootstrap-select {
     margin: 0 !important;
     margin-bottom: 5px !important;
+}
+.stockrequestArchiveData th {
+    text-align: center;
 }

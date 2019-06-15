@@ -71,7 +71,7 @@
                   <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
                   @can('TakeOutProducts_update', 1)
                    <span class="edit">
-                      <span class="editBtn"  ng-click="EditSelected(row.id)" aria-label="{{Lang::get('labels.edit')}}" >
+                      <span class="editBtn"  ng-click="EditSelected(row.id,'viewMode')" aria-label="{{Lang::get('labels.edit')}}" >
                          {{ Lang::get('labels.stockRequest_Edit') }}
                        </span>
                     </span>
