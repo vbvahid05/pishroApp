@@ -35,7 +35,7 @@
                         var obj = JSON.parse($("#postContentAtachments").val());
                         console.log(obj.length);
                         for (i = 0; i < obj.length; i++) {
-                            string=string+'<img src="/storage/mediaCenter/'+obj[i]['id']+'/thumb/'+obj[i]['mdiac_filename']+'" >'
+                            string=string+'<img src="{{ url('/') }}/storage/mediaCenter/'+obj[i]['id']+'/thumb/'+obj[i]['mdiac_filename']+'" >'
                         }
                         editor.insertHtml(string);
                     }

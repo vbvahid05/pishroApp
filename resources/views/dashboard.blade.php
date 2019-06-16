@@ -57,8 +57,8 @@
 
 
     <div class="row" style="margin-top: 15px">
-        <?php echo 'Current PHP version: ' . phpversion(); ?>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <?php // echo 'Current PHP version: ' . phpversion(); ?>
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon bg-aqua"><i class="fa fa-user-circle-o"></i></span>
                 <div class="info-box-content">
@@ -78,7 +78,7 @@
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div><!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-dropbox"></i></span>
                 <div class="info-box-content">
@@ -103,7 +103,7 @@
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon bg-green"><i class="fa fa-diamond"></i></span>
                 <div class="info-box-content">
@@ -123,7 +123,7 @@
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div><!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-credit-card"></i></span>
                 <div class="info-box-content">
@@ -136,7 +136,7 @@
 
 
     <div class="row">
-        <div class="col-md-4 pull-right" >
+        <div class="col-md-6 pull-right" >
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-bug" aria-hidden="true" style="color: #49758c;"></i>&nbsp;{{Lang::get('labels.changeLog')}}</h3>
@@ -182,7 +182,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 pull-right" >
+        <div class="col-md-6 pull-right" >
         <div class="box box-warning ">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-pie-chart" aria-hidden="true" style="color: #49758c;"></i>&nbsp;{{Lang::get('labels.chart')}}</h3>
@@ -199,7 +199,7 @@
         </div>
         </div>
 
-        <div class="col-md-4 pull-right" >
+        <div class="col-md-6 pull-right" >
                     <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title"><i class="fa fa-group" aria-hidden="true" style="color: #49758c;"></i>&nbsp;{{Lang::get('labels.Users_activity')}}</h3>
