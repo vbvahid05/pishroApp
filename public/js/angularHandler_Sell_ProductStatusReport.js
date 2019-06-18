@@ -3959,27 +3959,28 @@ app.controller('Sell_ProductStatusReport_Ctrl', ['$scope','$http','Pagination','
 
     //-------Borrow StockRequest
     $scope.borrow_BacktoStock=function(StockRequestID){
-        var args=
-            {StockRequestID: StockRequestID };
-        $http.post('/services_sell/Stockrequest/borrow_BacktoStock',args).then
-        (function xSuccess(response)
-        {
-            // alert(response.data)
-            if(response.data=='archived'){
-                toast_alert( message_StockRequest_Archived_and_returned,'success');
-                $scope.closeDimmer();
+        access=false;var r = confirm(message_askFor_returnProductsToStock);if (r == true) {access=true;} else {access=false; }
+        if(access){
+            var args=
+                {StockRequestID: StockRequestID };
+            $http.post('/services_sell/Stockrequest/borrow_BacktoStock',args).then
+            (function xSuccess(response)
+            {
+                if(response.data=='archived'){
+                    toast_alert( message_StockRequest_Archived_and_returned,'success');
+                    $scope.closeDimmer();
+                }
+                if(response.data=='stockIsEmpty')
+                    toast_alert( message_noserial_cantReturnTOStock,'warning');
+                if (response.data =='TackOut All Stock ')
+                    toast_alert(  message_notComplete_cantReturnTOStock ,'warning');
+
+            }), function xError(response)
+            {
+                toast_alert(response.data,'danger');
             }
-
-            if(response.data=='stockIsEmpty')
-                toast_alert( message_noserial_cantReturnTOStock,'warning');
-            if (response.data =='TackOut All Stock ')
-                toast_alert(  message_notComplete_cantReturnTOStock ,'warning');
-
-        }), function xError(response)
-        {
-            toast_alert(response.data,'danger');
         }
-    }
+ }
 
 
 //*********************************
