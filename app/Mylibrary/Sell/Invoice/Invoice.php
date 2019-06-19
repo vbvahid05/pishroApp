@@ -350,6 +350,8 @@ class Invoice
                                                 invoice_detail.sid_qty           AS  qty,
                                                 products.stkr_prodct_price       AS  EPL_price                                                                                                
                                                 '))
+                         ->orderBy('sid_position', 'ASC')
+                         ->orderBy('invoice_detail.id', 'ASC')
                          ->get();
             $ArrayCount=$ArrayCount+count($invoiceSubProductDate);
 
@@ -853,12 +855,34 @@ public function add_subProduct_in_Invoice   ($request)
     $SubproductID= $data['SubproductID'];
     $Qty= $data['Qty'];
     //----------------------
+    $count = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID )
+                                ->where('sid_parent', '=',$parentProduct_id )
+                                ->count();
+
+
+
+       try{
+         $check=sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID )
+        ->where('sid_parent', '=',$parentProduct_id )
+        ->orderBy('sid_position','DESC')
+        ->firstOrFail();
+        $last=$check['sid_position'];
+       }catch (\Exception $exception){
+           $last =0; $count=0;
+       }
+        if ( ($last == $count) || $count==0 )
+            $count++;
+        else if ($count < $last)
+            $count=$last+1;
+
+
     $stockrequest = new  sell_invoice_detail;
     $stockrequest->sid_invoice_id = $invoiceID;
     $stockrequest->sid_product_id = $SubproductID;
     $stockrequest->sid_qty = $Qty;
     $stockrequest->sid_Unit_price=0;
     $stockrequest->sid_parent=$parentProduct_id;
+    $stockrequest->sid_position=$count;
     $stockrequest->deleted_flag=0;
     $stockrequest->archive_flag=0;
     $stockrequest->save();
@@ -867,7 +891,6 @@ public function add_subProduct_in_Invoice   ($request)
 
     public function get_subProduct_list_invoice   ($request)
     {
-
         $data=$request->all();
         $invoiceID=$data['invoiceID'];
         $parentProduct_id= $data['parentProduct_id'];
@@ -878,8 +901,25 @@ public function add_subProduct_in_Invoice   ($request)
 
             ->where('invoice_details.sid_invoice_id', '=', $invoiceID)
             ->where('invoice_details.sid_parent', '=', $parentProduct_id)
+            ->orderBy('sid_position', 'ASC')
+            ->orderBy('invoice_details.id', 'ASC')
+
             ->get();
 
+    }
+//-------------------------------
+    public  function  updateSortableList ($req)
+    {
+        $data=$req['data'];
+        $i=0;
+        foreach ($data as $r)
+        {
+            $i++;
+            sell_invoice_detail::where('sid_invoice_id', '=', $r['sid_invoice_id'])
+                                ->where('sid_product_id', '=',$r['id'])
+                                ->update(array('sid_position' => $i));
+        }
+        return 'OK';
     }
 //-------------------------------
     public function delete_subProduct_from_list_invoice($request)
@@ -1080,6 +1120,72 @@ public function add_subProduct_in_Invoice   ($request)
             ->get();
     }
 
+      private function find_Position ($invoiceID ,$position ,$action){
+            $items = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+            ->where('sid_parent', '!=', null)
+             ->orderBy('sid_position' ,'ASC')
+            ->get();
+
+          for($i=0; $i<=count($items) ;$i++)
+          {
+              if ($items[$i]['sid_position']== $position) {
+                  if ($action =='up')
+                    return $items[$i-1]['sid_position'];
+                  else
+                      return $items[$i+1]['sid_position'];
+              }
+          }
+    }
+//--------------------
+   public function changePosition ($req)
+   {
+        $doing =$req['doing'];
+        $position = $req['position'];
+        $invoiceID= $req['invoiceID'];
+        $currentRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                  ->where('sid_position', '=',$position)
+                                                  ->firstOrFail();
+        $currentRecordID=$currentRecord['id'];
+        switch ($doing){
+            case 'up' :
+               //find Last record ID
+               try{
+                     $lastPosition= $this->find_Position($invoiceID ,$position ,'up');
+                     $lastRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                      ->where('sid_position', '=',$lastPosition)->firstOrFail();
+                 echo   $lastRecordID=$lastRecord['id'];
+
+                    sell_invoice_detail::where('id', '=', $currentRecordID)
+                       ->update(array('sid_position' => $lastPosition));
+
+                    sell_invoice_detail::where('id', '=', $lastRecordID)
+                       ->update(array('sid_position' => $position));
+                  // return 1;
+               }
+               catch (\Exception $exception) { return $exception->getCode(); }
+               // change position
+
+
+            break;
+            case 'down' :
+                try{
+
+                    $NextPosition= $this->find_Position($invoiceID ,$position ,'down');
+                    $NextRecord = sell_invoice_detail::where('sid_invoice_id', '=',$invoiceID)
+                                                     ->where('sid_position', '=',$NextPosition)->firstOrFail();
+                    $NextRecordID=$NextRecord->id;
+                    sell_invoice_detail::where('id', '=', $currentRecordID)
+                        ->update(array('sid_position' => $NextPosition));
+                    sell_invoice_detail::where('id', '=', $NextRecordID)
+                        ->update(array('sid_position' => $position));
+                    return 1;
+                }
+                catch (\Exception $exception) { return $exception->getCode(); }
+                // change position
+
+            break;
+        }
+   }
 //--------------------
     public  function  getPDFStings($req)
     {
@@ -1126,9 +1232,34 @@ Mouse over this paragraph, to display the title attribute as a tooltip.
     }
 
 //--------------------
+
     public function getPdf($data)
     {
+        $style=new pdf_Style();
+        $HFD= new pdf_headerFooterDesc($data);
+        $pdfSetting= new pdf_setting($data);
 
+        $mainTite=" پیش فاکتور فروش";
+        //Header
+            $Header=$HFD->get_header();
+        // Main Data
+            $Invoice_info =$HFD->get_invoice_info();
+            $MainData=$HFD->get_MainTable();
+        // Descriptions
+            $Descriptions=$HFD->get_desc();
+        //Footer
+            $footer =$HFD->get_footer();
+
+        $marginTop=50;
+        $space=1;
+
+        if ($pdfSetting->stng_mainTableFontSize())
+              $stng_mainTableFontSize=$pdfSetting->stng_mainTableFontSize();
+         else $stng_mainTableFontSize=12;
+
+        $pdfStyle= $style->pdf_Css_Style($stng_mainTableFontSize);
+
+<<<<<<< HEAD
 //        $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
 //            1,  9,   'P');
 
@@ -1577,8 +1708,42 @@ EOT;
 
         $file_name=$InvoiceInfo->si_Alias_id ;
         if ($InvoiceInfo->org_name !=null) $file_name =$file_name.'_'.$InvoiceInfo->org_name.'.pdf';
-        $mpdf->Output($file_name, 'D');
+=======
+        $Separator='<div  style="height: '.$space.'cm " > </div>';
+        $Seprator_date_To_sellerInfo ='<div  style="height: '.$pdfSetting->space_date_To_sellerInfo() .'cm " > </div>';
+        $Seprator_seller_To_InvoiceTable='<div  style="height: '.$pdfSetting->space_seller_To_InvoiceTable().'cm " > </div>';
+        $Seprator_InvoiceTable_To_DescriptionTable='<div  style="height: '. $pdfSetting->space_InvoiceTable_To_DescriptionTable() .'cm " ></div>';
 
+        $mpdf = new Mpdf('','A4',  0,  'vYekan',  15,  15,  $marginTop, 45,
+            1,  9,   'P');
+$html =
+<<<EOT
+            <!DOCTYPE>
+            <html>
+                <head>
+                    $pdfStyle;
+                </head>
+                <body> 
+                      <hr>                                        
+                      $Invoice_info
+                      <hr> 
+                      $Seprator_seller_To_InvoiceTable
+                     <table class="table" border="0.2" style="width: 100%;">                   
+                        $MainData                                                                                                                                  
+                        $Descriptions   
+                      </table>                                                    
+                </body>
+            </html>
+EOT;
+        $mpdf->SetHTMLHeader($Header);
+        $mpdf->SetHTMLFooter($footer);
+        $mpdf->AddPage(); // force pagebreak
+        $mpdf->WriteHTML($html);
+        $InvInfo=$data[0][0];
+        $file_name=$InvInfo->si_Alias_id ;
+        if ($InvInfo->org_name !=null) $file_name =$file_name.'_'.$InvInfo->org_name.'.pdf';
+>>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
+        $mpdf->Output($file_name, 'D');
     }
 
 }

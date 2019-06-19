@@ -1811,10 +1811,16 @@ label.invcsting {
 
 .StockTypeA {
     border-right: 5px solid #8BC34A;
+    background: #8bc3490d;
 }
 
 .StockTypeB {
     border-right: 5px solid #FFC107;
+    background: #ffc1060d;
+}
+.StockTypeC {
+    border-right: 5px solid #956bf4;
+    background: #956af412;
 }
 
 .StockType_span_A {
@@ -1828,6 +1834,12 @@ label.invcsting {
     border-radius: 100px;
     padding: 5px;
 }
+.StockType_span_C {
+    background: rgba(149, 107, 244, 0.37);
+    border-radius: 100px;
+    padding: 5px;
+}
+
 .edit_link {
     cursor: pointer;
     color: #0000ca;
@@ -2209,6 +2221,9 @@ i.fa.fa-key.changepass {
 .StockRequest_CustommerList .btn-group.bootstrap-select {
     margin: 0;
 }
+.newStockRequestForm .xLabel {
+    margin-bottom: 10px !important;
+}
 
 .CustommerOrg a {
     text-align: right;
@@ -2320,6 +2335,7 @@ i.fa.fa-key.changepass {
     padding: 0px !important;
 }
 
+<<<<<<< HEAD
 
 /*POSTs*/
 
@@ -2554,3 +2570,65 @@ canvas {
     z-index: -1;
 }
 /*________________Media Center*/
+=======
+.pointerGreen {
+    cursor: pointer;
+    font-size: 20px !important;
+}
+.pointerGreen:hover {
+    color: green;
+}
+.pointerRed {
+    cursor: pointer;
+    font-size: 20px !important;
+}
+.pointerRed:hover {
+    color: red;
+}
+.moveable
+{
+    cursor: move;
+}
+.ng-scope .step {
+    height: 145px !important;
+}
+i.fa.fa-trash.gray {
+    cursor: pointer !important;
+}
+
+.Wcusstommers .btn-group.bootstrap-select {
+    margin: 0;
+    width: 100% !important;
+}
+.InvoicePartNumbers .btn-group.bootstrap-select {
+    margin: 0;
+}
+
+.field .btn-group.bootstrap-select {
+    margin: 0;
+    width: 82.5% !important;
+    margin-bottom: 10px !important;
+}
+
+.header_lable {
+    text-align: center;
+    margin: auto !important;
+    margin-top: 10px !important;
+    display: block;
+    width: 100px;
+    height: 25px;
+
+}
+.field.header_lable label {
+    color: #000 !important;
+    font-weight: bold !important;
+}
+
+.select_CustommerList.warranty .btn-group.bootstrap-select {
+    margin: 0 !important;
+    margin-bottom: 5px !important;
+}
+.stockrequestArchiveData th {
+    text-align: center;
+}
+>>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d

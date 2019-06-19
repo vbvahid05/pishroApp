@@ -41,14 +41,6 @@
             </th>
 
 
-            {{--<th colspan="2">--}}
-            {{--<input id="serchInput" class="vbInputDroplistSearch" type="text" id="query" ng-model="search.cstmr_family" ng-change="showDroplist()" ng-clickx="showDroplist()" ng-blur="hideDroplist()" />--}}
-            {{--<div class="vbDropList">--}}
-            {{--<div class="items" ng-repeat="seller in Custommers | filter:search.cstmr_family"   ng-click="SelectItemFromDropList(seller.cstmr_family)" >--}}
-            {{--@{{ seller.cstmr_name }} @{{ seller.cstmr_family }}--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</th>--}}
 
         </tr>
 
@@ -79,7 +71,7 @@
                   <div ng-showx="inAllDatalist" id="inAllDatalist" class="row-actions">
                   @can('TakeOutProducts_update', 1)
                    <span class="edit">
-                      <span class="editBtn"  ng-click="EditSelected(row.id)" aria-label="{{Lang::get('labels.edit')}}" >
+                      <span class="editBtn"  ng-click="EditSelected(row.id,'viewMode')" aria-label="{{Lang::get('labels.edit')}}" >
                          {{ Lang::get('labels.stockRequest_Edit') }}
                        </span>
                     </span>
@@ -98,26 +90,9 @@
                   {{Lang::get('labels.print')}}
                 </a></td>
                 {{--@{{ row.qtyStatus}}--}}
-                <td> <div > @{{ row.totalQTY  }} /  @{{row.AvailableQTY}}</div></td>
+                <td> <div >  @{{ row.totalQTY  }} /  @{{row.AvailableQTY}}</div></td>
                <br/>
 
-
-<!--
-               <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
-                 <span class="edit">
-                   <span class="editBtn"  ng-click="EditSelected(row.orderID)" aria-label="{{Lang::get('labels.edit')}}" > {{ Lang::get('labels.edit') }} </span> |
-                 </span>
-                 <span class="trash"> <span  class="submitdelete"  ng-click="MoveToTrash(row.orderID)" >{{ Lang::get('labels.moveToTrash') }}</span>
-                 </span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
-
-               <div ng-show="inTrashlist" id="inTrashlist" class="row-actions">
-                 <span class="RestoreTrash"> <span  class="RestoreTrash"  ng-click="RestoreFromTrash(row.orderID)" >{{ Lang::get('labels.RestoreFromTrash') }} | </span></span>
-                 <span class="trash">        <span  class="submitdelete"  ng-click="DeleteFromDataBase(row.orderID)" >{{ Lang::get('labels.fulldelete') }}</span></span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
--->
       </tr>
     </table>
   </div>

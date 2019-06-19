@@ -35,8 +35,6 @@
     <div class="item" data-tab="tab-name8">Menu</div>
     <div class="item" data-tab="tab-name9">Brand/Types  dropMenu</div>
     <div class="item" data-tab="tab-name10">Upload File</div>
-
-
   </div>
 
   <!-- reference Home -->
@@ -174,6 +172,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <!-- Angular Simple change Label -->
   <div class="ui tab" data-tab="tab-name2">

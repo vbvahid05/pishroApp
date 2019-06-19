@@ -16,14 +16,14 @@
             });
         </script>
         {{--      DatePicker      --}}
-        <div   class="ui segment mainInvoice" style="position: absolute !important;
-                                        top: 50%;
-                                        left: 50%;
-                                        min-height: 600px;
-                                        width: 1200!important;
-                                        border-top: 4px solid #db2828;
-                                        margin-left: -600px;
-                                        margin-top: -400px;">
+        <div   class="ui segment mainInvoice" style="  position: fixed;
+                                                     top: 50%;
+                                                     left: 5%;
+                                                     right: 5%;
+                                                     min-height: 600px;
+                                                     width: 1200!important;
+                                                     border-top: 4px solid #db2828;
+                                                     margin-top: -400px;">
             <h3 class="dimmer-title">@{{ FormTitle }}</h3>
             <hr/>
             <div style="width: 100%;height: 20px;margin-top: -15px;">
@@ -224,7 +224,7 @@
                         <div class="col-md-3">@{{echo_ProductTitle}}</div>
                         <div class="col-md-2">
                              {{ Lang::get('labels.QTY') }} :
-                            <input ng-model="product_QTY"  type="number" style="width: 70px !important;">
+                            <input ng-model="product_QTY"  type="number" style="width: 110px !important;">
                         </div>
                         <div class="col-md-4">
                             {{ Lang::get('labels.invoice_Unit_price') }} :

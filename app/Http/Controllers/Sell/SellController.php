@@ -198,6 +198,12 @@ public function Invoice(request $request ,$function)
             return $allInvoiceDate->get_subProduct_list_invoice($request);
             break;
 
+        case 'updateSortableList' :
+
+            $updateSortableList= new Invoice();
+            return $updateSortableList->updateSortableList($request);
+        break;
+
         case 'delete_subProduct_from_list_invoice':
 
             $allInvoiceDate= new Invoice();
@@ -227,6 +233,11 @@ public function Invoice(request $request ,$function)
         case 'SearchInvoice':
             $SearchInvoice= new Invoice();
             return $SearchInvoice->SearchInvoice($request);
+            break;
+
+        case 'changePosition':
+             $changePosition= new Invoice();
+            return $changePosition->changePosition($request);
             break;
     }
 
@@ -304,6 +315,47 @@ public function Invoice(request $request ,$function)
                         return $data->addAlternativeSerial($request);
                         break;
 
+                    case 'RemoveSerialFromList':
+                        $data= new Warranty();
+                        return $data->RemoveSerialFromList($request);
+                        break;
+
+                    case 'delete_alternative_serial':
+                        $data= new Warranty();
+                        return $data->delete_alternative_serial($request);
+                        break;
+
+                    case 'backToWarrantyRequest':
+                        $data= new Warranty();
+                        return $data->backToWarrantyRequest($request);
+                        break;
+
+                    case 'changeWarrantyDeleteFlag':
+                        $data= new Warranty();
+                        return $data->changeWarrantyDeleteFlag($request);
+                    break;
+
+                    case 'WarrantyFullDelete':
+                        $data= new Warranty();
+                        return $data->WarrantyFullDelete($request);
+                        break;
+
+                    case 'getProductByPartNumber':
+                        $data= new Warranty();
+                        return $data->getProductByPartNumber($request);
+                        break;
+
+                    case 'addFaulty_serialNumber':
+                        $data= new Warranty();
+                        return $data->addFaulty_serialNumber($request);
+                        break;
+                    case 'getWarrantyStockRoomList':
+                        $data= new Warranty();
+                        return $data->getWarrantyStockRoomList($request);
+                        break;
+
+
+
                 }
             break ;
 
@@ -363,6 +415,33 @@ public function Invoice(request $request ,$function)
                         $data= new New_Edit_stockRequest();
                         return $data->getPdfSettingValue($request);
                         break;
+
+                    case 'UpdateWarrantyDiuration' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->UpdateWarrantyDiuration($request);
+                        break;
+                    case 'reIndex' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->reIndex($request);
+                        break;
+
+                    case 'updateSortableList_StockRequestArray' :
+                        $data= new New_Edit_stockRequest();
+                        return $data->updateSortableList_StockRequestArray($request);
+                        break;
+
+
+                    case 'borrow_BacktoStock' :
+
+                         $data= new New_Edit_stockRequest();
+                         return $data->borrow_BacktoStock($request);
+                        break;
+
+
+
+
+
+
                 }
             break;
             case 'TakeOutProducts':
@@ -399,6 +478,12 @@ public function Invoice(request $request ,$function)
             break;
         }
       //  return $req=$controller.$function;
+    }
+
+    public function getWarrantyPdf ($id)
+    {
+        $data= new Warranty();
+        return $data->getWarrantyPdf($id);
     }
 
     public function showsn()
@@ -490,8 +575,11 @@ public  function get_SubChassisParts (request $request)
         if ($updateStep1 && $updateStep2)
             return 1;
     }
-    else if ($type==0) //Ghatii
+    else if ($type==0 || $type==2) //Ghatii
     {
+        $product = Stockroom_products::find($product_id);
+        $product_typeCat= $product->stkr_prodct_type_cat;
+
         $QTYinDB = \DB::table('stockroom_product_status AS product_status')
             ->where('product_status.sps_product_id', '=', $product_id)
             ->select(\DB::raw('product_status.sps_available AS  QTY_available ,
@@ -501,7 +589,7 @@ public  function get_SubChassisParts (request $request)
         $oldQTY_available = $QTYinDB[0]->QTY_available;
         $oldQTY_reserved = $QTYinDB[0]->QTY_reserved;
 
-        if ($oldQTY_available >= $addedQty)
+        if ($oldQTY_available >= $addedQty && $product_typeCat !=3)
         {
             //Update QTY  OLdQTY+newQTY | in -> stockrequests details Table
             $updateStep1 = \DB::table('sell_stockrequests_details')
@@ -515,6 +603,8 @@ public  function get_SubChassisParts (request $request)
             if ($updateStep1) $val->save();
             return 1;
         }
+        else if ($product_typeCat ==3)
+            return 2;
         else return 0;
 
 
@@ -544,14 +634,54 @@ public  function get_SubChassisParts (request $request)
   //%%%%%%%%%%%%  SUBPAGE DATA SERVICES
   public function count_Of_takeoutproducts(request $request )
   {
+
+      $newQty=$request['newQty'];
+      $oldQty=$request['oldQty'];
+      $type=$request['type'];
+      $stockrequest_id=$request['stockrequest_id'];
+      $productid=$request['productid'];
+
       $argdata = $request->all();
       $stockrequest_id=$argdata['stockrequest_id'];
       $productid=$argdata['productid'];
-      return  \DB::table('sell_takeoutproducts AS takeoutproducts')
+      $takeOutQTY=  \DB::table('sell_takeoutproducts AS takeoutproducts')
           ->where('takeoutproducts.sl_top_stockrequest_id', '=', $stockrequest_id)
           ->where('takeoutproducts.sl_top_productid', '=', $productid)
           ->count();
+       if ($newQty >= $takeOutQTY)
+       {
+            sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $stockrequest_id)
+                                    ->where('ssr_d_product_id', '=', $productid)
+                                    ->update(array('ssr_d_qty' => $newQty));
+            if ($type==0 || $type==2){
+                $x=$oldQty-$newQty;
+                $product_statu=stockroom_product_statu::where('sps_product_id', '=', $productid) ->firstOrFail();
+                $reserved=$product_statu['sps_reserved'];
+                $newReservedQty = $reserved-$x;
+                $AvailQty = $product_statu['sps_available'];
+                $newAvailQty = $AvailQty+$x;
+
+                stockroom_product_statu::where('sps_product_id', '=', $productid)
+                    ->update(array('sps_reserved' => $newReservedQty ,
+                        'sps_available' => $newAvailQty
+                    ));
+                return 1;
+            }
+            else if ($type==1){
+                $product_statu=stockroom_product_statu::where('sps_product_id', '=', $productid) ->firstOrFail();
+                $Taahodi=$product_statu['sps_Taahodi'];
+                $newTaahodi=$Taahodi-$newQty;
+                stockroom_product_statu::where('sps_product_id', '=', $productid)
+                    ->update(array('sps_Taahodi' => $newTaahodi
+                    ));
+                return 1;
+            }
+       }
+       else
+           return 0;
   }
+
+
   public function List_Of_PartNumbers   (request $request)
   {
       try {
@@ -686,13 +816,47 @@ public  function get_SubChassisParts (request $request)
   $data = $request->all();
   $qmode=$data['qmode'];
   $StockRequestID=$data['StockRequestID'];
-    if ($qmode==0) // get StockRequest Data by id
-      {
-      $val = \DB::table('sell_stockrequests AS stockrequests')
-      ->join('custommers AS custmer'   ,   'custmer.id', '=','stockrequests.sel_sr_custommer_id')
-       ->select( \DB::raw('
+
+          $stockrequest = sell_stockrequest::where('id', '=', $StockRequestID)
+          ->firstOrFail();
+    if ($stockrequest->archive_flag)
+    {
+        // 'Archived'........................;
+       return $val = \DB::table('sell_stockrequests AS stockrequests')
+            ->join('custommers                  AS custmer'  , 'custmer.id', '=','stockrequests.sel_sr_custommer_id')
+            ->join('sell_stockrequests_archives AS archives' , 'archives.slsr_arch_stockrequests_id', '=','stockrequests.id')
+            ->select( \DB::raw('
+                 stockrequests.id                         AS stockrequestID , 
+                 stockrequests.sel_sr_pre_contract_number AS contract_number,
+                 stockrequests.sel_sr_delivery_date       AS delivery_date,
+                 stockrequests.sel_sr_warranty_priod      AS warranty_date,
+                 stockrequests.sel_sr_registration_date   AS registration_date,                 
+                 stockrequests.sel_sr_type                AS stockRequestsType,
+                 custmer.cstmr_name                       AS cstmrName,
+                 custmer.cstmr_family                     AS cstmrFamily,
+                 custmer.cstmr_organization               AS cstmrOrganization,
+                 custmer.id                               AS cstmr_id,                 
+                 custmer.cstmr_post                       AS cstmrPost ,
+                 archives.slsr_arch_products_data         AS archivesData 
+                 
+                 '))
+            ->where('stockrequests.id', '=', $StockRequestID)
+            ->where('stockrequests.deleted_flag', '=', 0)
+            ->get();
+
+           //return $val[0]->archivesData;
+    }
+    else
+    {
+        //.......................
+        if ($qmode==0) // get StockRequest Data by id
+        {
+            $val = \DB::table('sell_stockrequests AS stockrequests')
+                ->join('custommers AS custmer'   ,   'custmer.id', '=','stockrequests.sel_sr_custommer_id')
+                ->select( \DB::raw('
                  stockrequests.sel_sr_pre_contract_number AS contract_number,
                  stockrequests.sel_sr_delivery_date AS  delivery_date,
+                 stockrequests.sel_sr_warranty_priod AS  warranty_date,
                  stockrequests.sel_sr_registration_date AS  registration_date,                 
                  stockrequests.sel_sr_type AS stockRequestsType,
                  custmer.cstmr_name AS cstmrName,
@@ -701,36 +865,55 @@ public  function get_SubChassisParts (request $request)
                  custmer.id AS cstmr_id,                 
                  custmer.cstmr_post AS cstmrPost
                      '))
-        ->where('stockrequests.id', '=', $StockRequestID)
-        ->where('stockrequests.deleted_flag', '=', 0)
-        ->get();
-        return $val;
-      }
+                ->where('stockrequests.id', '=', $StockRequestID)
+                ->where('stockrequests.deleted_flag', '=', 0)
+                ->get();
 
-    if ($qmode==1) // get StockRequest Data by id
-      {
-       $val = \DB::table('sell_stockrequests AS stockrequests')
-                 ->join ('custommers AS custmer','custmer.id', '=','stockrequests.sel_sr_custommer_id')
-                 ->join ('custommerorganizations AS customerOrg' , 'customerOrg.id', '=','custmer.cstmr_organization')
-                 ->select(\DB::raw('
+
+            $warranty_date = date('Y-m-d', strtotime("+".$val[0]->warranty_date." months", strtotime($val[0]->delivery_date)));
+            $Vval = array(
+                "contract_number"=>$val[0]->contract_number,
+                "delivery_date"=>$val[0]->delivery_date,
+                "warranty_date"=>$warranty_date ,
+                "WarrantyPriod"=>$val[0]->warranty_date ,
+                "registration_date"=>$val[0]->registration_date,
+                "stockRequestsType"=>$val[0]->stockRequestsType ,
+                "cstmrName"=>$val[0]->cstmrName ,
+                "cstmrFamily"=>$val[0]->cstmrFamily,
+                "cstmrOrganization"=>$val[0]->cstmrOrganization,
+                "cstmr_id"=>$val[0]->cstmr_id ,
+                "cstmrPost"=>$val[0]->cstmrPost,
+            );
+            $ret=[];
+            array_push($ret,$Vval);
+
+            return $ret;
+        }
+
+        if ($qmode==1) // get StockRequest Data by id
+        {
+            $val = \DB::table('sell_stockrequests AS stockrequests')
+                ->join ('custommers AS custmer','custmer.id', '=','stockrequests.sel_sr_custommer_id')
+                ->join ('custommerorganizations AS customerOrg' , 'customerOrg.id', '=','custmer.cstmr_organization')
+                ->select(\DB::raw('
                            customerOrg.org_name AS orgName
                                '))
-                  ->where('stockrequests.id', '=', $StockRequestID)
-                 ->get();
-                 return $val;
+                ->where('stockrequests.id', '=', $StockRequestID)
+                ->get();
+            return $val;
 
-      }
-      //------
-      if ($qmode==2) // -GET stockrequests Products
+        }
+        //------
+        if ($qmode==2) // -GET stockrequests Products
         {
-      return    $val = \DB::table('sell_stockrequests AS stockrequests')
-                   ->join ('sell_stockrequests_details AS stockrequests_details',
-                            'stockrequests_details.ssr_d_stockrequerst_id', '=','stockrequests.id')
-                     ->join ('stockroom_products AS product','product.id', '=','stockrequests_details.ssr_d_product_id')
-                     ->join ('stockroom_products_types AS types','types.id', '=','product.stkr_prodct_type')
-                     ->join ('stockroom_products_brands AS brands','brands.id', '=','product.stkr_prodct_brand')
+            return    $val = \DB::table('sell_stockrequests AS stockrequests')
+                ->join ('sell_stockrequests_details AS stockrequests_details',
+                    'stockrequests_details.ssr_d_stockrequerst_id', '=','stockrequests.id')
+                ->join ('stockroom_products AS product','product.id', '=','stockrequests_details.ssr_d_product_id')
+                ->join ('stockroom_products_types AS types','types.id', '=','product.stkr_prodct_type')
+                ->join ('stockroom_products_brands AS brands','brands.id', '=','product.stkr_prodct_brand')
 
-                     ->select( \DB::raw('
+                ->select( \DB::raw('
                                stockrequests_details.id AS StockRequestRowID,
                                stockrequests.id AS StockRequestID,
                                product.id AS  productID ,
@@ -741,16 +924,17 @@ public  function get_SubChassisParts (request $request)
                                types.stkr_prodct_type_title AS ProductType,
                                stockrequests_details.ssr_d_qty AS  product_QTY
                                    '))
-                   /*->select(\DB::raw('
-                             customerOrg.org_name AS orgName
-                                 ')) */
-                    ->where('stockrequests.id', '=', $StockRequestID)
-                    ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
-
-                   ->get();
+                /*->select(\DB::raw('
+                          customerOrg.org_name AS orgName
+                              ')) */
+                ->where('stockrequests.id', '=', $StockRequestID)
+                ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
+                ->orderBy('stockrequests_details.ssr_d_position', 'ASC')
+                ->orderBy('stockrequests_details.id', 'ASC')
+                ->get();
         }
-
-  //return   $StockRequest_ID=$data['StockRequestID'];
+        //......................
+    }
 
 
 }
@@ -762,6 +946,7 @@ public  function get_SubChassisParts (request $request)
     $StockRequest_id =$data['StockRequest_id'];
     $serialArray=$data['SerialNumbers'];
     $StockRequestRowID = $data['StockRequestRowID'];
+    $stockRequestType = $data['stockRequestType'];
   $i=0;
   $Result_status=true;
 
@@ -803,16 +988,32 @@ public  function get_SubChassisParts (request $request)
        $serialnumberRowID=$val[0]->serialnumberID;
 
        //Update serial number status  :: stockroom_serialnumbers
-         $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
-         $val->stkr_srial_status =1; //sold Status
-       if ($val->save()) $Result_status=$Result_status && true;
+        if ($stockRequestType ==0){ //Ghatii
+            $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
+            $val->stkr_srial_status =1; //sold Status
+            if ($val->save()) $Result_status=$Result_status && true;
 
-      //Update  count of products     :: stockroom_product_status
-        $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
-        if ($val->sps_reserved-1 >=0)
-          $val->sps_reserved =$val->sps_reserved-1;
-        $val->sps_sold =$val->sps_sold+1;
-      if ($val->save()) $Result_status=$Result_status && true;
+            //Update  count of products     :: stockroom_product_status
+            $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
+            if ($val->sps_reserved-1 >=0)
+                $val->sps_reserved =$val->sps_reserved-1;
+            $val->sps_sold =$val->sps_sold+1;
+            if ($val->save()) $Result_status=$Result_status && true;
+        }
+
+
+        else if ($stockRequestType ==2) { //Amani
+            $val = stockroom_serialnumber ::where('id', $serialnumberRowID)->first();
+            $val->stkr_srial_status =3; //Borrowed Status
+            if ($val->save()) $Result_status=$Result_status && true;
+
+            //Update  count of products     :: stockroom_product_status
+            $val =  stockroom_product_statu ::where('sps_product_id', $product_id)->first();
+            if ($val->sps_reserved-1 >=0)
+                $val->sps_reserved =$val->sps_reserved-1;
+            $val->sps_borrowed =$val->sps_borrowed+1;
+            if ($val->save()) $Result_status=$Result_status && true;
+        }
 
        //insert serilaNumber to stockrequests  :: sell_takeoutproducts
         $val= new sell_takeoutproduct ($request->all());
@@ -825,16 +1026,6 @@ public  function get_SubChassisParts (request $request)
       if ($val->save()) $Result_status=$Result_status && true;
 
         }
-
-        //update count of serialnumbers  ::sell_stockrequests_details
-        /*
-        $val = sell_stockrequests_detail ::
-        where('id', $serialnumberRowID)
-        ->first();
-        $val->stkr_srial_status =1; //sold Status
-        if ($val->save()) $Result_status=$Result_status && true;
-      */
-
         if ($Result_status )return 1;
   }
 
@@ -954,13 +1145,14 @@ public  function get_SubChassisParts (request $request)
       {
         $data = $request->all();
         $brandName= $data['brandName'];
-        $TypeName=$data['TypeName'];
+        $TypeId=$data['TypeName'];
+
          $val = \DB::table('stockroom_products')
               ->join('stockroom_products_brands AS brd', 'stockroom_products.stkr_prodct_brand', '=','brd.id')
               ->join('stockroom_products_types', 'stockroom_products.stkr_prodct_type', '=','stockroom_products_types.id')
               ->where('stockroom_products.deleted_flag', '=', 0)
               ->where('brd.stkr_prodct_brand_title', '=', $brandName)
-              ->where('stockroom_products_types.stkr_prodct_type_title', '=', $TypeName)
+              ->where('stockroom_products_types.id', '=', $TypeId)
               //->select('*')
               ->select('*', \DB::raw('stockroom_products.id AS productID '))
               ->orderBy('stockroom_products.id', 'desc')
@@ -996,7 +1188,7 @@ public  function get_SubChassisParts (request $request)
             compact( 'val','TakoutID','TotalQty'));
     }
 //---------------------------------------
-    public function pdfStockRequest($id)
+    public function pdfStockRequest($id ,$outPut)
         {
 
 //            https://packagist.org/packages/carlos-meneses/laravel-mpdf?q=&p=2&hFR[type][0]=composer-plugin
@@ -1005,6 +1197,7 @@ public  function get_SubChassisParts (request $request)
 
         //NEW
         $RequestData = \DB::table('sell_stockrequests AS stockrequests')
+            ->join ('sell_stockrequests_tpes AS stockrequestType','stockrequestType.ids', '=','stockrequests.sel_sr_type')
             ->join ('custommers AS custommer','custommer.id', '=','stockrequests.sel_sr_custommer_id')
             ->join ('custommerorganizations AS custommerORG','custommerORG.id', '=','custommer.cstmr_organization')
             ->join ('sell_stockrequests_details AS stockrequests_details','stockrequests_details.ssr_d_stockrequerst_id', '=','stockrequests.id')
@@ -1014,6 +1207,8 @@ public  function get_SubChassisParts (request $request)
             ->where('stockrequests.id', '=', $id)
             ->where('stockrequests_details.ssr_d_ParentChasis', '=', 0)
             ->select('*', \DB::raw('stockrequests_details.id AS stkreqdeta_id ,stockrequests.id AS stockrequestsid' ))
+            ->orderBy('stockrequests_details.ssr_d_position', 'ASC')
+            ->orderBy('stockrequests_details.id', 'ASC')
             ->get();
 
         $serialnumberData = \DB::table('stockroom_serialnumbers AS serialnumbers')
@@ -1021,6 +1216,8 @@ public  function get_SubChassisParts (request $request)
             ->where('takeoutproducts.sl_top_stockrequest_id', '=', $id)
             ->get();
         //----------
+        ($RequestData[0]->sel_sr_type ==2) ? $typeTitle=$RequestData[0]->ssr_type_title : $typeTitle='';
+        $docTitle=' صورتجلسه تحويل ' . $typeTitle .' دستگاه ';
         $stackReq=  sell_stockrequest::where('id', '=', $id)->firstOrFail();
         $Pdfsetting= json_decode($stackReq['sel_sr_pdf_setting'], false);
         $delivery_date=$RequestData[0]->sel_sr_delivery_date;
@@ -1061,7 +1258,9 @@ public  function get_SubChassisParts (request $request)
                     '.$lbl_number.': EP'.$Jyear[1].'-'.$id.' <br/>                         
                     </div>
                 </div>
-                <div style="text-align: center" > بسمه تعالي  <br/> صورتجلسه تحويل دستگاه  </div>
+                <div style="text-align: center" > بسمه تعالي  <br/>
+                '.$docTitle.'
+                  </div>
                 <br/>
                 <table   style="width: 100%; border: 1px solid #4c4c4e;">
                     <tr>
@@ -1197,10 +1396,10 @@ EOT;
 
 //        return $mpdf->Output();
         $file_name = $contract_number.'_'.$registration_date.'_'.$customer.'.pdf';
-        $mpdf->Output($file_name, 'D');
-
-
-
-
+        if ($outPut=='download')
+            $mpdf->Output($file_name, 'D');
+        else if ($outPut=='saveFile')
+            $mpdf->Output('StockRequestPdfArchive/'.$id.'.pdf', 'F');
+            //$file_name
         }
 }

@@ -664,8 +664,9 @@ public function delete_Serial_Number(Request $request)
 
                 if ($access)
                 {
+
                     $model = stockroom_serialnumber::where('id', '=', $serialID)->firstOrFail();
-                    $srial_status= $model['stkr_srial_status'];
+                     $srial_status= $model['stkr_srial_status'];
                     if ($srial_status==0)
                     {
 
@@ -674,9 +675,9 @@ public function delete_Serial_Number(Request $request)
                         else
                         {
                             $model = Stockroom_stock_putting_product::where('id', '=', $putting_productsID)->firstOrFail();
-                            $productID= $model['stkr_stk_putng_prdct_product_id'];
+                             $productID= $model['stkr_stk_putng_prdct_product_id'];
                         }
-                        $modelB = stockroom_product_statu::where('sps_product_id', '=', $productID)->firstOrFail();
+                          $modelB = stockroom_product_statu::where('sps_product_id', '=', $productID)->firstOrFail();
                          '$productID :'.$productID.' $available :'. $available= $modelB['sps_available'];
 
                         $val = stockroom_product_statu::where('sps_product_id', $productID)->first();

@@ -2,8 +2,8 @@
 @section('title', 'Page Title')
 @section('sidebar') @endsection
 <!-- Parts -->
-@include('sell.view_warranty.allRecord_parts.section_toolbars')
-@include('sell.view_warranty.allRecord_parts.section_filter')
+@include('sell.view_warranty.allRecord_parts.section_warrantyStock')
+@include('sell.view_warranty.allRecord_parts.section_waitForCommit')
 @include('sell.view_warranty.allRecord_parts.section_list')
 
 @include('sell.view_warranty.single_parts.section_dimmerPage')
@@ -23,18 +23,19 @@
 
 
 
-  @can('TakeOutProducts_read', 1)
-    @section('section_toolbars') @show
+  @can('warranty_read', 1)
+      {{--@section('section_toolbars') @show--}}
     <!-- Notifications-->
       <div id="publicNotificationMessage" class="publicNotificationMessage"></div>
     <!-- Filters-->
-      @section('section_filter') @show<p></p>
+        {{--@section('section_filter') @show<p></p>--}}
     <!-- List Table-->
 
       <input id="pageType" type="hidden" value="{{ $pageType }}">
       @section('section_list') @show
+
   @endcan
-  @cannot('TakeOutProducts_read', 1)
+  @cannot('warranty_read', 1)
       <div class="alert alert-danger"><i class="fa fa-ban" aria-hidden="true"></i>{{Lang::get('labels.Access_denied')}}</div>
   @endcannot
 

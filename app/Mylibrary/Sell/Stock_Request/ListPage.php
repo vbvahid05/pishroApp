@@ -9,6 +9,8 @@
 namespace App\Mylibrary\Sell\Stock_Request;
 
 
+use App\User;
+
 class ListPage
 {
     public  function Get_ListPage ($request)
@@ -17,37 +19,52 @@ class ListPage
         $data = $request->all();
         $mode=$data['mode'];
         $type=$data['type'];
-        if ($type==0)
+        if ($type==0 )
         {
+
             $valus = \DB::table('sell_stockrequests AS stockrequests')
-                ->join('custommers'   ,   'custommers.id', '=','stockrequests.sel_sr_custommer_id')
-                ->join('custommerorganizations AS cusmrORD'   ,   'cusmrORD.id', '=','custommers.cstmr_organization')
-                //  ->select('*')
-                ->select('*', \DB::raw('stockrequests.id AS stockrequestsID '))
-                ->where('stockrequests.deleted_flag', '=', $mode)
-                ->where('stockrequests.sel_sr_type', '=', $type)
-                ->orderBy('stockrequestsID', 'desc')
-                ->get();
-        }
-        else   {
-            $valus = \DB::table('sell_stockrequests AS stockrequests')
+                ->join('sell_stockrequests_tpes AS stockrequests_tpes' , 'stockrequests_tpes.ids', '=','stockrequests.sel_sr_type')
                 ->join('custommers'   ,   'custommers.id', '=','stockrequests.sel_sr_custommer_id')
                 ->join('custommerorganizations AS cusmrORD'   ,   'cusmrORD.id', '=','custommers.cstmr_organization')
                 ->select('*', \DB::raw('stockrequests.id AS stockrequestsID '))
                 ->where('stockrequests.deleted_flag', '=', $mode)
+                ->where('stockrequests.archive_flag', '=', 0)
+                ->where('stockrequests_tpes.ssr_type_slug', '!=', 'taahodi' )
                 ->orderBy('stockrequestsID', 'desc')
                 ->get();
         }
 
+         else if ($type==1 && $mode!=2)   {
+            $valus = \DB::table('sell_stockrequests AS stockrequests')
+                ->join('custommers'   ,   'custommers.id', '=','stockrequests.sel_sr_custommer_id')
+                ->join('custommerorganizations AS cusmrORD'   ,   'cusmrORD.id', '=','custommers.cstmr_organization')
+                ->select('*', \DB::raw('stockrequests.id AS stockrequestsID '))
+                ->where('stockrequests.deleted_flag', '=', $mode)
+                ->where('stockrequests.archive_flag', '=', 0)
+                ->orderBy('stockrequestsID', 'desc')
+                ->get();
+        }
+         else if ($type==1 && $mode==2)   {
+             $valus = \DB::table('sell_stockrequests AS stockrequests')
+                 ->join('custommers'   ,   'custommers.id', '=','stockrequests.sel_sr_custommer_id')
+                 ->join('custommerorganizations AS cusmrORD'   ,   'cusmrORD.id', '=','custommers.cstmr_organization')
+                 ->select('*', \DB::raw('stockrequests.id AS stockrequestsID '))
+                 ->where('stockrequests.deleted_flag', '=', 0)
+                 ->where('stockrequests.archive_flag', '=', 1)
+                 ->orderBy('stockrequestsID', 'desc')
+                 ->get();
+         }
 
         $arrayLength=count($valus);
         $outArray=array();
         foreach ($valus as $val)
         {
+           $user = user::find($val->sel_sr_created_by);
             /* Count of comited requerst*/
             $stockrequestsID=  $val->stockrequestsID  ;
             $Resvalus = \DB::table('sell_takeoutproducts AS takeoutproducts')
                 ->where('takeoutproducts.sl_top_stockrequest_id', '=', $stockrequestsID)
+                ->where('takeoutproducts.deleted_flag', '=', 0)
                 ->get();
             $serilaCount=count($Resvalus ) ;
 //-------------
@@ -59,6 +76,7 @@ class ListPage
             if ($serilaCount==$totalQTY && $serilaCount !=0 && $totalQTY!=0)
                 $qtyStatus='Print';
             $array = array(
+                "userName" => $user['name'] ,
                 "cstmr_name"    => $val->cstmr_name,
                 "cstmr_family"  => $val->cstmr_family,
                 "org_name" => $val->org_name,

@@ -173,6 +173,30 @@ class AuthServiceProvider extends ServiceProvider
         {
             return  PublicController::checkUserACL('invoice_delete');
         });
+
+
+        //@@@@@@@@@@@@@@@@@
+        $gate->define('warranty_create',function($user,$action )
+        {
+            return PublicController::checkUserACL('warranty_create');
+        });
+        //--------------------
+        $gate->define('warranty_read',function($user,$action )
+        {
+            return  PublicController::checkUserACL('warranty_read');
+        });
+        //--------------------
+        $gate->define('warranty_update',function($user,$action )
+        {
+            return  PublicController::checkUserACL('warranty_update');
+        });
+        //--------------------
+        $gate->define('warranty_delete',function($user,$action )
+        {
+            return  PublicController::checkUserACL('warranty_delete');
+        });
+
+
         //--------------------
         $gate->define('adminCheck',function($user,$action )
         {

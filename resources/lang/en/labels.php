@@ -12,7 +12,11 @@ return [
     | you want to customize your views to better match your application.
     |
     */
+<<<<<<< HEAD
 'slog' => '' . 'سامانه خدمات الکترونیک پیشرو  ' .' v1.2.9' ,
+=======
+'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.3.1' ,
+>>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
 'copyright' => 'گروه شرکت های مهندسی پیشرو '  ,
 'copyright_date' => '© Copyright 2017-2019' ,
 'changeLog'=>'تغییرات انجام شده',
@@ -66,6 +70,7 @@ return [
 'update' => 'ثبت',
 'delete' => 'حذف',
 'view' => 'نمایش',
+'Archive'=>'بایگانی',
 'fulldelete' => 'حذف کامل',
 'all' => 'همه',
 'Trash' => 'زباله دان',
@@ -88,6 +93,7 @@ return [
 'print'=>'چاپ',
 'pdf'=>'PDF',
 'add'=>'اضافه به لیست',
+'add-simple'=>'درج',
 'default'=>'پیش فرض',
 'duplicated'=>'این کالا در لیست وجود دارد ',
 
@@ -255,6 +261,7 @@ return [
 'Title_PartofChassis'=> 'لیست قطعات منفصله مربوط به شاسی فوق',
 'showEmptyListMessage'=> 'فاقد قطعه منفصله',
 'Search_pre_contract_number'=>  'جستجوی شماره پیش فاکتور' ,
+'Amani' =>'امانی' ,
 
 /*Pring page*/
 'EhrazText'=>'احراز صلاحيت شده توسط شوراي عالي انفورماتيك كشور عضو سازمان نظام صنفي رايانه‌اي كشور',
@@ -321,6 +328,15 @@ return [
 'warranty_delevery_date'=>'تاريخ تحويل',
 'warranty_update_and_send_to_stock'=> 'ثبت و ارسال به انبار',
 'warranty_save_and_send_to_stock'=>'ذخیره سازی و ارسال به انبار',
+'WarrantyPriod'=>' مدت گارانتی (ماه)',
+'WarrantyExpired'=>'اتمام گارانتی',
+'WarrantyExpiredDate'=>'تاریخ اتمام گارانتی',
+'warranty_commit_to_PDF'=>'تایید و صدور حواله گارانتی',
+'WarrantyFailedSN' =>'سریال معیوب',
+'WarrantySNS'=>'سریال جایگزین',
+'WarrantySN1'=>'سریال جایگزین اول ',
+'WarrantySN2'=>'سریال جایگزین دوم ',
+'Warranty_updateAndSendToStock'=>'    ارسال درخواست به انبار',
 //** SETTING */
 
 'userSetting'=>'کاربران',
@@ -336,6 +352,9 @@ return [
 'addNewUser'=>'درج کاربر جدید',
 'addNewUserToApp'=>'درج کاربر جدید در سیستم ',
 'rePassNotValid'=> ' تکرار پسورد صحیح نیست',
+
+'WarrantyStockCommit'=>'تاییدیه انبار',
+'warrantyStockRoom'=>'انبار گارانتی',
 
 
 //** Posts */

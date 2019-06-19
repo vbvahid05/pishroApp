@@ -29,8 +29,13 @@
 <script type="text/javascript" src="{{ URL::asset('semantic/handler.js') }}"></script>
 <!-- angularJS -->
 
-<script type="text/javascript" src="{{ URL::asset('js/angular.min.js') }}"></script>
+<!-- sortable -->
+<link   data-require="jqueryui@*" data-semver="1.10.0" rel="stylesheet" href="{{ URL::asset('js/jquery-ui-1.10.0.custom.min.css') }}" />
+<script data-require="jqueryui@*" data-semver="1.10.0"  type="text/javascript" src="{{ URL::asset('js/jquery-ui.js') }}"></script>
 
+
+<script type="text/javascript" src="{{ URL::asset('js/angular.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/sortable.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angular-cookies.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angular-ui-form-validation.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/simplePagination.js') }}"></script>
@@ -64,6 +69,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/jquery.Bootstrap-PersianDateTimePicker.css') }}" />
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/calendar.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js') }}"></script>
+<<<<<<< HEAD
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 
 
@@ -71,5 +77,7 @@
 
 
 
+=======
+>>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
 
 

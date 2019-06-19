@@ -9,8 +9,18 @@
 namespace App\Mylibrary\Sell\StatusReport;
 
 
+use App\Stockroom_stock_putting_product;
+
 class All_Status_Repost
 {
+    function getParentQty($parentID){
+        if ($parentID){
+            $parentData = stockroom_stock_putting_product::find($parentID);
+            return $parentQty= $parentData->stkr_stk_putng_prdct_qty;
+        }else
+            return 1;
+    }
+
     public  function get_reports ($request)
     {
         $data=$request->all();
@@ -31,7 +41,6 @@ class All_Status_Repost
             //-----------------------
             $val = \DB::table('stockroom_stock_putting_products')
                 ->join('stockroom_products AS products'   ,   'products.id', '=','stockroom_stock_putting_products.stkr_stk_putng_prdct_product_id')
-
                 ->join('stockroom_orders AS orders'   ,   'orders.id', '=','stockroom_stock_putting_products.stkr_stk_putng_prdct_order_id')
                 ->join('stockroom_orders_status AS status'   ,   'status.id', '=','orders.stk_ordrs_status_id')
                 ->select('*')
@@ -42,22 +51,23 @@ class All_Status_Repost
             foreach ($val as $v)
             {
                 $status =$v->stk_ordrs_status_id;
+                $parentQty = $this->getParentQty($v->stkr_stk_putng_prdct_partofchassis);
                 switch($status)
                 {
                     case 1:
-                        $stVal1=$stVal1+$v->stkr_stk_putng_prdct_qty;
+                        $stVal1=$stVal1+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 2:
-                        $stVal2=$stVal2+$v->stkr_stk_putng_prdct_qty;
+                        $stVal2=$stVal2+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 3:
-                        $stVal3=$stVal3+$v->stkr_stk_putng_prdct_qty;
+                        $stVal3=$stVal3+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 4:
-                        $stVal4=$stVal4+$v->stkr_stk_putng_prdct_qty;
+                        $stVal4=$stVal4+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                     case 5:
-                        $stVal5=$stVal5+$v->stkr_stk_putng_prdct_qty;
+                        $stVal5=$stVal5+$v->stkr_stk_putng_prdct_qty * $parentQty;
                         break;
                 }
             }
@@ -77,7 +87,6 @@ class All_Status_Repost
                 ($productStatus[0]->sps_borrowed  != null ? $borrowed=$productStatus[0]->sps_borrowed  : $borrowed=0);
                 ($productStatus[0]->sps_warranty  != null ? $warranty=$productStatus[0]->sps_warranty  : $warranty=0);
                 ($productStatus[0]->sps_Taahodi  != null ? $sps_Taahodi=$productStatus[0]->sps_Taahodi  : $sps_Taahodi=0);
-
             }
             else
             {
@@ -100,8 +109,22 @@ class All_Status_Repost
                 ->where('products.deleted_flag', '=', 0)
                 ->get();
             //-----------------------
-            $sum=$stVal1+$stVal2+$stVal3+$stVal4+$stVal5;
-            $AvailableStock=($avail+$sum)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+             // $sum=$stVal1+$stVal2+$stVal3+$stVal4+$stVal5;
+            //$AvailableStock=($avail+$sum)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+
+            $sum=($stVal1+$stVal2+$stVal3+$stVal4+$stVal5)-($avail+$sold+$reserved+$borrowed+$warranty);
+            if ($sum >=0)
+                $sum=$sum;
+            else
+                $sum=0;
+
+            $AvailableStock=($avail+$sum+$reserved)-($reserved+$borrowed+$warranty+$sps_Taahodi);
+
+            if ($stVal4-($avail+$sold+$reserved+$warranty+$borrowed) >=0)
+                $stVal4 =$stVal4-($avail+$sold+$reserved+$warranty+$borrowed);
+            else
+                $stVal4=0;
+
             $array = array(
                 "productID"    => $vm->id,
                 "partnumber"  => $vm->stkr_prodct_partnumber_commercial,
@@ -112,8 +135,8 @@ class All_Status_Repost
                 "status1" =>  $stVal1 ,//در حال مذاکره
                 "status2" =>  $stVal2 , //تایید سفارش
                 "status3" =>  $stVal3 , //منتظر بررسی در مبدا
-                "status4" =>  $stVal4 , //گمرکات داخل کشور
-                "status5" =>  $stVal5 , //ترخیص شده
+                "status4" =>  $stVal4 , //ترخیص شده
+                "status5" =>  $stVal5 ,//گمرکات داخل کشور
 
                 "status2_1_avail"    =>  $avail  ,
                 "status2_2_sold"     =>  $sold ,
@@ -122,7 +145,7 @@ class All_Status_Repost
                 "status2_5_warranty" =>  $warranty,
                 "status2_6_sps_Taahodi" =>  $sps_Taahodi,
                 "AvailableStock" => $AvailableStock,
-                "sum"     =>  $sum //جمع کل ورودی
+                "sum"     =>  $sum //$sum-$warranty //جمع کل ورودی
 
             );
             if ($mode==0)
@@ -165,7 +188,7 @@ class All_Status_Repost
     {
         try
         {
-            $types=\DB::table('stockroom_products_types AS types')
+          return  $types=\DB::table('stockroom_products_types AS types')
                 ->join('stockroom_products_brands AS brands','brands.id','=','types.stkr_prodct_type_In_brands')
                 ->where('brands.stkr_prodct_brand_title', '=', $brand_name)
                 ->select(\DB::raw('types.id AS id , types.stkr_prodct_type_title AS name '))

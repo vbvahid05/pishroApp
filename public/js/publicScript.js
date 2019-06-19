@@ -36,6 +36,7 @@ var MessageDefine_Org="سازمان مربوط به مشتری را مشخص ن�
 var MessageDefine_Post="سمت مشتری را تعیین کنید";
 var Message_OrgName="نام سازمان را وارد کنید";
 var Message_Tel="شماره تلفن را وارد کنید";
+var Message_500_internalServerError="خطای اتصال به سرور";
 var Message_Confirm_invoice="آیا مایل به تایید نهایی پیش فاکتور هستید؟  پس از تایید ، ویرایش پیش فاکتور امکان پذیر نخواهد بود";
 var message_stockRequest_Qty_not_ziro ="تعداد نمی تواند صفر باشد";
 var message_QTY_moreTHenavailQty ="تعداد وارد شده از تعداد موجود در انبار بیشتر است ";
@@ -48,6 +49,12 @@ var message_convertSuccessfully ="تبدیل حواله به صورت کامل �
 var message_duplicated ="این کالا در لیست وجود دارد";
 var message_changedPassword ="کلمه عبور با موفقیت تغییر کرد";
 var message_CantDeleteAdmin ="شما نمی توانید کاربر با عنوان مدیریت را حذف نمایید !";
+var message_noserial_cantReturnTOStock='کالایی خارج نشده است که بازگردانده شود';
+var message_notComplete_cantReturnTOStock='ابتدا همه کالای موجود در حواله را از انبار خارج نمایید';
+var message_addOneChassisinStockRequest ='در هر ردیف فقط یک شاسی قابل پذیرش می باشد';
+var message_askFor_returnProductsToStock='قطعات به انبار بازگردانده شوند ؟';
+var message_StockRequest_Archived_and_returned='قطعات به انبار بازگردانده و  سوابق آن بایگانی شد';
+
 var lbl_new_puttingStock ="ورود کالای جدید به انبار";
 var lbl_edit_org_info ="ویرایش اطلاعات سازمان";
  var lbl_serialNumber ="ثبت شماره سریال کالا";
@@ -216,7 +223,6 @@ function toast_alert(message,status)
           }
          locations=stringval;
           $('#'+locations).addClass('activeSubMenu');
-
           switch (locations)
           {
 
@@ -231,6 +237,7 @@ function toast_alert(message,status)
             case 'PuttingProducts':
             case 'AllOrders':
             case 'TakeOutProducts' :
+            case 'stockOut' :
                   var  menu_Id = "#stockroom";
             break;
 
@@ -238,6 +245,7 @@ function toast_alert(message,status)
             case 'ProductStatusReport':
             case 'stockRequest':
             case 'invoice':
+            case 'addRequest':
                   var  menu_Id = "#sell";
             break;
 

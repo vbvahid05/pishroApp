@@ -1,5 +1,6 @@
 
 
+
 /*##################### all-custommers.blade.php  ###########################################################*/
 /*##################### all-custommers.blade.php  ###########################################################*/
           var app = angular.module('AllcustommerApp', ['simplePagination']);
@@ -191,7 +192,7 @@
       var enterLastName ="نام خانوادگی را وارد کنید";
       var enterMobileNumber ="شماره تلفن همراه را وارد کنید";
       var enterMobileNumberValid="شماره تلفن همراه را به صورت صحیح وارد نمایید - 12 رقمی"
-      var MobileNumberDuplicate ="شماره موبایل تکراری است ";
+      var MobileNumberDuplicate ="شماره تلفن تکراری است ";
       var enterCodeMelli ="کد ملی را وارد بفرمایید ";
       var enterValidCodeMelli ="کد ملی را به صورت صحیح وارد کنید (10رقمی)";
       var orgNameIsDuplicated="نام سازمان تکراری است ";

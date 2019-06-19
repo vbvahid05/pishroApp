@@ -8,7 +8,9 @@
 
 namespace App\Mylibrary\Sell\Stock_Request;
 //>>>>>>>>>>>> Model
+use App\Http\Controllers\Sell\SellController;
 use App\sell_stockrequest;
+use App\sell_stockrequests_archive;
 use App\sell_stockrequests_detail;
 use App\stockroom_product_statu;
 use App\sell_takeoutproduct;
@@ -24,26 +26,42 @@ class New_Edit_stockRequest
 
     public function Add_to_DB($request)
     {
-        $val= new sell_stockrequest ($request->all());
-        $val->sel_sr_type	=$request->sr_type;
-        $val->sel_sr_custommer_id=$request->sr_custommer_id;
-        $val->sel_sr_pre_contract_number =$request->sr_preFaktorNum;
-        $val->sel_sr_delivery_date =$request->sr_deliveryDate;
-        $val->sel_sr_registration_date=date("Y/m/d");
-        $val->sel_sr_lock_status =0;
-        $val->deleted_flag=0;
-        $val->archive_flag=0;
-        if ($val->save())
-        {
-            $LastID = \DB::table('sell_stockrequests')
-                ->orderBy('sell_stockrequests.id', 'desc')
-                ->select('id', \DB::raw('sell_stockrequests.id AS stockrequestsID '))
-                ->limit(1)
-                ->get();
-            return  $stockrequestsID= $LastID[0]->id;
+       $now= date("Y-m-d H:i:s");
 
+        //ignore Daubell  push new
+       $count = sell_stockrequest::where('sel_sr_type', '=', $request->sr_type)
+                                  ->where('sel_sr_custommer_id', '=', $request->sr_custommer_id )
+                                  ->where('sel_sr_pre_contract_number', '=', $request->sr_preFaktorNum )
+                                  ->where('sel_sr_delivery_date', '=', $request->sr_deliveryDate )
+//                                  ->where('sel_sr_registration_date', '=', date("Y/m/d") )
+                                  ->where('sel_sr_warranty_priod', '=', $request->WarrantyPriod )
+                                  ->where('sel_sr_lock_status', '=', 0 )
+                                  ->where('created_at', '=',$now )
+                                ->count();
+        //......................................
+        if ($count==0){
+            $val= new sell_stockrequest ($request->all());
+            $val->sel_sr_type	=$request->sr_type;
+            $val->sel_sr_custommer_id=$request->sr_custommer_id;
+            $val->sel_sr_pre_contract_number =$request->sr_preFaktorNum;
+            $val->sel_sr_delivery_date =$request->sr_deliveryDate;
+            $val->sel_sr_registration_date=date("Y/m/d");
+            $val->sel_sr_warranty_priod=$request->WarrantyPriod;
+            $val->sel_sr_created_by	=Auth::user()->id;
+            $val->sel_sr_lock_status =0;
+            $val->deleted_flag=0;
+            $val->archive_flag=0;
+            if ($val->save())
+            {
+                $LastID = \DB::table('sell_stockrequests')
+                    ->orderBy('sell_stockrequests.id', 'desc')
+                    ->select('id', \DB::raw('sell_stockrequests.id AS stockrequestsID '))
+                    ->limit(1)
+                    ->get();
+                return  $stockrequestsID= $LastID[0]->id;
+
+            }
         }
-
     }
 
 
@@ -55,6 +73,9 @@ class New_Edit_stockRequest
             $data = $request->all();
             $StockRequestType = $data['StockRequestType'];  //Ghatii=0  TaaHodi =1
 
+            $count= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $data["StockRequestID"])
+            ->where('ssr_d_ParentChasis', '=', 0)
+            ->count();
 
             $val= new sell_stockrequests_detail ();
             $val->ssr_d_stockrequerst_id= $data["StockRequestID"];
@@ -62,10 +83,10 @@ class New_Edit_stockRequest
             $val->ssr_d_qty=$data["product_QTY"];
             $val->ssr_d_ParentChasis =0;
             $val->ssr_d_status=0;
+            $val->ssr_d_position=++$count;
             $val->deleted_flag=0;
             $val->archive_flag=0;
             if ($val->save())
-
                 $nextStep=true;
             //---------------------
 
@@ -104,7 +125,7 @@ class New_Edit_stockRequest
 
 
             //---------------------
-            if ($nextStep && $StockRequestType ==0) //Ghatii
+            if ($nextStep && $StockRequestType ==0 || $StockRequestType ==2 ) //Ghatii
             {
                 $newAvailQty =$OldAvailable-$data["product_QTY"];
                 $newReservQty= $OldReserved+$data["product_QTY"];
@@ -396,9 +417,8 @@ class New_Edit_stockRequest
     }
 
 
-    public function DeleteProduct_From_StackRequest($request)
+    public function   DeleteProduct_From_StackRequest($request)
     {
-
 
         $State = "State::>";
         $argdata = $request->all();
@@ -412,7 +432,7 @@ class New_Edit_stockRequest
 //            ->where('stockrequests_details.ssr_d_ParentChasis', '=', $StockReq_RowID)
 //            ->get();
 
-        $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
+           $TakeOut=   sell_takeoutproduct::where('sl_top_StockRequestRowID','=',$StockReq_RowID)->count();
 
         //Step 1: Delete Or Delete Tag  From  "sell_stockrequests_details" Table
         try
@@ -423,9 +443,10 @@ class New_Edit_stockRequest
                 ->firstOrFail();
             $recordIsInDB="Yes";
             //.........................
-            $SerialFlagIsFree = \DB::table('sell_takeoutproducts AS takeoutproducts')
+              $SerialFlagIsFree = \DB::table('sell_takeoutproducts AS takeoutproducts')
                 ->where('takeoutproducts.sl_top_stockrequest_id', '=', $StockRequestID)
                 ->where('takeoutproducts.sl_top_productid', '=', $productID)
+               ->where('takeoutproducts.sl_top_StockRequestRowID', '=', $StockReq_RowID)
                 ->count();
         }
         catch (\Exception $e)
@@ -435,12 +456,12 @@ class New_Edit_stockRequest
         }
 
 
-        if ($recordIsInDB=="Yes" && $SerialFlagIsFree==0 && $TakeOut==0)
+        if ($recordIsInDB=="Yes" && $SerialFlagIsFree==0 && $TakeOut==0 ) //
         {
             // Full Delete
             sell_stockrequests_detail::destroy($RowID['id']);
             //Step 2: Change QTY From "stockroom_product_status"  Table
-            if ($type == 0) //Ghatiiiii
+            if ($type == 0 || $type == 2) //Ghatiiiii Or borrowed
             {
                 //..................
                 $QTYinDB = \DB::table('stockroom_product_status AS product_status')
@@ -536,13 +557,21 @@ class New_Edit_stockRequest
     {
         $argdata = $request->all();
         $rowid = $argdata['rowid'];
+        $deleteType = $argdata['type'];
+
 
         $countOfstockrequests_details = \DB::table('sell_stockrequests_details AS stockrequests_details')
             ->where('stockrequests_details.ssr_d_stockrequerst_id', '=', $rowid)
             ->count();
         if ($countOfstockrequests_details==0)
         {
-            sell_stockrequest::destroy($rowid);
+            if ($deleteType=='hide')
+                sell_stockrequest::where('id', '=', $rowid) ->update(array('deleted_flag' => 1));
+            else if ($deleteType=='fullDelete')
+                sell_stockrequest::destroy($rowid);
+            else if ($deleteType=='restore')
+                sell_stockrequest::where('id', '=', $rowid) ->update(array('deleted_flag' => 0));
+
             return '1';
         }
         else
@@ -784,7 +813,7 @@ class New_Edit_stockRequest
         $formType=$stockrequest->sel_sr_type;
         // if chassis then find Sub chassis List
         //1):
-        $stock = \DB::table('Stockroom_stock_putting_products AS stock')
+         $stock = \DB::table('Stockroom_stock_putting_products AS stock')
             ->join('stockroom_products AS  products'   ,   'products.id', '=','stock.stkr_stk_putng_prdct_product_id')
             ->where('stock.stkr_stk_putng_prdct_product_id', '=', $product_ID)
             ->where('products.stkr_prodct_type_cat', '=', 3) // Just Chassis
@@ -809,7 +838,7 @@ class New_Edit_stockRequest
                 $productArray[]=$ProductRecord->id;
                }
         }
-        $productArray= array_unique($productArray);
+         $productArray= array_unique($productArray);
 
         //----------------------
           $sell_stockrequests_detail=sell_stockrequests_detail::
@@ -851,7 +880,7 @@ class New_Edit_stockRequest
                 $stockrequest->archive_flag=0;
                 $stockrequest->save();
 
-                $subChasiss =
+                 $subChasiss =
                     \DB::table('stockroom_products AS  products')
                         ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
                         ->where('products.id', '=', $array)
@@ -866,53 +895,11 @@ class New_Edit_stockRequest
             {
                 array_push($Arry_SubChassisParts, $subChasiss);
             }
-//            try
-//            {
-//
-//                $subChasiss =
-//                    \DB::table('stockroom_products AS  products')
-//                        ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
-//                        ->where('products.id', '=', $array)
-//                        ->select('*', \DB::raw( 'products.id AS products_id ,
-//                                           product_status.id AS product_status_id  '))
-//                        ->get();
-//                if (count ($subChasiss) ==0 )
-//                    return 'Null Array';
-//                else
-//                array_push($Arry_SubChassisParts, $subChasiss);
-//            }
-//            catch ( \Exception $e)
-//            {
-//
-//                //........................
-//                $stockrequest = new stockroom_product_statu;
-//                $stockrequest->sps_product_id =$array;
-//                $stockrequest->sps_available = 0;
-//                $stockrequest->sps_reserved = 0;
-//                $stockrequest->sps_sold=0;
-//                $stockrequest->sps_warranty=0;
-//                $stockrequest->sps_Taahodi=0;
-//                $stockrequest->sps_borrowed=0;
-//                $stockrequest->deleted_flag=0;
-//                $stockrequest->archive_flag=0;
-//                $stockrequest->save();
-//                //........................
-//                $subChasiss =
-//                    \DB::table('stockroom_products AS  products')
-//                        ->join('stockroom_product_status AS  product_status','products.id', '=','product_status.sps_product_id')
-//                        ->where('products.id', '=', $array)
-//                        ->select('*', \DB::raw( 'products.id AS products_id ,
-//                                           product_status.id AS product_status_id  '))
-//                        ->get();
-//                array_push($Arry_SubChassisParts, $subChasiss);
-//            }
         }
         $finalArray=array();
         array_push($finalArray, $Arry_SubChassisParts);
         array_push($finalArray, $formType);
         return $finalArray;
-
-
     }
 
 //---------------------------------------------------------------
@@ -929,7 +916,7 @@ class New_Edit_stockRequest
         $newAvialQty = $availQty - $data['QTY'];
         $newReservedQty = $reservedQty + $data['QTY'];
 
-    if ($formType==0) //Ghatii
+    if ($formType==0 || $formType==2) //Ghatii  Or Borrowed
         {
             if ($availQty >=$data['QTY'])
             {
@@ -1027,7 +1014,7 @@ class New_Edit_stockRequest
             $model = sell_stockrequests_detail::where('id', '=',  $stckreqstDtlRowID)->firstOrFail();
             $OldQty= $model->ssr_d_qty;
         //-------------------------------------------------------
-            if ($formType==0) //Ghatiiii
+            if ($formType==0 || $formType==2) //Ghatiiii Or Borrowed
             {
                 try
                 {
@@ -1299,6 +1286,8 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
             ->where('stockrequests_detail.ssr_d_stockrequerst_id', '=', $StockRequestID)
             ->where('stockrequests_detail.ssr_d_ParentChasis', '=', 0)
             ->select('*', \DB::raw( 'stockrequests_detail.id AS stckreqstDtlRowID'))
+            ->orderBy('stockrequests_detail.ssr_d_position', 'ASC')
+            ->orderBy('stockrequests_detail.id', 'ASC')
             ->get();
 
         $finalArray=array();
@@ -1382,4 +1371,166 @@ public function  ConvertEngain($product_ID,$stckreqstDtlRowID,$StockRequestID_Va
                 return $e->getMessage();
             }
     }
+//----------------------------------------------------------------------------------
+    public function UpdateWarrantyDiuration($req )
+    {
+        if (sell_stockrequest::where('id', '=', (int)$req['StockRequestID'])
+                        ->update(array('sel_sr_warranty_priod' => (int)$req['WarrantyDiurationValue'])))
+            return 'Updated';
+        else
+            return 'failed';
+    }
+//----------------------------------------------------------------------------------
+    public function reIndex($req )
+    {
+        return 'blucked';
+       $StockRequestID=  $req['StockRequestID'];
+      $rows= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $StockRequestID)
+                          ->where('ssr_d_ParentChasis', '=', 0)
+                          ->get();
+      $i=1;
+      foreach ($rows AS $r)
+      {
+
+        echo  sell_stockrequests_detail::where('id', '=', $r->id)
+                                  ->update(array('ssr_d_position' => $i));
+          $i++;
+      }
+      return $i;
+    }
+//----------------------------------------------------------------------------------
+    public  function updateSortableList_StockRequestArray ($request)
+    {
+
+        $data=$request['data'];
+        $i=0;
+        foreach ($data as $r)
+        {
+            $i++;
+            sell_stockrequests_detail::where('id', '=', $r['StockRequestRowID'])
+                ->update(array('ssr_d_position' => $i));
+        }
+        return 'OK';
+    }
+
+//----------------------------------------------------------------------------------
+    public function borrow_BacktoStock($request){
+        $StockRequestID= $request['StockRequestID'];
+        //____________________________
+        $Qty=0;
+         $stockrequests_detail= sell_stockrequests_detail::where('ssr_d_stockrequerst_id', '=', $StockRequestID)->get();
+        foreach ($stockrequests_detail as $st)
+        {
+            $Qty=$Qty+$st->ssr_d_qty;
+        }
+        //____________________________
+        $state= sell_takeoutproduct::where('sl_top_stockrequest_id', '=', $StockRequestID)->count();
+        if ($state==$Qty){
+             return   $this->onBacktoStock($StockRequestID);
+        }else {
+//            return $state;
+                if ($state == 0)   return 'stockIsEmpty';
+                else  return 'TackOut All Stock ';
+            }
+    }
+      //____________________________
+        function  onBacktoStock($StockRequestID){
+        // 1).........add new Archive Data from StockRequest  ...........
+
+
+
+            $detailDate = \DB::table('sell_stockrequests_details    AS details')
+                                 ->join('sell_takeoutproducts     AS  takeout','takeout.sl_top_StockRequestRowID', '=','details.id')
+                                 ->join('stockroom_serialnumbers  AS  serialnumbers','serialnumbers.id', '=','takeout.sl_top_product_serialnumber_id')
+
+                                 ->join('stockroom_products AS  products','products.id', '=','details.ssr_d_product_id')
+                                 ->join('stockroom_products_brands AS  brands','brands.id', '=','products.stkr_prodct_brand')
+                                 ->join('stockroom_products_types  AS  types' ,'types.id', '=','products.stkr_prodct_type')
+                                 ->where('details.ssr_d_stockrequerst_id', '=', $StockRequestID)
+
+                                 ->select(\DB::raw('
+                                                     details.id AS details_ID ,
+                                                     details.ssr_d_product_id         AS ssr_d_product_id,
+                                                     details.ssr_d_qty                AS ssr_d_qty,
+                                                     details.ssr_d_ParentChasis       AS ssr_d_ParentChasis,
+                                                     details.ssr_d_status             AS ssr_d_status,
+                                                     details.ssr_d_position           AS ssr_d_position ,
+                                                     products.stkr_prodct_partnumber_commercial AS stkr_prodct_partnumber_commercial ,
+                                                     products.stkr_prodct_title       AS stkr_prodct_title,
+                                                     products.stkr_prodct_type_cat    AS   prodct_type_cat,
+                                                     brands.stkr_prodct_brand_title   AS stkr_prodct_brand_title ,
+                                                     types.stkr_prodct_type_title     AS stkr_prodct_type_title,
+                                                     serialnumbers.id                 AS srial_ID ,
+                                                     serialnumbers.stkr_srial_parent  AS srial_parent ,
+                                                     serialnumbers.stkr_srial_serial_numbers_a AS srial_numbers_a,
+                                                     serialnumbers.stkr_srial_serial_numbers_b AS srial_numbers_b  ,
+                                                     takeout.id AS takeout_ID
+                                                   '))
+                                 ->get();
+
+
+          $pdfStockRequest= new SellController();
+          $pdfStockRequest->pdfStockRequest($StockRequestID ,'saveFile');
+
+          $stockrequests_archive = new sell_stockrequests_archive;
+          $stockrequests_archive->slsr_arch_stockrequests_id =$StockRequestID;
+          $stockrequests_archive->slsr_arch_products_data =$StockRequestID.'.pdf';
+          $stockrequests_archive->slsr_arch_more ='';
+          $stockrequests_archive->deleted_flag ='0';
+          $stockrequests_archive->archive_flag ='0';
+          $stockrequests_archive->save();
+
+
+
+
+//echo '1- stockrequests archive added';
+        // 2).........Change Serial Flag to ziro ...........
+            foreach ($detailDate AS $ddata ){
+                    stockroom_serialnumber::where('id', '=', $ddata->srial_ID)
+                               ->update(array('stkr_srial_status' => 0));
+//echo '2- freeUp serialNumber '.$ddata->srial_ID;
+            }
+        // 3).........delete takeoutproducts...........
+            foreach ($detailDate AS $ddata ){
+                sell_takeoutproduct::where('id', '=', $ddata->takeout_ID)
+                    ->delete();
+//echo '3- Delete takeoutproduct '.$ddata->takeout_ID;
+            }
+        // 4).........Delete sell_stockrequests_details ...........
+            foreach ($detailDate AS $ddata ){
+                sell_stockrequests_detail::where('id', '=', $ddata->details_ID)
+                    ->delete();
+//echo '4- Delete sell_stockrequests_details '.$ddata->takeout_ID;
+            }
+        // 5).........set Archive Field from sell_stockrequests ...........
+              if(sell_stockrequest::where('id', '=', $StockRequestID)
+                  ->update(array('archive_flag' => 1)))
+//echo '5- sell_stockrequest Archive Field set 1';
+        // 6).........Update stockroom_product_status...........
+$ret="__(";
+            foreach ($detailDate AS $ddata ){
+                $product_statu= stockroom_product_statu::where('sps_product_id', '=', $ddata->ssr_d_product_id)->firstOrFail();
+                $oldBorrowed= $product_statu->sps_borrowed;
+                $oldAvailable= $product_statu->sps_available;
+
+                $currentQTY= $ddata->ssr_d_qty;
+
+                $newBorrow=$oldBorrowed-1;
+                $newAvailable=$oldAvailable+1;
+                stockroom_product_statu::where('sps_product_id', '=', $ddata->ssr_d_product_id)
+                    ->update(array('sps_available' => $newAvailable ,
+                        'sps_borrowed' => $newBorrow
+                    ));
+                $ret= $ret.  '$oldBorrowed'.$oldBorrowed .'| $oldAvailable'.$oldAvailable .' | $currentQTY'.$currentQTY.
+                '| $newBorrow'.$newBorrow .'| $newAvailable'.$newAvailable .' )';
+            }
+//            return $ret;
+//echo '6- Update stockroom_product_status';
+        // 7).........Disable Edit Info Of StockRequest  ...........
+
+            return 'archived';
+
+        }
+     //____________________________
+
 }
