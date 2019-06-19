@@ -9,6 +9,7 @@
                 <th><input type="checkbox" style="width: 15px !important;"></th>
                 <th>{{ Lang::get('labels.posts_title') }}</th>
                 <th>{{ Lang::get('labels.posts_author') }}</th>
+                <th>{{ Lang::get('labels.Lang') }}</th>
                 <th>{{ Lang::get('labels.posts_cat') }}</th>
                 <th>{{ Lang::get('labels.posts_created_at') }} </th>
                 <th>{{ Lang::get('labels.id') }}</th>
@@ -25,6 +26,7 @@
                     )
                 </td>
                 <td>{{$dl->name}}</td>
+                <td>{{$dl->lang_icon}}</td>
                  <td>{{$dl->trmrel_title}}</td>
                 <td>
                     <?php $date= $publicClass->gregorian_to_jalali_byString($dl->postsCreatedAt) ?>

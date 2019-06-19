@@ -2417,7 +2417,13 @@ input.select2-search__field {
     background-color: #3c8dbc !important;
     border: 1px solid #3c8dbc !important;
 }
-
+.languageBTN{
+    margin-left: 15px;
+}
+.languageBTN.active{
+    font-weight: bold;
+    color: #004f8e !important;
+}
 .my-drop-zone { border: dotted 3px lightgray; }
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }

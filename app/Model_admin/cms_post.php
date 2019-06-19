@@ -15,7 +15,7 @@ class cms_post extends Model implements HasMedia
 {
     use HasMediaTrait;
     protected $fillable = [
-        'post_title','post_slug','post_status','post_categury' ,'post_type' ,'post_content' ,'post_lang','post_author_id',
+        'post_title','post_slug','post_status','post_categury' ,'post_type' ,'post_content' ,'post_lang','post_lang_parent_id','post_author_id',
         'deleted_flag','archive_flag',
     ];
 }

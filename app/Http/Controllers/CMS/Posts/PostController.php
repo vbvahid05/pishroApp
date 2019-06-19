@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CMS\Posts;
 
+use App\Model_admin\cms_language;
 use App\Model_admin\cms_media_center;
 use App\Model_admin\cms_post;
 use App\Model_admin\cms_post_meta;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function showAllPosts(Request $request, $postType)
+    public function showAllPosts(Request $request,$lang ,$postType)
     {
         $viewListMode=Input::get("view");
         switch (Input::get("view"))
@@ -26,7 +27,7 @@ class PostController extends Controller
                 $deleted_flag=0;
 
         }
-        $local='fa';
+        $local=$lang;
 
 //        try
 //        {
@@ -38,6 +39,8 @@ class PostController extends Controller
                 ->select('*')
                 ->get();
              $catID=$temcat[0]->pst_typ_Termcat_id;
+
+
 
             $dataList= \DB::table('cms_posts as  posts')
                 ->Join('cms_term_relations as categories' ,'categories.id','=','posts.post_categury' )
@@ -52,11 +55,18 @@ class PostController extends Controller
                 ->orderby('Postid','DESC')
                 //->get();
                 ->paginate(10);
+
+//            foreach ($dataList as $data){
+//
+//            }
+
+            //
+          $all_language= cms_language::all();
             //-----------
             return view('CMS/Posts/list/list',
                 compact(
                     'local','postType' ,'viewListMode',
-                    'pageTitle' ,'pageIcon','dataList','temcat'
+                    'pageTitle' ,'pageIcon','dataList','temcat' ,'all_language'
                 ));
 //        }
 //        catch (\Exception $e)
@@ -85,10 +95,10 @@ class PostController extends Controller
      * @param $action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public  function  editPage(Request $request, $postType, $action)
+    public  function  editPage(Request $request,$lang , $postType, $action)
     {
 
-        $local ='fa';
+        $local =$lang;
         if ($action=='edit')
         {
             $pageTitle=  \Lang::get('labels.edit').' '.\Lang::get('labels.'.$postType);
