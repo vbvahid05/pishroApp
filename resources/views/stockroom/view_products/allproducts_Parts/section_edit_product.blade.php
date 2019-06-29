@@ -5,7 +5,7 @@
     <div class="content">
       <div class="center">
         <div class="ui text container">
-            <div class="ui segments" >
+            <div class="ui segments" style="position: absolute;top: 10%;left: 30%;" >
               <div class="ui segment" style="height:auto  ;color:#000;">
                 <h2 ng-model="message" > {{ Lang::get('labels.edit') }}</h2>
                 <input type="hidden" ng-model="thisProductID"  >

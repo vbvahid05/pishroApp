@@ -8,6 +8,7 @@
       <tr>
           <th style="width: 1% !important;"><input type="checkbox" ng-model="confirmed" ng-change="checkall(1)" id="checkall1" /><th>
           <th style="width:  300px;">{{ Lang::get('labels.Brand_name') }} <th>
+          <th>Translate</th>
           <th>{{ Lang::get('labels.Brand_logo') }} <th>
       </tr>
 
@@ -20,11 +21,33 @@
                     id="row@{{product.productID}}">
 
               <td>
-               <input type="checkbox" class="checkbox" name="itemIdList" value="@{{ brand.id }}">
+               <input type="checkbox" class="checkbox" name="itemIdList" value="@{{ brand['brand'].id }}">
               <td>
               <td>
-               @{{ brand.stkr_prodct_brand_title}}
+               @{{ brand['brand'].stkr_prodct_brand_title}}
                <br/>
+              <td>
+              <span ng-repeat="translateLangs in brand['lang']" >
+                  <span ng-if="translateLangs.translateID =='new'"  ng-click="setTranslate_new('product_brand' ,
+                                                                                         brand['brand'].id ,
+                                                                                         translateLangs.whatsLangIsNew_by_title ,
+                                                                                         translateLangs.whatsLangIsNew_by_name ,
+                                                                                         translateLangs.lang_title
+                                                                                          )" >
+                   @{{ translateLangs.whatsLangIsNew_by_name}}
+               </span>
+               <span ng-if="translateLangs.translateID !='new'" ng-click="setTranslate_edit('product_brand' ,
+                                                                                         brand['brand'].id ,
+                                                                                         translateLangs.lang_title ,
+                                                                                         translateLangs.translate
+                                                                                          )"  >
+                   @{{ translateLangs.translate}}
+                  <br/>
+               </span>
+              </span>
+
+               <br/>
+
 <!--
                <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
                  <span class="edit">
@@ -42,7 +65,7 @@
                </div>
 -->
              <td>
-             <td> @{{product.stkr_prodct_titlea }} <td>
+             <td> @{{product['brand'].stkr_prodct_titlea }} <td>
 
       </tr>
     </table>

@@ -40,7 +40,7 @@ class PostController extends Controller
                 ->get();
              $catID=$temcat[0]->pst_typ_Termcat_id;
 
-
+        $AllData=array();
 
             $dataList= \DB::table('cms_posts as  posts')
                 ->Join('cms_term_relations as categories' ,'categories.id','=','posts.post_categury' )
@@ -49,15 +49,20 @@ class PostController extends Controller
                 ->Join('users' ,'users.id','=','posts.post_author_id' )
                 ->where('lang.lang_title','=',$local)
                 ->where('postType.pst_typ_title','=',$postType)
-                ->where('categories.trmrel_term_id','=',$catID)
+              //  ->where('categories.trmrel_term_id','=',$catID)
                 ->where('posts.deleted_flag','=',$deleted_flag)
                 ->select(['*','posts.id as Postid'  ,'posts.created_at AS postsCreatedAt' ])
                 ->orderby('Postid','DESC')
                 //->get();
-                ->paginate(10);
+                ->paginate(15);
 
 //            foreach ($dataList as $data){
+//                $d= \DB::table('cms_post_multi_language as  multi_language')
+//                    ->where('multi_language.cpml_parent_id','=',$data->Postid)
+//                    ->where('multi_language.deleted_flag','=',0)
+//                    ->get();
 //
+//                array_push($AllData ,$d);
 //            }
 
             //
@@ -65,7 +70,7 @@ class PostController extends Controller
             //-----------
             return view('CMS/Posts/list/list',
                 compact(
-                    'local','postType' ,'viewListMode',
+                    'local','postType' ,'viewListMode','AllData',
                     'pageTitle' ,'pageIcon','dataList','temcat' ,'all_language'
                 ));
 //        }
@@ -146,6 +151,8 @@ class PostController extends Controller
        }
         else if ('new')
         {
+            $local=$postType;
+            $postType=$lang;
             $hasValue=false;
             $pageTitle=  \Lang::get('labels.new').' '.\Lang::get('labels.'.$postType);
             $pageIcon="fa fa-file-text-o";
@@ -275,6 +282,9 @@ class PostController extends Controller
     public function CRUD(Request $request,$postType,$action)
     {
         $postAction= $request['postAction'];
+        $local=$request['local'];
+        $lang = cms_language::where('lang_title', '=', $local)->firstOrFail();
+
         if ($action =='newOrUpdate')
         {
             switch($postType)
@@ -323,7 +333,7 @@ class PostController extends Controller
                                         $cms_post->post_title=$request['postTitle'];
                                         $cms_post->post_slug=$slog;
                                         $cms_post->post_type=1;
-                                        $cms_post->post_lang=1;
+                                        $cms_post->post_lang=$lang->id;
                                         $cms_post->post_status=1;
                                         $cms_post->post_author_id=1;
                                         $cms_post->deleted_flag=0;

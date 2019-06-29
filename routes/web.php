@@ -131,6 +131,10 @@ Route::post('/service/stock/searchProduct','Stockroom\ProductsController@searchP
     \Illuminate\Support\Facades\Route::get ('stock/product/{id}' ,'Stockroom\ProductsController@newOrEditProduct');
     Route::post('/service/stock/getProductData','Stockroom\ProductsController@get_Product_data');
     Route::get('/service/stock/getProductBrands','Stockroom\ProductsController@get_Product_brands');
+    Route::get('/service/stock/getProductBrandsWithTranslate','Stockroom\ProductsController@getProductBrandsWithTranslate');
+    Route::post('/service/Products/{function}','Stockroom\ProductsController@manageRoute');
+
+
     Route::get('/service/stock/getProductTypes','Stockroom\ProductsController@get_Product_Types');
     \Illuminate\Support\Facades\Route::get('/service/stock/getProductTypesByBrandID/{id}','Stockroom\ProductTypeController@get_Product_Types_ByBrandID');
     Route::post('/service/stock/add_new_product','Stockroom\ProductsController@insert_form');
@@ -280,6 +284,10 @@ Route::get('/test' ,'setting\SettingController@dotest');
 Route::get('/all-posts/{lang}/{postType}'         ,'CMS\Posts\PostController@showAllPosts');
 Route::get('/all-posts/{lang}/{postType}/{action}','CMS\Posts\PostController@editPage');
 Route::post('/all-posts/postActions/{postType}/{action}','CMS\Posts\PostController@CRUD');
+
+/*Categories*/
+Route::get('/all-Categories/{lang}/{postType}/{term_ID?}' ,'CMS\Categories\CategoryController@loadPage');
+Route::post('/all-Categories-service/{function}'         ,'CMS\Categories\CategoryController@CategoryServices');
 
 /*Media Center*/
 Route::post('/mediaLibrary/Actions/{Type}','CMS\MediaCenter\MediaCenterController@manageRequest');

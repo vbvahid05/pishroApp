@@ -1,6 +1,6 @@
 @section('section_mainBody')
     <div class="ui form">
-
+        <input id="local" ng-model="local" type="hidden" value="{{$local}}">
         <div class="TitleSection field row">
             <div class="title col-md-6 pull-right">
                 <input id="post_Title" type="text" value="@if ($hasValue)  {{$dataList[0]->post_title}} @endif">

@@ -670,11 +670,12 @@ function($scope, $http,Pagination)
     {
     $(".MainLoading").addClass("show");
     $http({
-    method:"GET",
-    url:"/service/stock/getProductBrands"
+    method:"Get",
+    url:"/service/stock/getProductBrandsWithTranslate"
 
     }).then (function getsuccess(response)
     {
+     console.log(response.data)  ;
     $scope.AllBrandTabel=response.data;
     $scope.pagination = Pagination.getNew(10);
     $scope.pagination.numPages = Math.ceil($scope.AllBrandTabel.length/$scope.pagination.perPage);
@@ -700,6 +701,8 @@ function($scope, $http,Pagination)
     $http.post('/services/stock/addNewBrand2DB',typeArray).then(
     function xSuccess(response)
     {
+       console.log(response.data)
+
     if (response.data=='is_dublicate')
     {
     toast_is_Dublicate();
@@ -727,6 +730,7 @@ function($scope, $http,Pagination)
 
     }).then (function getsuccess(response)
     {
+       console.log(response.data);
     $scope.AllTypesTabel=response.data;
     $scope.pagination = Pagination.getNew(10);
     $scope.pagination.numPages = Math.ceil($scope.AllTypesTabel.length/$scope.pagination.perPage);
@@ -768,6 +772,8 @@ function($scope, $http,Pagination)
 
     });
     }
+
+
 //-------------------------------------
     $scope.searchItem=function () {
         arg={
@@ -782,6 +788,58 @@ function($scope, $http,Pagination)
             toast_alert(response.data,'danger');
         }
     }
+
+//-------------------------------------
+  $scope.setTranslate_new=function (type ,
+                                     rowId ,
+                                    lang_title ,
+                                     whatsLangIsNew_by_name ,
+                                    ) {
+
+      var recived_value = prompt("ترجمه " + whatsLangIsNew_by_name)
+      if (recived_value != null){
+          arg={
+              actionx:'new',
+              type:type,
+              rowId ,
+              lang_title ,
+              whatsLangIsNew_by_name ,
+              recived_value
+          }
+
+          $http.post('/service/Products/setTranslate',arg).then
+          (function xSuccess(response) {
+              console.log(response.data);
+              $scope.All_productTypes_OnLoadPage()
+          }), function xError(response)
+          {}
+
+      }
+  }
+//-------------------------------------
+  $scope.setTranslate_edit=function ( type ,
+                                     rowId ,
+                                      lang_title ,translate) {
+      var recived_value = prompt("ترجمه "  ,translate)
+         if (recived_value != null)
+         {
+             arg={
+                 actionx:'edit',
+                 type ,
+                 rowId ,
+                 lang_title ,
+                 translate ,
+                 recived_value
+             }
+
+             $http.post('/service/Products/setTranslate',arg).then
+             (function xSuccess(response) {
+                 console.log(response.data);
+                 $scope.All_productTypes_OnLoadPage()
+             }), function xError(response)
+             {}
+         }
+      }
 
 
   /*-----------*/

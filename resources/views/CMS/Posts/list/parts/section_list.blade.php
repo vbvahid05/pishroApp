@@ -26,7 +26,24 @@
                     )
                 </td>
                 <td>{{$dl->name}}</td>
-                <td>{{$dl->lang_icon}}</td>
+                <td>
+                    @foreach( $AllData as $lanData)
+                        @foreach( $lanData as $ldata)
+                            @if ($ldata->cpml_parent_id == $dl->Postid )
+                                <a href="/all-posts/{{$ldata->cpml_lang}}/posts/edit?id={{ $ldata->cpml_child_id }}">
+                                    {{ $ldata->cpml_lang }}
+                                </a>
+                            @endif
+
+                             {{--@if ($ldata->cpml_child_id == $dl->Postid )--}}
+                                {{--<a href="/all-posts/{{$ldata->cpml_lang}}/posts/edit?id={{ $ldata->cpml_child_id }}">--}}
+                                    {{--{{ $ldata->cpml_lang }}--}}
+                                {{--</a>--}}
+                            {{--@endif--}}
+
+                        @endforeach
+                    @endforeach
+                </td>
                  <td>{{$dl->trmrel_title}}</td>
                 <td>
                     <?php $date= $publicClass->gregorian_to_jalali_byString($dl->postsCreatedAt) ?>

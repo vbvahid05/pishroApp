@@ -29,11 +29,13 @@
             <?php //echo  $publicLibrary->checkBoxList($categuryList,0,$dataList[0]->post_categury)?>
             <select id="post_Categury" class="form-control" >
                 <?php
+
                 if ($hasValue)
                     echo  $publicLibrary->DropDownList($categuryList,0,$dataList[0]->post_categury,0);
                 else
                     echo  $publicLibrary->DropDownList($categuryList,0,0,0);
                 ?>
+
             </select>
         </div>
         <br/>

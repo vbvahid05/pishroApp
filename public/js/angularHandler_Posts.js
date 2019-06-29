@@ -56,7 +56,8 @@ function($scope, $http,Pagination)
                             postCategury:$('#post_Categury').val(),
                             postContent: content,
                             tags:$('#post_tags').val(),
-                            postImage:$scope.postThumb
+                            postImage:$scope.postThumb,
+                            local:$('#local').val()
                         }
                         console.log(arg)
             break;

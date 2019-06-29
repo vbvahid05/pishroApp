@@ -12,11 +12,11 @@ return [
     | you want to customize your views to better match your application.
     |
     */
-<<<<<<< HEAD
-'slog' => '' . 'سامانه خدمات الکترونیک پیشرو  ' .' v1.2.9' ,
-=======
+
+
+
 'slog' => '&nbsp;&nbsp;' . 'سامانه خدمات الکترونیک پیشرو  ' .'&nbsp; v1.3.1' ,
->>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
+
 'copyright' => 'گروه شرکت های مهندسی پیشرو '  ,
 'copyright_date' => '© Copyright 2017-2019' ,
 'changeLog'=>'تغییرات انجام شده',
@@ -381,6 +381,11 @@ return [
     'select'=>'انتخاب و افزودن',
     'postThumbImage'=>'قرار دادن به‌عنوان تصویر شاخص',
 
+/* category*/
+    'catName'=>'نام دسته ',
+    'catSlug'=>'نامک',
+    'catParent'=>'دسته ی مادر',
+    'menu' => 'منوها',
 
 //   Media Center
    'addMultimediaToContent'=> ' افزودن پرونده چندرسانه‌ای',

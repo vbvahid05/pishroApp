@@ -2570,7 +2570,7 @@ canvas {
     z-index: -1;
 }
 /*________________Media Center*/
-=======
+
 .pointerGreen {
     cursor: pointer;
     font-size: 20px !important;
@@ -2631,4 +2631,46 @@ i.fa.fa-trash.gray {
 .stockrequestArchiveData th {
     text-align: center;
 }
->>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
+
+.categoryManagement {
+    background: #fff;
+    border-radius: 5px;
+    padding-top: 50px;
+    margin-top: -50px;
+    padding-right: 50px;
+    padding-left: 50px;
+    display: block;
+    position: relative;
+    height: -webkit-fill-available;
+}
+/*.categoryManagement ul {*/
+    /*list-style: arabic-indic;*/
+/*}*/
+
+/*.categoryManagement ul li {*/
+    /*height: 25px;*/
+    /*border-bottom: 1px solid #ececec;*/
+/*}*/
+/*.categoryManagement ul li ul li {*/
+    /*height: 30px;*/
+    /*margin-top: 20px;*/
+    /*border-bottom: 1px solid #ececec;*/
+/*}*/
+/*.categoryManagement ul li ul li ul li {*/
+    /*margin-top: 25px;*/
+    /*height: 25px;*/
+/*}*/
+.categoryManagement li{
+    padding: 10px;
+}
+form.ui.form.newCategory label {
+    position: absolute;
+}
+
+form.ui.form.newCategory input {
+    margin-top: 25px;
+}
+.newCategory .fields.parents {
+    padding-top: 10px;
+}
+

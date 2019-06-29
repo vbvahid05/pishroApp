@@ -50,6 +50,8 @@
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_userSetting.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Posts.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/angularHandler_Sell_waranty.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/angularHandler_CMS_categories.js') }}"></script>
+
 
 
 <!-- accordian Side Menu -->
@@ -69,7 +71,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/jquery.Bootstrap-PersianDateTimePicker.css') }}" />
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/calendar.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js') }}"></script>
-<<<<<<< HEAD
+
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 
 
@@ -77,7 +79,5 @@
 
 
 
-=======
->>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
 
 

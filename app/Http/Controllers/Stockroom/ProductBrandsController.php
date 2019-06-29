@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Stockroom;
 //>>>>>>>>>>>> Model
+use App\Model_admin\cms_language;
+use App\Model_admin\cms_shop_translate;
+use App\Model_admin\cms_shop_translate_type;
 use App\Stockroom_products_brands;
 use App\Stockroom_products;
 use App\Stockroom_products_type;
@@ -30,6 +33,25 @@ class ProductBrandsController extends Controller
               $val->archive_flag=0;
               $val->deleted_flag=0;
               $val->save();
+              $latestId=$val->id;
+
+             $brand= cms_shop_translate_type::where('cmsshptrst_type_title', '=', 'product_brand')->firstOrFail();
+             $transTypeId= $brand['id'];
+
+            $language= cms_language::where('lang_title', '=', 'fa')->firstOrFail();
+            $languageId= $language['id'];
+
+             $trans= new cms_shop_translate ();
+             $trans->cmsshptransl_type = $transTypeId;
+             $trans->cmsshptransl_target_id = $latestId;
+             $trans->cmsshptransl_lang_id = $languageId;
+             $trans->cmsshptransl_title = $request->newBrand;
+             $trans->save();
+
+
+
+
+
          }
       }
 

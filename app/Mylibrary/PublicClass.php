@@ -125,8 +125,9 @@ public   function ConvertStringDatePicker($stringDate){
     $y=$arDate[0];$yr=explode("{\"Year\":",$y); $year=$yr[1];
     $m=$arDate[1]; $mn=explode("\"Month\":",$m); $month=$mn[1];
     $d=$arDate[2];$dy=explode("\"Day\":",$d);  $day=$dy[1];
+    return $this->convert_jalali_to_gregorian($year,$month,$day );
+}
 
-<<<<<<< HEAD
     public function renderMenu($array, $level) {
         $output = "<ul>";
         foreach ($array as $i) {
@@ -141,7 +142,39 @@ public   function ConvertStringDatePicker($stringDate){
         $output = $output . "</ul>";
         return $output;
     }
-//---------------------------------
+
+    public function renderMenuAsTable($array, $level) {
+        $output = "<tr>";
+        foreach ($array as $i) {
+            if ($i->trmrel_parent == $level) {
+                $output = $output .
+                    "<td>
+                    <a href='" . $i->trmrel_value . "'>" . $i->trmrel_title . "</a>" .
+                    $this->renderMenuAsTable($array, $i->ItemID) .
+                    "</td>";
+            }
+        }
+        $output = $output . "</tr>";
+        return $output;
+    }
+
+      public function renderMenuAsList($array, $level) {
+        $output = "<ul>";
+        foreach ($array as $i) {
+            if ($i->trmrel_parent == $level) {
+                $output = $output .
+                    "<li>
+                    <span>" . $i->trmrel_title ."(".$i->trmrel_slug. ")</span> " .
+                    $this->renderMenuAsList($array, $i->ItemID) .
+                    "</li>";
+            }
+        }
+        $output = $output . "</ul>";
+        return $output;
+    }
+
+
+
     public function checkBoxList($array, $level ,$selected) {
 
         $output = "<ul>";
@@ -167,11 +200,10 @@ public   function ConvertStringDatePicker($stringDate){
         return $output;
     }
 
-//---------------------------------
     public function DropDownList($array, $level ,$selected,$cunter) {
-         $sub="";
-            for( $c=1;$c<=$cunter;$c++)
-             $sub=$sub.'_';
+        $sub="";
+        for( $c=1;$c<=$cunter;$c++)
+            $sub=$sub.'_';
         if ($cunter !=0) $subEnd='|';else $subEnd='';
         $cunter++;
         $output = "";
@@ -180,6 +212,7 @@ public   function ConvertStringDatePicker($stringDate){
                 $checked='';
                 if ($i->ItemID ==$selected) $checked='selected';
                 $output = $output .
+                "<option value=0></option>".
                     " 
                 <option value='$i->ItemID' $checked >$sub$subEnd $i->trmrel_title </option>
                     ".$this->DropDownList($array, $i->ItemID,$selected,$cunter)  ;
@@ -188,12 +221,6 @@ public   function ConvertStringDatePicker($stringDate){
         return $output;
     }
 
-
-=======
-    return $this->convert_jalali_to_gregorian($year,$month,$day );
-}
-//---------------------------------
->>>>>>> 154f02302566fc33a0e7559e30b7c105edbc451d
   public static function get_Table_Name($slug)
     {
   //     if ($slug == 'xeeoirder')

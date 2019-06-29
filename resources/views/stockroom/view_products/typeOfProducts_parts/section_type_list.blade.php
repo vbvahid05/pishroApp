@@ -5,6 +5,7 @@
           <th style="width: 1% !important;"><input type="checkbox" ng-model="confirmed" ng-change="checkall(2)" id="checkall2" /><th>
           <th style="width:  300px;">{{ Lang::get('labels.productType') }} <th>
           <th>{{ Lang::get('labels.Product_brand') }} <th>
+          <th>{{lang::get('labels.translate')}}</th>
       </tr>
       <tr ng-repeat="Types in AllTypesTabel
                     | startFrom: pagination.page * pagination.perPage
@@ -15,29 +16,34 @@
                     id="row@{{product.productID}}">
 
               <td>
-               <input type="checkbox" class="checkbox" name="itemIdList" value="@{{ Types.id }}">
+               <input type="checkbox" class="checkbox" name="itemIdList" value="@{{ Types['type'].id }}">
               <td>
               <td>
-               @{{ Types.stkr_prodct_type_title}}
+               @{{ Types['type'].stkr_prodct_type_title}}
                <br/>
-<!--
-               <div ng-show="inAllDatalist" id="inAllDatalist" class="row-actions">
-                 <span class="edit">
-                   <span class="editBtn"  ng-click="editProduct(product.productID)" aria-label="{{Lang::get('labels.edit')}}" > {{ Lang::get('labels.edit') }} </span> |
-                 </span>
-                 <span class="trash"> <span  class="submitdelete"  ng-click="moveToTrash(product.productID)" >{{ Lang::get('labels.moveToTrash') }}</span>
-                 </span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
-
-               <div ng-show="inTrashlist" id="inTrashlist" class="row-actions">
-                 <span class="RestoreTrash"> <span  class="RestoreTrash"  ng-click="RestoreFromTrash(product.productID)" >{{ Lang::get('labels.RestoreFromTrash') }} | </span></span>
-                 <span class="trash">        <span  class="submitdelete"  ng-click="DeleteFromDataBase(product.productID)" >{{ Lang::get('labels.fulldelete') }}</span></span>
-                 <span class="view"><a href="#" rel="bookmark" </a>  </span>
-               </div>
--->
              <td>
-             <td>  @{{ Types.stkr_prodct_brand_title}}<td>
+             <td>  @{{ Types['type'].stkr_prodct_brand_title}}<td>
+            <td>
+           <span ng-repeat="translateLangs in Types['lang']" >
+               <span ng-if="translateLangs.translateID =='new'"  ng-click="setTranslate_new('product_type' ,
+                                                                                         Types['type'].products_typesID ,
+                                                                                         translateLangs.whatsLangIsNew_by_title ,
+                                                                                         translateLangs.whatsLangIsNew_by_name ,
+                                                                                         translateLangs.lang_title
+                                                                                          )" >
+                   @{{ translateLangs.whatsLangIsNew_by_name}}
+               </span>
+               <span ng-if="translateLangs.translateID !='new'" ng-click="setTranslate_edit('product_type' ,
+                                                                                         Types['type'].products_typesID ,
+                                                                                         translateLangs.lang_title ,
+                                                                                         translateLangs.translate
+                                                                                          )"  >
+                   @{{ translateLangs.translate}}
+                  <br/>
+               </span>
+           </span>
+              <br/>
+          </td>
       </tr>
     </table>
   </div>
@@ -57,7 +63,7 @@
     <div class="content">
       <div class="center">
         <div class="ui text container">
-            <div class="ui segments">
+            <div class="ui segments" style="position: absolute;top: 10%;left: 30%;">
               <div class="ui segment" style="height:  400px;  width: 450px;">
                 <!-- -->
                 <h3>{{ Lang::get('labels.add_new_productType') }}</h3>

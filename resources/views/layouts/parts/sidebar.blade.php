@@ -137,6 +137,12 @@
                 <li><a href="{{ url('all-posts/posts') }}">
                         <i class="fa fa-user" aria-hidden="true"></i>
                         {{Lang::get('labels.allPosts')}}</a></li>
+
+                <li><a href="{{ url('all-posts/posts') }}">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        {{Lang::get('labels.Allcats')}}</a></li>
+
+
             </ul>
         </li>
 

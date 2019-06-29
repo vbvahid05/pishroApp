@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Stockroom;
 //>>>>>>>>>>>> Model
+use App\Model_admin\cms_language;
+use App\Model_admin\cms_shop_translate;
+use App\Model_admin\cms_shop_translate_type;
 use App\Mylibrary\excel\InvoicesExport;
 use App\Mylibrary\excel\productsExport;
 use App\Mylibrary\excel\StockReportExport;
@@ -27,6 +30,44 @@ class ProductsController extends Controller
     if ( $this->middleware('auth')) return "OK";
     else return view('/login');
 }
+
+  public  function manageRoute(request $request ,$function){
+
+            switch ($function){
+                case 'setTranslate':
+                    $langTitle= $request['lang_title'];
+                    $language = cms_language::where('lang_title', '=', $langTitle)->firstOrFail();
+                    $language_ID=$language['id'];
+
+                    $type= $request['type'];
+                    $translate_type = cms_shop_translate_type::where('cmsshptrst_type_title', '=', $type)->firstOrFail();
+                    $translate_type_ID=$translate_type['id'];
+
+
+                     switch ($request['actionx']){
+                         case  'new':
+                             $shop_translate = new cms_shop_translate;
+                             $shop_translate->cmsshptransl_type = $translate_type_ID;
+                             $shop_translate->cmsshptransl_target_id = $request['rowId']  ;
+                             $shop_translate->cmsshptransl_lang_id = $language_ID;
+                             $shop_translate->cmsshptransl_title= $request['recived_value'];
+                             $shop_translate->save();
+                                return $shop_translate->id;
+                          break;
+                         case  'edit':
+
+                                           cms_shop_translate::where( 'cmsshptransl_target_id', '=',  $request['rowId'])
+                                                             ->where( 'cmsshptransl_type', '=',  $translate_type_ID)
+                                                             ->where( 'cmsshptransl_lang_id', '=',  $language_ID)
+
+                                               ->update(array('cmsshptransl_title' =>  $request['recived_value']));
+                          break;
+                     }
+
+                break;
+            }
+        }
+
 
     public  function  ExportProductsStatus()
     {
@@ -283,34 +324,185 @@ public function DeleteSelectedProductsFromDatabase(Request $request)
   $StockroomClass->Delete_Selected_Products_From_Database($request);
 }
 
-public function get_Product_brands()
-{//$data['productID']
+    public function get_Product_brands()
+    {
+      return  $product = \DB::table('stockroom_products_brands')
+            ->where('stockroom_products_brands.deleted_flag', '=', 0)
+            ->orderBy('stockroom_products_brands.id', 'desc')
+            ->get();
+    }
 
+public function getProductBrandsWithTranslate()
+{//$data['productID']
+    $resultArray=[];
+    $languageStatus=[];
    $product = \DB::table('stockroom_products_brands')
    ->where('stockroom_products_brands.deleted_flag', '=', 0)
    ->orderBy('stockroom_products_brands.id', 'desc')
    ->get();
-   return $product;
+//-------------------------------------------
+   $type= cms_shop_translate_type::where('cmsshptrst_type_title', '=', 'product_brand')->firstOrFail();
+      $typeId= $type->id;
+//-------------------------------------------
+   foreach ($product AS $p){
+       $minResult=[];
+        $shop_translate= cms_shop_translate::where('cmsshptransl_type', '=', $typeId )
+                           ->where('cmsshptransl_target_id', '=', $p->id )
+                           ->get();
+//-------------------------------------------
+       $language= cms_language::all();
+//-------------------------------------------
+      if (count($shop_translate)){
+          $langStatus=array();
+          foreach ($language AS $lang){
+              foreach ($shop_translate AS $shopTrans ){
+                  if ($shopTrans->cmsshptransl_lang_id == $lang->id ){
+                      if (!in_array($lang->id, $langStatus, TRUE))
+                      {
+                          $langStatus[]=$lang->id;
+                          $Language_status = array(
+                          "lang_title"=>$lang->lang_title,
+                          "translate"=>$shopTrans->cmsshptransl_title,
+                          "translateID"=>$shopTrans->id);
+                          array_push($minResult ,$Language_status);
+                      }
+                  }
+              }
+          }
+          foreach ($language AS $lang){
+              foreach ($shop_translate AS $shopTrans ){
+                  if ($shopTrans->cmsshptransl_lang_id != $lang->id ){
+                      if (!in_array($lang->id, $langStatus, TRUE))
+                      {
+                          $langStatus[]=$lang->id;
+                          $Language_status = array(
+                              "lang_title"=>$lang->lang_title,
+                              "translateID"=>'new' ,
+                              "whatsLangIsNew_by_title"=>$lang->lang_title ,
+                              "whatsLangIsNew_by_name"=>$lang->lang_name ,
+
+                              );
+                          array_push($minResult ,$Language_status);
+                      }
+                  }
+              }
+          }
+//-------------------------------------------
+      }
+      else {
+          foreach ($language AS $lang){
+              $Language_status = array(
+                       "lang_title"=> $lang->lang_title,
+                       "translateID"=>'new' ,
+                      "whatsLangIsNew_by_title"=>$lang->lang_title ,
+                      "whatsLangIsNew_by_name"=>$lang->lang_name ,
+                  );
+              array_push($minResult ,$Language_status);
+          }
+      }
+
+//-------------------------------------------
+       $status = array("brand"=>$p,
+                       "lang"=>$minResult);
+       array_push($resultArray , $status)   ;
+
+   }
+    return $resultArray;
+
 }
 public function get_Product_Types()
 {
-  return  $product = \DB::table('stockroom_products_types')
+
+return  $product = \DB::table('stockroom_products_types')
   ->where('stockroom_products_types.deleted_flag', '=', 0)
   ->orderBy('stockroom_products_types.id', 'desc')
   ->get();
+
+
+
+
 }
 public function get_Product_Types_Join_Brands()
 {
-      $val = \DB::table('stockroom_products_types')
+    $resultArray=[];
+    $languageStatus=[];
+    $product = \DB::table('stockroom_products_types')
       ->join('stockroom_products_brands', 'stockroom_products_types.stkr_prodct_type_In_brands', '=','stockroom_products_brands.id')
-
       ->where('stockroom_products_types.deleted_flag', '=',0)
-      //->select('*')
-      //->select('*', \DB::raw('stockroom_products.id AS productID '))
+        ->select('*', \DB::raw('stockroom_products_types.id AS products_typesID '))
       ->orderBy('stockroom_products_types.id', 'desc')
-      //->paginate(15);
       ->get();
-      return $val;
+
+    //-------------------------------------------
+    $typeIs='product_type';
+    $type= cms_shop_translate_type::where('cmsshptrst_type_title', '=',$typeIs)->firstOrFail();
+    $typeId= $type->id;
+//-------------------------------------------
+    foreach ($product AS $p){
+        $minResult=[];
+        $shop_translate= cms_shop_translate::where('cmsshptransl_type', '=', $typeId )
+            ->where('cmsshptransl_target_id', '=', $p->products_typesID )
+            ->get();
+//-------------------------------------------
+        $language= cms_language::all();
+//-------------------------------------------
+        if (count($shop_translate)){
+            $langStatus=array();
+            foreach ($language AS $lang){
+                foreach ($shop_translate AS $shopTrans ){
+                    if ($shopTrans->cmsshptransl_lang_id == $lang->id ){
+                        if (!in_array($lang->id, $langStatus, TRUE))
+                        {
+                            $langStatus[]=$lang->id;
+                            $Language_status = array(
+                                "lang_title"=>$lang->lang_title,
+                                "translate"=>$shopTrans->cmsshptransl_title,
+                                "translateID"=>$shopTrans->id);
+                            array_push($minResult ,$Language_status);
+                        }
+                    }
+                }
+            }
+            foreach ($language AS $lang){
+                foreach ($shop_translate AS $shopTrans ){
+                    if ($shopTrans->cmsshptransl_lang_id != $lang->id ){
+                        if (!in_array($lang->id, $langStatus, TRUE))
+                        {
+                            $langStatus[]=$lang->id;
+                            $Language_status = array(
+                                "lang_title"=>$lang->lang_title,
+                                "translateID"=>'new' ,
+                                "whatsLangIsNew_by_title"=>$lang->lang_title ,
+                                "whatsLangIsNew_by_name"=>$lang->lang_name ,
+
+                            );
+                            array_push($minResult ,$Language_status);
+                        }
+                    }
+                }
+            }
+//-------------------------------------------
+        }
+        else {
+            foreach ($language AS $lang){
+                $Language_status = array(
+                    "lang_title"=> $lang->lang_title,
+                    "translateID"=>'new' ,
+                    "whatsLangIsNew_by_title"=>$lang->lang_title ,
+                    "whatsLangIsNew_by_name"=>$lang->lang_name ,
+                );
+                array_push($minResult ,$Language_status);
+            }
+        }
+
+//-------------------------------------------
+        $status = array("type"=>$p,
+            "lang"=>$minResult);
+        array_push($resultArray , $status)   ;
+
+    }
+    return $resultArray;
+
 }
 
 
